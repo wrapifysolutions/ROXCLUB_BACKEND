@@ -1,9 +1,9 @@
-const pool = require('../lib/pool');
+const pool = require('../../lib/pool');
 const {
     verifyAccessToken,
     clearAuthCookie,
     readTokenFromRequest,
-} = require('../lib/token');
+} = require('../../lib/token');
 
 const GetAuthSession = async (req, res) => {
     try {

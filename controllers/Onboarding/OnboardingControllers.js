@@ -1,4 +1,4 @@
-const pool = require('../lib/pool');
+const pool = require('../../lib/pool');
 
 const UserOnboarding = async (req, res) => {
 

@@ -1,7 +1,7 @@
 require('dotenv').config();
-const transporter = require('../lib/nodemailer');
-const pool = require('../lib/pool');
-const { hashPassword } = require('../data/encryption');
+const transporter = require('../../lib/nodemailer');
+const pool = require('../../lib/pool');
+const { hashPassword } = require('../../data/encryption');
 
 const ResendOtp = async (req, res) => {
     try {

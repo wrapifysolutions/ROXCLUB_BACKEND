@@ -1,16 +1,13 @@
 const express = require('express');
 const Onboardingrouter = express.Router();
-const UserOnboarding = require('../controllers/OnboardingControllers');
+const UserOnboarding = require('../controllers/Onboarding/OnboardingControllers');
 const authMiddleware = require('../middlewares/auth.middleware');
-const CreateOnboardingQuestions = require('../controllers/OnboardingQuestionsControllers');
-const CustomEmailSetup = require('../controllers/CustomEmailSetup');
-const VerifyEmailOTP = require('../controllers/VerifyEmailOTP');
-const CustomEmailLogin = require('../controllers/CustomEmailLogin');
-const { GetAuthSession, Logout } = require('../controllers/AuthSession');
-const ResendOtp = require('../controllers/ResendOtp');
-
-
-
+const CreateOnboardingQuestions = require('../controllers/Onboarding/OnboardingQuestionsControllers');
+const CustomEmailSetup = require('../controllers/AuthControllers/CustomEmailSetup');
+const VerifyEmailOTP = require('../controllers/AuthControllers/VerifyEmailOTP');
+const CustomEmailLogin = require('../controllers/AuthControllers/CustomEmailLogin');
+const { GetAuthSession, Logout } = require('../controllers/AuthControllers/AuthSession');
+const ResendOtp = require('../controllers/AuthControllers/ResendOtp');
 
 Onboardingrouter.post('/onboarding', authMiddleware, UserOnboarding);
 Onboardingrouter.post('/onboarding-questions', authMiddleware, CreateOnboardingQuestions);

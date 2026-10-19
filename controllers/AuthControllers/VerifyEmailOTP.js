@@ -1,6 +1,6 @@
-const pool = require('../lib/pool');
-const { verifyPassword } = require('../data/encryption');
-const { createAccessToken, setAuthCookie } = require('../lib/token');
+const pool = require('../../lib/pool');
+const { verifyPassword } = require('../../data/encryption');
+const { createAccessToken, setAuthCookie } = require('../../lib/token');
 
 const clearExpiredOTP = async (email) => {
     await pool.query(

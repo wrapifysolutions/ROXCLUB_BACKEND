@@ -1,7 +1,7 @@
 require('dotenv').config();
-const transporter = require('../lib/nodemailer');
-const { hashPassword } = require('../data/encryption');
-const pool = require('../lib/pool');
+const transporter = require('../../lib/nodemailer');
+const { hashPassword } = require('../../data/encryption');
+const pool = require('../../lib/pool');
 
 const CustomEmailSetup = async (req, res) => {
     try {
