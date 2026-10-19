@@ -20,7 +20,7 @@ async function main() {
             is_email_verified,
             updated_at
         )
-        VALUES ($1, $2, $3, NOW() + INTERVAL '2 minutes', 'email', FALSE, NOW())
+        VALUES ($1, $2, $3, NOW() + INTERVAL '1 minute', 'email', FALSE, NOW())
         ON CONFLICT (email)
         DO UPDATE SET
             password_hash = EXCLUDED.password_hash,

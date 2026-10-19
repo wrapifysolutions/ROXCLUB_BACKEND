@@ -3,11 +3,23 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const Onboardingrouter = require('./routes/OnboardingRoute');
-
+const session = require('express-session');
 const { connectDB, closeDB } = require('./lib/db');
 
 const app = express();
 app.use(express.json());
+app.use(session({
+    name: 'roxclub.sid',
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 5 * 60 * 1000, // 5 minutes
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    }
+}));
 app.use(cookieParser());
 app.use('/', Onboardingrouter);
 const port = Number(process.env.PORT) || 5000;

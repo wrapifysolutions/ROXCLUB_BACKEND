@@ -64,7 +64,7 @@ const authMiddleware = async (req, res, next) => {
                 return next();
             }
         } catch (_) {
-            // Not our JWT — try Supabase below.
+           
         }
 
         const { data, error } = await SupabaseConfig.auth.getUser(token);

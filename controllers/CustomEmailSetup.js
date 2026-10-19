@@ -37,7 +37,7 @@ Thank you for joining ROXCLUB.
 
 Your email verification code is: ${otp}
 
-This code will expire in 2 minutes.
+This code will expire in 1 minute.
 
 If you did not create a ROXCLUB account, please ignore this email.
 
@@ -51,7 +51,10 @@ Powered by Wrapify Solutions
             return res.status(400).json({ message: 'Failed to send email' });
         }
 
-        // OTP lives for 2 minutes only. After otp_expires_at it is cleared and invalid.
+        req.session.email = normalizedEmail;
+        req.session.emailExpireAt = Date.now() + 5* 60 * 1000;
+
+        // OTP lives for 1 minute only. After otp_expires_at it is cleared and invalid.
         await pool.query(
             `
             INSERT INTO users (
@@ -63,7 +66,7 @@ Powered by Wrapify Solutions
                 is_email_verified,
                 updated_at
             )
-            VALUES ($1, $2, $3, NOW() + INTERVAL '2 minutes', 'email', FALSE, NOW())
+            VALUES ($1, $2, $3, NOW() + INTERVAL '1 minute', 'email', FALSE, NOW())
             ON CONFLICT (email)
             DO UPDATE SET
                 password_hash = EXCLUDED.password_hash,
