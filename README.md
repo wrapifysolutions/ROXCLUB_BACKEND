@@ -83,6 +83,32 @@ npm run dev
 
 Server: `http://localhost:3000`
 
+## Deploy to Vercel
+
+1. Push this repo to GitHub (do **not** commit `.env`).
+2. Import the repo in [vercel.com/new](https://vercel.com/new).
+3. Framework Preset: **Other** (Express is auto-detected from `server.js`).
+4. Add all env vars from `.env.example` in **Project → Settings → Environment Variables**.
+5. Deploy.
+
+Or CLI:
+
+```bash
+npm i -g vercel
+vercel login
+vercel
+vercel --prod
+```
+
+After deploy, update production redirect URLs:
+
+- `STRAVA_REDIRECT_URI=https://YOUR_APP.vercel.app/api/integrations/strava/callback`
+- `ZEPP_REDIRECT_URI=https://YOUR_APP.vercel.app/api/integrations/zepp/callback`
+
+Also set the same callback domain/URL in Strava / Xiaomi dashboards.
+
+Health check: `GET https://YOUR_APP.vercel.app/` → `{ "ok": true }`
+
 Required `.env` keys (do not commit real secrets):
 
 ```env
