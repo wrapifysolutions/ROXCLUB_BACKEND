@@ -2,6 +2,16 @@ require('dotenv').config();
 const transporter = require('../../lib/nodemailer');
 const { hashPassword } = require('../../data/encryption');
 const pool = require('../../lib/pool');
+const { queryWithHardTimeout } = require('../../lib/dbQuery');
+const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+
+let usersTableReady = false;
+
+async function ensureUsersTable() {
+    if (usersTableReady) return;
+    await queryWithHardTimeout(createUsersTable, [], 8000);
+    usersTableReady = true;
+}
 
 const CustomEmailSetup = async (req, res) => {
     try {
@@ -12,6 +22,8 @@ const CustomEmailSetup = async (req, res) => {
         }
 
         const normalizedEmail = String(email).trim().toLowerCase();
+
+        await ensureUsersTable();
 
         const existing = await pool.query(
             'SELECT id, is_email_verified FROM users WHERE email = $1',

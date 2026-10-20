@@ -1,7 +1,17 @@
+/**
+ * Neon `users` — single source of truth for RoxClub onboarding identity.
+ *
+ * Who writes here:
+ * - google / apple → POST /onboarding (after Supabase session)
+ * - email         → POST /auth/email-signup (then verify OTP)
+ *
+ * Every onboarding email (Google, Apple, or custom) must end up in this table.
+ */
 const createUsersTable = `
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
+    -- Supabase Auth user id (Google / Apple). NULL for custom email signup.
     supabase_user_id UUID UNIQUE,
 
     email VARCHAR(255) NOT NULL UNIQUE,

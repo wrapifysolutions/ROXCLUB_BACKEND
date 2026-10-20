@@ -10,6 +10,11 @@ async function ensureUsersTable() {
 }
 
 function resolveAuthProvider(user) {
+    // Prefer explicit provider already on our JWT / DB user.
+    if (['google', 'apple', 'email'].includes(user?.auth_provider)) {
+        return user.auth_provider;
+    }
+
     const fromApp = user?.app_metadata?.provider;
     const fromMeta = user?.user_metadata?.provider;
     const iss = String(user?.user_metadata?.iss || '');
@@ -32,52 +37,64 @@ function resolveAuthProvider(user) {
         return 'google';
     }
 
-    if (user?.source === 'supabase') {
-        return 'google';
-    }
-
     if (fromApp === 'email' || fromMeta === 'email') {
         return 'email';
+    }
+
+    // Supabase OAuth without clear provider metadata (Continue with Google default).
+    if (user?.source === 'supabase') {
+        return 'google';
     }
 
     return 'email';
 }
 
 /**
- * Production upsert:
- * - New Google/Apple user → insert with id = supabase sub
- * - Existing email account → link supabase_user_id, keep canonical DB id (FK-safe)
- * - Concurrent retries → unique-violation safe retry
- * - Always return the canonical users row FE / questions must use
+ * Store / link any onboarding identity into Neon `users`.
+ * - Google / Apple: id + supabase_user_id = Supabase sub, email from token
+ * - Email: row already created at signup; this call is idempotent upsert
+ * - Same email across providers: link supabase_user_id, keep canonical DB id
  */
 async function upsertOnboardingUser({
-    supabaseUserId,
+    userId,
     email,
     authProvider,
     isEmailVerified,
+    supabaseUserId = null,
 }) {
+    const oauthId = supabaseUserId || (authProvider === 'email' ? null : userId);
+
     const findSql = `
         SELECT id, email, auth_provider, is_email_verified, supabase_user_id, created_at
         FROM users
-        WHERE supabase_user_id = $1
-           OR id = $1
-           OR email = $2
+        WHERE ($1::uuid IS NOT NULL AND (id = $1 OR supabase_user_id = $1))
+           OR ($2::uuid IS NOT NULL AND (id = $2 OR supabase_user_id = $2))
+           OR email = $3
         ORDER BY CASE
-            WHEN supabase_user_id = $1 THEN 0
-            WHEN id = $1 THEN 1
-            ELSE 2
+            WHEN $2::uuid IS NOT NULL AND supabase_user_id = $2 THEN 0
+            WHEN $1::uuid IS NOT NULL AND id = $1 THEN 1
+            WHEN email = $3 THEN 2
+            ELSE 3
         END
         LIMIT 1
     `;
 
-    const existing = await queryWithHardTimeout(findSql, [supabaseUserId, email], 8000);
+    const existing = await queryWithHardTimeout(
+        findSql,
+        [userId || null, oauthId || null, email],
+        8000
+    );
+
     if (existing.rows[0]) {
         const row = existing.rows[0];
         const updated = await queryWithHardTimeout(
             `
             UPDATE users
             SET
-                supabase_user_id = COALESCE(users.supabase_user_id, $2),
+                supabase_user_id = CASE
+                    WHEN $2::uuid IS NULL THEN users.supabase_user_id
+                    ELSE COALESCE(users.supabase_user_id, $2)
+                END,
                 email = CASE
                     WHEN users.email = $3 THEN users.email
                     WHEN EXISTS (
@@ -96,10 +113,16 @@ async function upsertOnboardingUser({
             WHERE id = $1
             RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
             `,
-            [row.id, supabaseUserId, email, authProvider, isEmailVerified],
+            [row.id, oauthId, email, authProvider, isEmailVerified],
             8000
         );
         return updated.rows[0];
+    }
+
+    // New row — OAuth uses Supabase sub as PK; email signup should normally already exist.
+    const insertId = oauthId || userId;
+    if (!insertId) {
+        throw new Error('Cannot create user without id');
     }
 
     try {
@@ -113,30 +136,49 @@ async function upsertOnboardingUser({
                 is_email_verified,
                 updated_at
             )
-            VALUES ($1, $1, $2, $3, $4, NOW())
+            VALUES (
+                $1,
+                $2,
+                $3,
+                $4,
+                $5,
+                NOW()
+            )
             RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
             `,
-            [supabaseUserId, email, authProvider, isEmailVerified],
+            [
+                insertId,
+                authProvider === 'email' ? null : insertId,
+                email,
+                authProvider,
+                isEmailVerified,
+            ],
             8000
         );
         return inserted.rows[0];
     } catch (error) {
-        // Concurrent first-login race (unique email / id / supabase_user_id).
         if (error.code === '23505') {
-            const again = await queryWithHardTimeout(findSql, [supabaseUserId, email], 8000);
+            const again = await queryWithHardTimeout(
+                findSql,
+                [userId || null, oauthId || null, email],
+                8000
+            );
             if (again.rows[0]) {
                 const row = again.rows[0];
                 const updated = await queryWithHardTimeout(
                     `
                     UPDATE users
                     SET
-                        supabase_user_id = COALESCE(users.supabase_user_id, $2),
+                        supabase_user_id = CASE
+                            WHEN $2::uuid IS NULL THEN users.supabase_user_id
+                            ELSE COALESCE(users.supabase_user_id, $2)
+                        END,
                         is_email_verified = users.is_email_verified OR $3,
                         updated_at = NOW()
                     WHERE id = $1
                     RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
                     `,
-                    [row.id, supabaseUserId, isEmailVerified],
+                    [row.id, oauthId, isEmailVerified],
                     8000
                 );
                 return updated.rows[0];
@@ -166,18 +208,18 @@ const UserOnboarding = async (req, res) => {
 
     try {
         const user = req.user || {};
-        const supabaseUserId = user.id;
+        const userId = user.id;
         const email = String(user.email || '')
             .trim()
             .toLowerCase();
 
         console.log('UserOnboarding: start', {
-            supabaseUserId,
+            userId,
             email,
             source: user.source,
         });
 
-        if (!supabaseUserId || !email) {
+        if (!userId || !email) {
             clearTimeout(watchdog);
             return respond(400, {
                 message: 'Authenticated user is missing id or email',
@@ -191,7 +233,8 @@ const UserOnboarding = async (req, res) => {
         }
 
         const isEmailVerified = Boolean(
-            user.email_confirmed_at ||
+            user.is_email_verified ||
+                user.email_confirmed_at ||
                 user.user_metadata?.email_verified ||
                 authProvider === 'google' ||
                 authProvider === 'apple'
@@ -199,17 +242,23 @@ const UserOnboarding = async (req, res) => {
 
         await ensureUsersTable();
 
+        const supabaseUserId =
+            user.supabase_user_id ||
+            (user.source === 'supabase' ? user.id : null);
+
         console.log('UserOnboarding: upsert', { authProvider });
         const saved = await upsertOnboardingUser({
-            supabaseUserId,
+            userId,
             email,
             authProvider,
             isEmailVerified,
+            supabaseUserId,
         });
 
         console.log('UserOnboarding: success', {
             ms: Date.now() - startedAt,
             userId: saved?.id,
+            authProvider: saved?.auth_provider,
         });
 
         clearTimeout(watchdog);
