@@ -1,5 +1,13 @@
 const pool = require('../../lib/pool');
-const createOnboardingQuestionsTable = require('../../models/Onboarding/OnboardingQuestions');
+const {
+    createOnboardingQuestionsTable,
+    alterOnboardingAvatarColumns,
+} = require('../../models/Onboarding/OnboardingQuestions');
+
+async function ensureOnboardingQuestionsSchema() {
+    await pool.query(createOnboardingQuestionsTable);
+    await pool.query(alterOnboardingAvatarColumns);
+}
 
 const createOnboardingQuestions = async (req, res) => {
     try {
@@ -17,6 +25,11 @@ const createOnboardingQuestions = async (req, res) => {
             weight,
             training_experience,
             training_goals,
+            avatar_smile,
+            avatar_hair,
+            avatar_kit,
+            avatar_skin_tone,
+            avatar_skipped = false,
         } = req.body;
 
         if (
@@ -34,7 +47,20 @@ const createOnboardingQuestions = async (req, res) => {
             });
         }
 
-        await pool.query(createOnboardingQuestionsTable);
+        const skippedAvatar = Boolean(avatar_skipped);
+
+        // If user did not skip avatar step, require the 4 avatar choices from "Create your athlete"
+        if (
+            !skippedAvatar &&
+            (!avatar_smile || !avatar_hair || !avatar_kit || !avatar_skin_tone)
+        ) {
+            return res.status(400).json({
+                message:
+                    'avatar_smile, avatar_hair, avatar_kit, and avatar_skin_tone are required (or set avatar_skipped=true)',
+            });
+        }
+
+        await ensureOnboardingQuestionsSchema();
 
         const { rows } = await pool.query(
             `
@@ -47,10 +73,19 @@ const createOnboardingQuestions = async (req, res) => {
                 weight,
                 training_experience,
                 training_goals,
+                avatar_smile,
+                avatar_hair,
+                avatar_kit,
+                avatar_skin_tone,
+                avatar_skipped,
                 is_completed,
                 updated_at
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, TRUE, NOW())
+            VALUES (
+                $1, $2, $3, $4, $5, $6, $7, $8,
+                $9, $10, $11, $12, $13,
+                TRUE, NOW()
+            )
             ON CONFLICT (user_id)
             DO UPDATE SET
                 display_name = EXCLUDED.display_name,
@@ -60,6 +95,11 @@ const createOnboardingQuestions = async (req, res) => {
                 weight = EXCLUDED.weight,
                 training_experience = EXCLUDED.training_experience,
                 training_goals = EXCLUDED.training_goals,
+                avatar_smile = EXCLUDED.avatar_smile,
+                avatar_hair = EXCLUDED.avatar_hair,
+                avatar_kit = EXCLUDED.avatar_kit,
+                avatar_skin_tone = EXCLUDED.avatar_skin_tone,
+                avatar_skipped = EXCLUDED.avatar_skipped,
                 is_completed = TRUE,
                 updated_at = NOW()
             RETURNING *
@@ -73,6 +113,11 @@ const createOnboardingQuestions = async (req, res) => {
                 weight,
                 training_experience,
                 training_goals,
+                skippedAvatar ? null : avatar_smile,
+                skippedAvatar ? null : avatar_hair,
+                skippedAvatar ? null : avatar_kit,
+                skippedAvatar ? null : avatar_skin_tone,
+                skippedAvatar,
             ]
         );
 
