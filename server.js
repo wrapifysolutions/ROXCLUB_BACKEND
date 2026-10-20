@@ -15,7 +15,6 @@ const isProduction = process.env.NODE_ENV === 'production' || isVercel;
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
-// Session only for local email OTP resend helpers. Skip on Vercel to avoid MemoryStore hangs/noise.
 if (!isVercel) {
     const session = require('express-session');
     app.use(
@@ -34,20 +33,6 @@ if (!isVercel) {
     );
 }
 
-let bootPromise = null;
-
-async function ensureBootstrapped() {
-    if (!bootPromise) {
-        // Keep cold-start light: only prove DB connectivity.
-        // Feature tables are created lazily inside their controllers.
-        bootPromise = connectDB().catch((error) => {
-            bootPromise = null;
-            throw error;
-        });
-    }
-    return bootPromise;
-}
-
 app.get('/', (req, res) => {
     res.status(200).json({
         ok: true,
@@ -56,20 +41,14 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use(async (req, res, next) => {
-    if (req.path === '/') {
-        return next();
-    }
-    try {
-        await ensureBootstrapped();
-        return next();
-    } catch (error) {
-        console.error('Bootstrap failed', error);
-        return res.status(503).json({
-            message: 'Service unavailable',
-            detail: error.message,
-        });
-    }
+// Request tracer — proves the function accepted the call.
+app.use((req, res, next) => {
+    const startedAt = Date.now();
+    console.log('req:in', req.method, req.path);
+    res.on('finish', () => {
+        console.log('req:out', req.method, req.path, res.statusCode, `${Date.now() - startedAt}ms`);
+    });
+    next();
 });
 
 app.use('/', Onboardingrouter);
@@ -81,7 +60,7 @@ const port = Number(process.env.PORT) || 5000;
 
 async function startServer() {
     try {
-        await ensureBootstrapped();
+        await connectDB();
         console.log('Connected to the database');
 
         const server = app.listen(port, () => {
@@ -95,16 +74,11 @@ async function startServer() {
 
         let shuttingDown = false;
         const shutdown = (signal) => {
-            if (shuttingDown) {
-                return;
-            }
+            if (shuttingDown) return;
             shuttingDown = true;
-            console.log(`${signal} received, closing server`);
             server.close(() => {
                 closeDB()
-                    .catch((error) => {
-                        console.error('Error closing the database pool', error);
-                    })
+                    .catch(() => {})
                     .finally(() => process.exit(0));
             });
             setTimeout(() => process.exit(1), 10000).unref();

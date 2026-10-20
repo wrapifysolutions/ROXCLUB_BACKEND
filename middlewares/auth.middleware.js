@@ -2,10 +2,34 @@ const { getSupabaseUser } = require('../lib/SupabaseConfig');
 const pool = require('../lib/pool');
 const { verifyAccessToken, COOKIE_NAME } = require('../lib/token');
 
-const authMiddleware = async (req, res, next) => {
+function peekJwtPayload(token) {
     try {
-        const cookieToken = req.cookies?.[COOKIE_NAME];
+        const part = String(token).split('.')[1];
+        if (!part) return null;
+        const json = Buffer.from(part, 'base64url').toString('utf8');
+        return JSON.parse(json);
+    } catch (_) {
+        return null;
+    }
+}
 
+function isLikelySupabaseToken(token) {
+    const payload = peekJwtPayload(token);
+    if (!payload) return false;
+    const iss = String(payload.iss || '');
+    return (
+        iss.includes('supabase') ||
+        Boolean(payload.sub && payload.role) ||
+        Boolean(payload.amr)
+    );
+}
+
+const authMiddleware = async (req, res, next) => {
+    const startedAt = Date.now();
+    try {
+        console.log('auth: start', req.method, req.path);
+
+        const cookieToken = req.cookies?.[COOKIE_NAME];
         if (cookieToken) {
             try {
                 const payload = verifyAccessToken(cookieToken);
@@ -17,12 +41,10 @@ const authMiddleware = async (req, res, next) => {
                     `,
                     [payload.sub]
                 );
-
                 const user = rows[0];
                 if (!user || !user.is_email_verified) {
                     return res.status(401).json({ message: 'Unauthorized Access' });
                 }
-
                 req.user = {
                     id: user.id,
                     email: user.email,
@@ -31,7 +53,7 @@ const authMiddleware = async (req, res, next) => {
                 };
                 return next();
             } catch (error) {
-                console.error('Cookie auth failed', error.message);
+                console.error('auth: cookie failed', error.message);
                 return res.status(401).json({ message: 'Unauthorized Access' });
             }
         }
@@ -43,7 +65,26 @@ const authMiddleware = async (req, res, next) => {
 
         const token = authorization.slice(7);
 
-        // 1) Our RoxClub JWT (email auth)
+        // Google/Apple: skip RoxClub JWT+DB path so we never hang on pool before Supabase.
+        if (isLikelySupabaseToken(token)) {
+            console.log('auth: supabase token detected', { ms: Date.now() - startedAt });
+            const { data, error } = await getSupabaseUser(token, 6000);
+            if (error || !data?.user) {
+                console.error('auth: supabase invalid', error?.message || error);
+                return res.status(401).json({
+                    message: 'Unauthorized Access',
+                    detail: error?.message,
+                });
+            }
+            console.log('auth: supabase ok', data.user.id, data.user.email, {
+                ms: Date.now() - startedAt,
+            });
+            req.user = data.user;
+            req.user.source = 'supabase';
+            return next();
+        }
+
+        // Email-login RoxClub JWT
         try {
             const payload = verifyAccessToken(token);
             const { rows } = await pool.query(
@@ -54,7 +95,6 @@ const authMiddleware = async (req, res, next) => {
                 `,
                 [payload.sub]
             );
-
             const user = rows[0];
             if (user && user.is_email_verified) {
                 req.user = {
@@ -65,35 +105,13 @@ const authMiddleware = async (req, res, next) => {
                 };
                 return next();
             }
-        } catch (_) {
-            // Not our JWT — try Supabase below.
+        } catch (error) {
+            console.error('auth: jwt failed', error.message);
         }
 
-        // 2) Supabase access token (Google / Apple)
-        console.log('authMiddleware: verifying supabase token');
-        let data;
-        let error;
-        try {
-            ({ data, error } = await getSupabaseUser(token, 8000));
-        } catch (timeoutError) {
-            console.error('authMiddleware: supabase getUser failed', timeoutError.message);
-            return res.status(503).json({
-                message: 'Auth provider timeout',
-                detail: timeoutError.message,
-            });
-        }
-
-        if (error || !data?.user) {
-            console.error('authMiddleware: supabase user invalid', error?.message || error);
-            return res.status(401).json({ message: 'Unauthorized Access' });
-        }
-
-        console.log('authMiddleware: supabase user ok', data.user.id, data.user.email);
-        req.user = data.user;
-        req.user.source = 'supabase';
-        return next();
+        return res.status(401).json({ message: 'Unauthorized Access' });
     } catch (error) {
-        console.error('authMiddleware fatal', error);
+        console.error('auth: fatal', error);
         return res.status(500).json({ message: 'Authentication Error' });
     }
 };

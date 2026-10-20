@@ -12,14 +12,40 @@ function resolveAuthProvider(user) {
     if (fromApp === 'apple' || fromMeta === 'apple') {
         return 'apple';
     }
-    if (fromApp === 'email' || fromMeta === 'email') {
-        return 'email';
-    }
     return fromApp || fromMeta || 'email';
+}
+
+async function queryWithHardTimeout(text, params, timeoutMs = 10000) {
+    return Promise.race([
+        pool.query(text, params),
+        new Promise((_, reject) => {
+            setTimeout(
+                () => reject(new Error(`DB query timed out after ${timeoutMs}ms`)),
+                timeoutMs
+            );
+        }),
+    ]);
 }
 
 const UserOnboarding = async (req, res) => {
     const startedAt = Date.now();
+    let responded = false;
+
+    const respond = (status, body) => {
+        if (responded || res.headersSent) return;
+        responded = true;
+        return res.status(status).json(body);
+    };
+
+    // Absolute safety net so the client never waits forever.
+    const watchdog = setTimeout(() => {
+        console.error('UserOnboarding: watchdog fired', { ms: Date.now() - startedAt });
+        respond(503, {
+            message: 'Onboarding timed out',
+            detail: 'Server failed to finish within 20s',
+        });
+    }, 20000);
+
     try {
         const user = req.user || {};
         const supabaseUserId = user.id;
@@ -34,7 +60,8 @@ const UserOnboarding = async (req, res) => {
         });
 
         if (!supabaseUserId || !email) {
-            return res.status(400).json({
+            clearTimeout(watchdog);
+            return respond(400, {
                 message: 'Authenticated user is missing id or email',
             });
         }
@@ -47,11 +74,11 @@ const UserOnboarding = async (req, res) => {
                 authProvider === 'apple'
         );
 
-        console.log('UserOnboarding: ensure users table');
-        await pool.query(createUsersTable);
+        console.log('UserOnboarding: create table');
+        await queryWithHardTimeout(createUsersTable, [], 10000);
 
-        console.log('UserOnboarding: upsert user', { authProvider, isEmailVerified });
-        const { rows } = await pool.query(
+        console.log('UserOnboarding: upsert', { authProvider });
+        const { rows } = await queryWithHardTimeout(
             `
             INSERT INTO users (
                 id,
@@ -70,7 +97,8 @@ const UserOnboarding = async (req, res) => {
                 updated_at = NOW()
             RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
             `,
-            [supabaseUserId, email, authProvider, isEmailVerified]
+            [supabaseUserId, email, authProvider, isEmailVerified],
+            10000
         );
 
         console.log('UserOnboarding: success', {
@@ -78,7 +106,8 @@ const UserOnboarding = async (req, res) => {
             userId: rows[0]?.id,
         });
 
-        return res.status(200).json({
+        clearTimeout(watchdog);
+        return respond(200, {
             message: 'User onboarded successfully',
             user: rows[0],
         });
@@ -87,9 +116,9 @@ const UserOnboarding = async (req, res) => {
             ms: Date.now() - startedAt,
             message: error.message,
             code: error.code,
-            detail: error.detail,
         });
-        return res.status(500).json({
+        clearTimeout(watchdog);
+        return respond(500, {
             message: 'Internal Server Error',
             detail: error.message,
         });
