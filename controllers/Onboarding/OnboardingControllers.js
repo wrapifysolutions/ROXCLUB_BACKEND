@@ -19,12 +19,19 @@ function resolveAuthProvider(user) {
 }
 
 const UserOnboarding = async (req, res) => {
+    const startedAt = Date.now();
     try {
         const user = req.user || {};
         const supabaseUserId = user.id;
         const email = String(user.email || '')
             .trim()
             .toLowerCase();
+
+        console.log('UserOnboarding: start', {
+            supabaseUserId,
+            email,
+            source: user.source,
+        });
 
         if (!supabaseUserId || !email) {
             return res.status(400).json({
@@ -40,9 +47,10 @@ const UserOnboarding = async (req, res) => {
                 authProvider === 'apple'
         );
 
+        console.log('UserOnboarding: ensure users table');
         await pool.query(createUsersTable);
 
-        // Use Supabase user id as our users.id for Google/Apple social accounts.
+        console.log('UserOnboarding: upsert user', { authProvider, isEmailVerified });
         const { rows } = await pool.query(
             `
             INSERT INTO users (
@@ -65,15 +73,25 @@ const UserOnboarding = async (req, res) => {
             [supabaseUserId, email, authProvider, isEmailVerified]
         );
 
+        console.log('UserOnboarding: success', {
+            ms: Date.now() - startedAt,
+            userId: rows[0]?.id,
+        });
+
         return res.status(200).json({
             message: 'User onboarded successfully',
             user: rows[0],
         });
     } catch (error) {
-        console.error('UserOnboarding error', error);
+        console.error('UserOnboarding error', {
+            ms: Date.now() - startedAt,
+            message: error.message,
+            code: error.code,
+            detail: error.detail,
+        });
         return res.status(500).json({
             message: 'Internal Server Error',
-            detail: process.env.NODE_ENV === 'production' ? undefined : error.message,
+            detail: error.message,
         });
     }
 };

@@ -2,47 +2,45 @@ require('dotenv').config();
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const Onboardingrouter = require('./routes/OnboardingRoute');
 const StravaRouter = require('./routes/StravaRoute');
 const ZeppRouter = require('./routes/ZeppRoute');
 const AppleHealthRouter = require('./routes/AppleHealthRoute');
 const { connectDB, closeDB } = require('./lib/db');
-const { ensureStravaTables } = require('./lib/strava/stravaTokens');
-const { ensureZeppTables } = require('./lib/zepp/zeppTokens');
-const { ensureAppleHealthTables } = require('./lib/appleHealth/appleHealthStore');
 
 const app = express();
 const isVercel = Boolean(process.env.VERCEL);
 const isProduction = process.env.NODE_ENV === 'production' || isVercel;
 
-app.use(express.json());
-app.use(
-    session({
-        name: 'roxclub.sid',
-        secret: process.env.SESSION_SECRET || 'dev-session-secret',
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 5 * 60 * 1000,
-            httpOnly: true,
-            secure: isProduction,
-            sameSite: 'lax',
-        },
-    })
-);
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
+
+// Session only for local email OTP resend helpers. Skip on Vercel to avoid MemoryStore hangs/noise.
+if (!isVercel) {
+    const session = require('express-session');
+    app.use(
+        session({
+            name: 'roxclub.sid',
+            secret: process.env.SESSION_SECRET || 'dev-session-secret',
+            resave: false,
+            saveUninitialized: false,
+            cookie: {
+                maxAge: 5 * 60 * 1000,
+                httpOnly: true,
+                secure: isProduction,
+                sameSite: 'lax',
+            },
+        })
+    );
+}
 
 let bootPromise = null;
 
 async function ensureBootstrapped() {
     if (!bootPromise) {
-        bootPromise = (async () => {
-            await connectDB();
-            await ensureStravaTables();
-            await ensureZeppTables();
-            await ensureAppleHealthTables();
-        })().catch((error) => {
+        // Keep cold-start light: only prove DB connectivity.
+        // Feature tables are created lazily inside their controllers.
+        bootPromise = connectDB().catch((error) => {
             bootPromise = null;
             throw error;
         });
@@ -58,7 +56,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// Warm DB/tables before API routes (important on Vercel cold starts).
 app.use(async (req, res, next) => {
     if (req.path === '/') {
         return next();
@@ -68,7 +65,10 @@ app.use(async (req, res, next) => {
         return next();
     } catch (error) {
         console.error('Bootstrap failed', error);
-        return res.status(503).json({ message: 'Service unavailable' });
+        return res.status(503).json({
+            message: 'Service unavailable',
+            detail: error.message,
+        });
     }
 });
 
@@ -83,7 +83,6 @@ async function startServer() {
     try {
         await ensureBootstrapped();
         console.log('Connected to the database');
-        console.log('Integration tables ready (Strava + Zepp + Apple Health)');
 
         const server = app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
@@ -119,10 +118,8 @@ async function startServer() {
     }
 }
 
-// Local / traditional hosting
 if (require.main === module) {
     startServer();
 }
 
-// Vercel looks for the Express export from server.js
 module.exports = app;
