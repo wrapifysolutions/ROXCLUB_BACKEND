@@ -16,15 +16,24 @@ function resolveAuthProvider(user) {
 }
 
 async function queryWithHardTimeout(text, params, timeoutMs = 10000) {
-    return Promise.race([
-        pool.query(text, params),
+    const connectMs = Math.min(timeoutMs, 8000);
+    const client = await Promise.race([
+        pool.connect(),
         new Promise((_, reject) => {
             setTimeout(
-                () => reject(new Error(`DB query timed out after ${timeoutMs}ms`)),
-                timeoutMs
+                () => reject(new Error(`DB connect timed out after ${connectMs}ms`)),
+                connectMs
             );
         }),
     ]);
+
+    try {
+        // Postgres aborts the query so the pooled client is free for the next request.
+        await client.query(`SET statement_timeout = ${Math.max(1000, timeoutMs)}`);
+        return await client.query(text, params);
+    } finally {
+        client.release();
+    }
 }
 
 const UserOnboarding = async (req, res) => {

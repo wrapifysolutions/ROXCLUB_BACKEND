@@ -15,6 +15,20 @@ const isProduction = process.env.NODE_ENV === 'production' || isVercel;
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
+// Mobile / Expo web clients need CORS; OPTIONS must never hang.
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Authorization, Content-Type, X-Requested-With, x-vercel-protection-bypass'
+    );
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+    return next();
+});
+
 if (!isVercel) {
     const session = require('express-session');
     app.use(
@@ -39,6 +53,56 @@ app.get('/', (req, res) => {
         service: 'roxclub-api',
         env: isVercel ? 'vercel' : 'local',
     });
+});
+
+app.get('/health', async (req, res) => {
+    const startedAt = Date.now();
+    const result = {
+        ok: true,
+        service: 'roxclub-api',
+        env: isVercel ? 'vercel' : 'local',
+        db: null,
+        supabase: null,
+        ms: 0,
+    };
+
+    try {
+        const pool = require('./lib/pool');
+        const dbStarted = Date.now();
+        await Promise.race([
+            pool.query('SELECT 1 AS ok'),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('db timeout')), 5000)
+            ),
+        ]);
+        result.db = { ok: true, ms: Date.now() - dbStarted };
+    } catch (error) {
+        result.ok = false;
+        result.db = { ok: false, error: error.message };
+    }
+
+    try {
+        const { supabaseUrl } = require('./lib/SupabaseConfig');
+        const sbStarted = Date.now();
+        const response = await Promise.race([
+            fetch(`${supabaseUrl}/auth/v1/health`),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('supabase timeout')), 5000)
+            ),
+        ]);
+        result.supabase = {
+            ok: response.ok || response.status < 500,
+            status: response.status,
+            ms: Date.now() - sbStarted,
+        };
+        if (!result.supabase.ok) result.ok = false;
+    } catch (error) {
+        result.ok = false;
+        result.supabase = { ok: false, error: error.message };
+    }
+
+    result.ms = Date.now() - startedAt;
+    return res.status(result.ok ? 200 : 503).json(result);
 });
 
 // Request tracer — proves the function accepted the call.
