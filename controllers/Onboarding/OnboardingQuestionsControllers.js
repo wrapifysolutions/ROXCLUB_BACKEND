@@ -1,12 +1,12 @@
 const pool = require('../../lib/pool');
 const {
     createOnboardingQuestionsTable,
-    alterOnboardingAvatarColumns,
+    alterOnboardingExtraColumns,
 } = require('../../models/Onboarding/OnboardingQuestions');
 
 async function ensureOnboardingQuestionsSchema() {
     await pool.query(createOnboardingQuestionsTable);
-    await pool.query(alterOnboardingAvatarColumns);
+    await pool.query(alterOnboardingExtraColumns);
 }
 
 const createOnboardingQuestions = async (req, res) => {
@@ -25,6 +25,8 @@ const createOnboardingQuestions = async (req, res) => {
             weight,
             training_experience,
             training_goals,
+            notifications_enabled = false,
+            location_enabled = false,
             avatar_smile,
             avatar_hair,
             avatar_kit,
@@ -48,6 +50,8 @@ const createOnboardingQuestions = async (req, res) => {
         }
 
         const skippedAvatar = Boolean(avatar_skipped);
+        const notificationsEnabled = Boolean(notifications_enabled);
+        const locationEnabled = Boolean(location_enabled);
 
         // If user did not skip avatar step, require the 4 avatar choices from "Create your athlete"
         if (
@@ -73,6 +77,8 @@ const createOnboardingQuestions = async (req, res) => {
                 weight,
                 training_experience,
                 training_goals,
+                notifications_enabled,
+                location_enabled,
                 avatar_smile,
                 avatar_hair,
                 avatar_kit,
@@ -83,7 +89,8 @@ const createOnboardingQuestions = async (req, res) => {
             )
             VALUES (
                 $1, $2, $3, $4, $5, $6, $7, $8,
-                $9, $10, $11, $12, $13,
+                $9, $10,
+                $11, $12, $13, $14, $15,
                 TRUE, NOW()
             )
             ON CONFLICT (user_id)
@@ -95,6 +102,8 @@ const createOnboardingQuestions = async (req, res) => {
                 weight = EXCLUDED.weight,
                 training_experience = EXCLUDED.training_experience,
                 training_goals = EXCLUDED.training_goals,
+                notifications_enabled = EXCLUDED.notifications_enabled,
+                location_enabled = EXCLUDED.location_enabled,
                 avatar_smile = EXCLUDED.avatar_smile,
                 avatar_hair = EXCLUDED.avatar_hair,
                 avatar_kit = EXCLUDED.avatar_kit,
@@ -113,6 +122,8 @@ const createOnboardingQuestions = async (req, res) => {
                 weight,
                 training_experience,
                 training_goals,
+                notificationsEnabled,
+                locationEnabled,
                 skippedAvatar ? null : avatar_smile,
                 skippedAvatar ? null : avatar_hair,
                 skippedAvatar ? null : avatar_kit,

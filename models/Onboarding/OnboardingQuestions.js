@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS onboarding_questions (
     training_experience VARCHAR(30),
     training_goals VARCHAR(100),
 
+    -- App permissions screen (optional toggles)
+    notifications_enabled BOOLEAN DEFAULT FALSE,
+    location_enabled BOOLEAN DEFAULT FALSE,
+
     -- Step 5: Create your athlete (avatar)
     avatar_smile VARCHAR(50),
     avatar_hair VARCHAR(50),
@@ -27,8 +31,10 @@ CREATE TABLE IF NOT EXISTS onboarding_questions (
 );
 `;
 
-const alterOnboardingAvatarColumns = `
+const alterOnboardingExtraColumns = `
 ALTER TABLE onboarding_questions
+    ADD COLUMN IF NOT EXISTS notifications_enabled BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS location_enabled BOOLEAN DEFAULT FALSE,
     ADD COLUMN IF NOT EXISTS avatar_smile VARCHAR(50),
     ADD COLUMN IF NOT EXISTS avatar_hair VARCHAR(50),
     ADD COLUMN IF NOT EXISTS avatar_kit VARCHAR(50),
@@ -38,5 +44,5 @@ ALTER TABLE onboarding_questions
 
 module.exports = {
     createOnboardingQuestionsTable,
-    alterOnboardingAvatarColumns,
+    alterOnboardingExtraColumns,
 };
