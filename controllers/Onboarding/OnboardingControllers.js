@@ -1,10 +1,27 @@
-const pool = require('../../lib/pool');
+const { queryWithHardTimeout } = require('../../lib/dbQuery');
+const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+
+let usersTableReady = false;
+
+async function ensureUsersTable() {
+    if (usersTableReady) return;
+    await queryWithHardTimeout(createUsersTable, [], 8000);
+    usersTableReady = true;
+}
 
 function resolveAuthProvider(user) {
     const fromApp = user?.app_metadata?.provider;
     const fromMeta = user?.user_metadata?.provider;
     const iss = String(user?.user_metadata?.iss || '');
     const providers = user?.app_metadata?.providers;
+
+    if (
+        fromApp === 'apple' ||
+        fromMeta === 'apple' ||
+        (Array.isArray(providers) && providers.includes('apple') && !providers.includes('google'))
+    ) {
+        return 'apple';
+    }
 
     if (
         fromApp === 'google' ||
@@ -14,36 +31,118 @@ function resolveAuthProvider(user) {
     ) {
         return 'google';
     }
-    if (
-        fromApp === 'apple' ||
-        fromMeta === 'apple' ||
-        (Array.isArray(providers) && providers.includes('apple'))
-    ) {
-        return 'apple';
-    }
+
     if (user?.source === 'supabase') {
         return 'google';
     }
-    return fromApp || fromMeta || 'email';
+
+    if (fromApp === 'email' || fromMeta === 'email') {
+        return 'email';
+    }
+
+    return 'email';
 }
 
-async function queryWithHardTimeout(text, params, timeoutMs = 8000) {
-    const connectMs = Math.min(timeoutMs, 5000);
-    const client = await Promise.race([
-        pool.connect(),
-        new Promise((_, reject) => {
-            setTimeout(
-                () => reject(new Error(`DB connect timed out after ${connectMs}ms`)),
-                connectMs
-            );
-        }),
-    ]);
+/**
+ * Production upsert:
+ * - New Google/Apple user → insert with id = supabase sub
+ * - Existing email account → link supabase_user_id, keep canonical DB id (FK-safe)
+ * - Concurrent retries → unique-violation safe retry
+ * - Always return the canonical users row FE / questions must use
+ */
+async function upsertOnboardingUser({
+    supabaseUserId,
+    email,
+    authProvider,
+    isEmailVerified,
+}) {
+    const findSql = `
+        SELECT id, email, auth_provider, is_email_verified, supabase_user_id, created_at
+        FROM users
+        WHERE supabase_user_id = $1
+           OR id = $1
+           OR email = $2
+        ORDER BY CASE
+            WHEN supabase_user_id = $1 THEN 0
+            WHEN id = $1 THEN 1
+            ELSE 2
+        END
+        LIMIT 1
+    `;
+
+    const existing = await queryWithHardTimeout(findSql, [supabaseUserId, email], 8000);
+    if (existing.rows[0]) {
+        const row = existing.rows[0];
+        const updated = await queryWithHardTimeout(
+            `
+            UPDATE users
+            SET
+                supabase_user_id = COALESCE(users.supabase_user_id, $2),
+                email = CASE
+                    WHEN users.email = $3 THEN users.email
+                    WHEN EXISTS (
+                        SELECT 1 FROM users other
+                        WHERE other.email = $3 AND other.id <> users.id
+                    ) THEN users.email
+                    ELSE $3
+                END,
+                auth_provider = CASE
+                    WHEN users.auth_provider = 'email' AND $4 IN ('google', 'apple') THEN $4
+                    WHEN $4 IN ('google', 'apple', 'email') THEN $4
+                    ELSE users.auth_provider
+                END,
+                is_email_verified = users.is_email_verified OR $5,
+                updated_at = NOW()
+            WHERE id = $1
+            RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
+            `,
+            [row.id, supabaseUserId, email, authProvider, isEmailVerified],
+            8000
+        );
+        return updated.rows[0];
+    }
 
     try {
-        await client.query(`SET statement_timeout = ${Math.max(1000, timeoutMs)}`);
-        return await client.query(text, params);
-    } finally {
-        client.release();
+        const inserted = await queryWithHardTimeout(
+            `
+            INSERT INTO users (
+                id,
+                supabase_user_id,
+                email,
+                auth_provider,
+                is_email_verified,
+                updated_at
+            )
+            VALUES ($1, $1, $2, $3, $4, NOW())
+            RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
+            `,
+            [supabaseUserId, email, authProvider, isEmailVerified],
+            8000
+        );
+        return inserted.rows[0];
+    } catch (error) {
+        // Concurrent first-login race (unique email / id / supabase_user_id).
+        if (error.code === '23505') {
+            const again = await queryWithHardTimeout(findSql, [supabaseUserId, email], 8000);
+            if (again.rows[0]) {
+                const row = again.rows[0];
+                const updated = await queryWithHardTimeout(
+                    `
+                    UPDATE users
+                    SET
+                        supabase_user_id = COALESCE(users.supabase_user_id, $2),
+                        is_email_verified = users.is_email_verified OR $3,
+                        updated_at = NOW()
+                    WHERE id = $1
+                    RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
+                    `,
+                    [row.id, supabaseUserId, isEmailVerified],
+                    8000
+                );
+                return updated.rows[0];
+            }
+        }
+        throw error;
     }
 }
 
@@ -86,6 +185,11 @@ const UserOnboarding = async (req, res) => {
         }
 
         const authProvider = resolveAuthProvider(user);
+        if (!['google', 'apple', 'email'].includes(authProvider)) {
+            clearTimeout(watchdog);
+            return respond(400, { message: 'Unsupported auth provider' });
+        }
+
         const isEmailVerified = Boolean(
             user.email_confirmed_at ||
                 user.user_metadata?.email_verified ||
@@ -93,41 +197,25 @@ const UserOnboarding = async (req, res) => {
                 authProvider === 'apple'
         );
 
-        // Table is created at boot / migrations — do not CREATE TABLE on every request
-        // (catalog locks on Neon can stall the single Vercel pool client).
+        await ensureUsersTable();
+
         console.log('UserOnboarding: upsert', { authProvider });
-        const { rows } = await queryWithHardTimeout(
-            `
-            INSERT INTO users (
-                id,
-                supabase_user_id,
-                email,
-                auth_provider,
-                is_email_verified,
-                updated_at
-            )
-            VALUES ($1, $1, $2, $3, $4, NOW())
-            ON CONFLICT (email)
-            DO UPDATE SET
-                supabase_user_id = COALESCE(users.supabase_user_id, EXCLUDED.supabase_user_id),
-                auth_provider = EXCLUDED.auth_provider,
-                is_email_verified = EXCLUDED.is_email_verified OR users.is_email_verified,
-                updated_at = NOW()
-            RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
-            `,
-            [supabaseUserId, email, authProvider, isEmailVerified],
-            8000
-        );
+        const saved = await upsertOnboardingUser({
+            supabaseUserId,
+            email,
+            authProvider,
+            isEmailVerified,
+        });
 
         console.log('UserOnboarding: success', {
             ms: Date.now() - startedAt,
-            userId: rows[0]?.id,
+            userId: saved?.id,
         });
 
         clearTimeout(watchdog);
         return respond(200, {
             message: 'User onboarded successfully',
-            user: rows[0],
+            user: saved,
         });
     } catch (error) {
         console.error('UserOnboarding error', {

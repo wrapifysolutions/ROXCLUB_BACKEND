@@ -1,5 +1,5 @@
 const { getSupabaseUser } = require('../lib/SupabaseConfig');
-const pool = require('../lib/pool');
+const { queryWithHardTimeout } = require('../lib/dbQuery');
 const { verifyAccessToken, COOKIE_NAME } = require('../lib/token');
 
 function peekJwtPayload(token) {
@@ -17,39 +17,57 @@ function isLikelySupabaseToken(token) {
     const payload = peekJwtPayload(token);
     if (!payload) return false;
     const iss = String(payload.iss || '');
+    // Supabase access tokens always carry iss + role=authenticated (or similar).
     return (
         iss.includes('supabase.co') ||
-        iss.includes('supabase') ||
-        Boolean(payload.sub && payload.role) ||
-        Boolean(payload.amr)
+        (Boolean(payload.sub) &&
+            Boolean(payload.role) &&
+            (payload.role === 'authenticated' || payload.role === 'anon'))
     );
 }
 
-async function queryUserById(userId, timeoutMs = 5000) {
-    const connectMs = Math.min(timeoutMs, 4000);
-    const client = await Promise.race([
-        pool.connect(),
-        new Promise((_, reject) => {
-            setTimeout(
-                () => reject(new Error(`DB connect timed out after ${connectMs}ms`)),
-                connectMs
-            );
-        }),
-    ]);
+async function findDbUser({ supabaseUserId, email }) {
+    const { rows } = await queryWithHardTimeout(
+        `
+        SELECT id, email, auth_provider, is_email_verified, supabase_user_id
+        FROM users
+        WHERE ($1::uuid IS NOT NULL AND (supabase_user_id = $1 OR id = $1))
+           OR ($2::text IS NOT NULL AND email = $2)
+        ORDER BY CASE
+            WHEN supabase_user_id = $1 THEN 0
+            WHEN id = $1 THEN 1
+            ELSE 2
+        END
+        LIMIT 1
+        `,
+        [supabaseUserId || null, email || null],
+        5000
+    );
+    return rows[0] || null;
+}
 
-    try {
-        await client.query(`SET statement_timeout = ${Math.max(1000, timeoutMs)}`);
-        return await client.query(
-            `
-            SELECT id, email, auth_provider, is_email_verified
-            FROM users
-            WHERE id = $1
-            `,
-            [userId]
-        );
-    } finally {
-        client.release();
+async function authRoxClubJwt(token) {
+    const payload = verifyAccessToken(token);
+    const { rows } = await queryWithHardTimeout(
+        `
+        SELECT id, email, auth_provider, is_email_verified, supabase_user_id
+        FROM users
+        WHERE id = $1
+        `,
+        [payload.sub],
+        5000
+    );
+    const user = rows[0];
+    if (!user || !user.is_email_verified) {
+        return null;
     }
+    return {
+        id: user.id,
+        email: user.email,
+        auth_provider: user.auth_provider,
+        supabase_user_id: user.supabase_user_id,
+        source: 'jwt',
+    };
 }
 
 const authMiddleware = async (req, res, next) => {
@@ -62,7 +80,6 @@ const authMiddleware = async (req, res, next) => {
         return res.status(status).json(body);
     };
 
-    // Never let auth hang past this — FE connectTimeout is ~20s.
     const watchdog = setTimeout(() => {
         console.error('auth: watchdog fired', { ms: Date.now() - startedAt, path: req.path });
         fail(503, {
@@ -74,47 +91,21 @@ const authMiddleware = async (req, res, next) => {
     try {
         console.log('auth: start', req.method, req.path);
 
-        const cookieToken = req.cookies?.[COOKIE_NAME];
-        if (cookieToken) {
-            try {
-                const payload = verifyAccessToken(cookieToken);
-                const { rows } = await queryUserById(payload.sub);
-                const user = rows[0];
-                if (!user || !user.is_email_verified) {
-                    clearTimeout(watchdog);
-                    return fail(401, { message: 'Unauthorized Access' });
-                }
-                req.user = {
-                    id: user.id,
-                    email: user.email,
-                    auth_provider: user.auth_provider,
-                    source: 'cookie',
-                };
-                clearTimeout(watchdog);
-                return next();
-            } catch (error) {
-                console.error('auth: cookie failed', error.message);
-                clearTimeout(watchdog);
-                return fail(401, { message: 'Unauthorized Access' });
-            }
-        }
-
         const authorization = req.headers.authorization;
-        if (!authorization?.startsWith('Bearer ')) {
-            clearTimeout(watchdog);
-            return fail(401, { message: 'Unauthorized Access' });
-        }
+        const bearer = authorization?.startsWith('Bearer ')
+            ? authorization.slice(7).trim()
+            : null;
+        const cookieToken = req.cookies?.[COOKIE_NAME];
 
-        const token = authorization.slice(7);
-
-        // Google/Apple Supabase token — JWKS local verify (no hanging Auth call).
-        if (isLikelySupabaseToken(token)) {
+        // Production mobile: Bearer wins over cookie (Flutter Dio + optional CookieJar).
+        if (bearer && isLikelySupabaseToken(bearer)) {
             console.log('auth: supabase token detected', {
                 ms: Date.now() - startedAt,
-                tokenLen: token.length,
+                tokenLen: bearer.length,
             });
-            const { data, error } = await getSupabaseUser(token, 5000);
-            if (error || !data?.user) {
+
+            const { data, error } = await getSupabaseUser(bearer, 5000);
+            if (error || !data?.user?.id) {
                 console.error('auth: supabase invalid', error?.message || error);
                 clearTimeout(watchdog);
                 return fail(401, {
@@ -122,32 +113,64 @@ const authMiddleware = async (req, res, next) => {
                     detail: error?.message,
                 });
             }
-            console.log('auth: supabase ok', data.user.id, data.user.email, {
+
+            const sbUser = data.user;
+            const email = String(sbUser.email || '')
+                .trim()
+                .toLowerCase();
+
+            // Resolve canonical DB id so /onboarding-questions FK stays correct
+            // when Google links to an existing email account.
+            let dbUser = null;
+            try {
+                dbUser = await findDbUser({
+                    supabaseUserId: sbUser.id,
+                    email: email || null,
+                });
+            } catch (lookupError) {
+                console.warn('auth: db lookup skipped', lookupError.message);
+            }
+
+            req.user = {
+                ...sbUser,
+                id: dbUser?.id || sbUser.id,
+                email: dbUser?.email || email || sbUser.email,
+                supabase_user_id: sbUser.id,
+                source: 'supabase',
+            };
+
+            console.log('auth: supabase ok', req.user.id, req.user.email, {
                 ms: Date.now() - startedAt,
+                linked: Boolean(dbUser),
             });
-            req.user = data.user;
-            req.user.source = 'supabase';
             clearTimeout(watchdog);
             return next();
         }
 
-        // Email-login RoxClub JWT
-        try {
-            const payload = verifyAccessToken(token);
-            const { rows } = await queryUserById(payload.sub);
-            const user = rows[0];
-            if (user && user.is_email_verified) {
-                req.user = {
-                    id: user.id,
-                    email: user.email,
-                    auth_provider: user.auth_provider,
-                    source: 'jwt',
-                };
-                clearTimeout(watchdog);
-                return next();
+        if (bearer) {
+            try {
+                const user = await authRoxClubJwt(bearer);
+                if (user) {
+                    req.user = user;
+                    clearTimeout(watchdog);
+                    return next();
+                }
+            } catch (error) {
+                console.error('auth: bearer jwt failed', error.message);
             }
-        } catch (error) {
-            console.error('auth: jwt failed', error.message);
+        }
+
+        if (cookieToken) {
+            try {
+                const user = await authRoxClubJwt(cookieToken);
+                if (user) {
+                    req.user = { ...user, source: 'cookie' };
+                    clearTimeout(watchdog);
+                    return next();
+                }
+            } catch (error) {
+                console.error('auth: cookie failed', error.message);
+            }
         }
 
         clearTimeout(watchdog);

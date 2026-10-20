@@ -1,12 +1,17 @@
 const pool = require('../../lib/pool');
+const { queryWithHardTimeout } = require('../../lib/dbQuery');
 const {
     createOnboardingQuestionsTable,
     alterOnboardingExtraColumns,
 } = require('../../models/Onboarding/OnboardingQuestions');
 
+let onboardingQuestionsReady = false;
+
 async function ensureOnboardingQuestionsSchema() {
-    await pool.query(createOnboardingQuestionsTable);
-    await pool.query(alterOnboardingExtraColumns);
+    if (onboardingQuestionsReady) return;
+    await queryWithHardTimeout(createOnboardingQuestionsTable, [], 8000);
+    await queryWithHardTimeout(alterOnboardingExtraColumns, [], 8000);
+    onboardingQuestionsReady = true;
 }
 
 const createOnboardingQuestions = async (req, res) => {
@@ -66,7 +71,7 @@ const createOnboardingQuestions = async (req, res) => {
 
         await ensureOnboardingQuestionsSchema();
 
-        const { rows } = await pool.query(
+        const { rows } = await queryWithHardTimeout(
             `
             INSERT INTO onboarding_questions (
                 user_id,
@@ -129,7 +134,8 @@ const createOnboardingQuestions = async (req, res) => {
                 skippedAvatar ? null : avatar_kit,
                 skippedAvatar ? null : avatar_skin_tone,
                 skippedAvatar,
-            ]
+            ],
+            8000
         );
 
         return res.status(200).json({
