@@ -33,7 +33,33 @@ Backend for RoxClub auth + onboarding. Today’s work focused on **Neon Postgres
 - Fields: display name, DOB, gender, height, weight, training experience, goals
 - `POST /onboarding-questions` saves/updates answers for the logged-in user
 
-### 5. Project structure cleanup
+### 5. Strava + Zepp integrations (production OAuth)
+- `GET /api/integrations/strava/connect` (auth) → returns Strava authorize URL
+- `GET /api/integrations/strava/callback` → exchanges code, encrypts tokens, redirects to frontend
+- `GET /api/integrations/strava/status` (auth) → connection status
+- `DELETE /api/integrations/strava` (auth) → local disconnect + Strava deauthorize
+- OAuth `state` stored in DB (`oauth_states`), not in memory
+- Access/refresh tokens encrypted with AES-256-GCM (`TOKEN_ENCRYPTION_KEY`)
+- Auto refresh helper via `getValidAccessToken(userId)` before API calls
+- Tables ensured on server boot: `user_integrations`, `oauth_states`
+
+**Zepp / Amazfit (Huami partner flow)**
+- `GET /api/integrations/zepp/connect` (auth) → Xiaomi authorize URL
+- `GET /api/integrations/zepp/callback` → Xiaomi code → Huami token → encrypted save
+- `GET /api/integrations/zepp/status` (auth)
+- `DELETE /api/integrations/zepp` (auth)
+- Uses same `user_integrations` table with `provider = 'zepp'`
+- Needs Xiaomi Open Platform + Huami/Zepp partner credentials (not fully self-serve like Strava)
+
+**Apple Health (HealthKit — iOS only, no web OAuth)**
+- `GET /api/integrations` (auth) → all providers for “Connect your data” screen
+- `POST /api/integrations/apple-health/connect` (auth) → iOS reports HealthKit granted
+- `GET /api/integrations/apple-health/status` (auth)
+- `POST /api/integrations/apple-health/sync` (auth) → push HRV/sleep/resting HR/steps
+- `DELETE /api/integrations/apple-health` (auth)
+- Stores samples in `apple_health_samples`
+
+### 6. Project structure cleanup
 Controllers moved into folders; imports fixed:
 
 ```
@@ -70,7 +96,25 @@ SMTP_USER=
 SMTP_PASS=
 JWT_SECRET=
 JWT_EXPIRES_IN=7d
+STRAVA_CLIENT_ID=
+STRAVA_CLIENT_SECRET=
+STRAVA_REDIRECT_URI=https://your-api.com/api/integrations/strava/callback
+STRAVA_FRONTEND_SUCCESS_URL=https://your-app.com/integrations/strava?status=connected
+STRAVA_FRONTEND_ERROR_URL=https://your-app.com/integrations/strava?status=error
+TOKEN_ENCRYPTION_KEY=   # 64-char hex (32 bytes)
+ZEPP_XIAOMI_CLIENT_ID=
+ZEPP_XIAOMI_CLIENT_SECRET=
+ZEPP_REDIRECT_URI=https://your-api.com/api/integrations/zepp/callback
+ZEPP_HUAMI_THIRD_NAME=
+ZEPP_HUAMI_APP_NAME=
+ZEPP_HUAMI_APP_ID=
+ZEPP_HUAMI_APP_SECRET=
+ZEPP_FRONTEND_SUCCESS_URL=
+ZEPP_FRONTEND_ERROR_URL=
 ```
+
+Strava dashboard callback domain must match your API host (for local: `localhost`).  
+Zepp needs Xiaomi redirect URI + Huami partner values from their onboarding team.
 
 ---
 
@@ -172,8 +216,28 @@ Header: `Authorization: Bearer <token>`
 
 ---
 
+## Strava API (Postman / app)
+
+1. Login → copy JWT  
+2. `GET /api/integrations/strava/connect` with `Authorization: Bearer <token>`  
+3. Open `authorizationUrl` in browser → approve Strava  
+4. Strava hits callback → tokens saved encrypted → browser redirects to frontend success URL  
+5. `GET /api/integrations/strava/status` to confirm `connected: true`
+
+## Zepp API (Postman / app)
+
+Same order as Strava, after filling Zepp env credentials:
+
+1. Login → JWT  
+2. `GET /api/integrations/zepp/connect`  
+3. Open `authorizationUrl` (Xiaomi login) → approve  
+4. Callback saves Huami/Zepp tokens  
+5. `GET /api/integrations/zepp/status`  
+6. `DELETE /api/integrations/zepp` to disconnect  
+
 ## Notes / bugs fixed today
 - Neon connect timeout: raised pool timeout; removed `channel_binding=require`
 - Resend OTP was not updating DB (old expiry kept short) — fixed to reset 1-minute expiry
 - Folder moves broke imports — routes + `../../lib` paths fixed
 - `start` uses `node`; `dev` uses `nodemon`
+- Strava env mismatch + in-memory state replaced with DB state + encrypted tokens
