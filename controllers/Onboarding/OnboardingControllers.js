@@ -1,22 +1,34 @@
 const pool = require('../../lib/pool');
-const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
 
 function resolveAuthProvider(user) {
     const fromApp = user?.app_metadata?.provider;
     const fromMeta = user?.user_metadata?.provider;
     const iss = String(user?.user_metadata?.iss || '');
+    const providers = user?.app_metadata?.providers;
 
-    if (fromApp === 'google' || fromMeta === 'google' || iss.includes('accounts.google.com')) {
+    if (
+        fromApp === 'google' ||
+        fromMeta === 'google' ||
+        iss.includes('accounts.google.com') ||
+        (Array.isArray(providers) && providers.includes('google'))
+    ) {
         return 'google';
     }
-    if (fromApp === 'apple' || fromMeta === 'apple') {
+    if (
+        fromApp === 'apple' ||
+        fromMeta === 'apple' ||
+        (Array.isArray(providers) && providers.includes('apple'))
+    ) {
         return 'apple';
+    }
+    if (user?.source === 'supabase') {
+        return 'google';
     }
     return fromApp || fromMeta || 'email';
 }
 
-async function queryWithHardTimeout(text, params, timeoutMs = 10000) {
-    const connectMs = Math.min(timeoutMs, 8000);
+async function queryWithHardTimeout(text, params, timeoutMs = 8000) {
+    const connectMs = Math.min(timeoutMs, 5000);
     const client = await Promise.race([
         pool.connect(),
         new Promise((_, reject) => {
@@ -28,7 +40,6 @@ async function queryWithHardTimeout(text, params, timeoutMs = 10000) {
     ]);
 
     try {
-        // Postgres aborts the query so the pooled client is free for the next request.
         await client.query(`SET statement_timeout = ${Math.max(1000, timeoutMs)}`);
         return await client.query(text, params);
     } finally {
@@ -46,14 +57,13 @@ const UserOnboarding = async (req, res) => {
         return res.status(status).json(body);
     };
 
-    // Absolute safety net so the client never waits forever.
     const watchdog = setTimeout(() => {
         console.error('UserOnboarding: watchdog fired', { ms: Date.now() - startedAt });
         respond(503, {
             message: 'Onboarding timed out',
-            detail: 'Server failed to finish within 20s',
+            detail: 'Server failed to finish within 12s',
         });
-    }, 20000);
+    }, 12000);
 
     try {
         const user = req.user || {};
@@ -83,9 +93,8 @@ const UserOnboarding = async (req, res) => {
                 authProvider === 'apple'
         );
 
-        console.log('UserOnboarding: create table');
-        await queryWithHardTimeout(createUsersTable, [], 10000);
-
+        // Table is created at boot / migrations — do not CREATE TABLE on every request
+        // (catalog locks on Neon can stall the single Vercel pool client).
         console.log('UserOnboarding: upsert', { authProvider });
         const { rows } = await queryWithHardTimeout(
             `
@@ -107,7 +116,7 @@ const UserOnboarding = async (req, res) => {
             RETURNING id, email, auth_provider, is_email_verified, supabase_user_id, created_at
             `,
             [supabaseUserId, email, authProvider, isEmailVerified],
-            10000
+            8000
         );
 
         console.log('UserOnboarding: success', {
