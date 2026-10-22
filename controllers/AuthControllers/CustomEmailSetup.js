@@ -4,6 +4,7 @@ const { hashPassword } = require('../../data/encryption');
 const pool = require('../../lib/pool');
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
 const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+const { applyConsentByEmail } = require('../../lib/onboarding/completeOnboarding');
 
 let usersTableReady = false;
 
@@ -97,6 +98,8 @@ Powered by Wrapify Solutions
         if (!result.accepted || result.accepted.length === 0) {
             return res.status(400).json({ message: 'Failed to send email' });
         }
+
+        await applyConsentByEmail(normalizedEmail, req.body || {});
 
         setSignupSession(req, normalizedEmail);
 

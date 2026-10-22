@@ -26,9 +26,28 @@ CREATE TABLE IF NOT EXISTS users (
 
     is_email_verified BOOLEAN DEFAULT FALSE,
 
+    consent_accepted_at TIMESTAMPTZ,
+    consent_version VARCHAR(40),
+
+    display_name VARCHAR(100),
+    dob DATE,
+    gender VARCHAR(20),
+    experience_level VARCHAR(30),
+
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 `;
 
+const alterUsersProfileColumns = `
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS consent_accepted_at TIMESTAMPTZ,
+    ADD COLUMN IF NOT EXISTS consent_version VARCHAR(40),
+    ADD COLUMN IF NOT EXISTS display_name VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS dob DATE,
+    ADD COLUMN IF NOT EXISTS gender VARCHAR(20),
+    ADD COLUMN IF NOT EXISTS experience_level VARCHAR(30);
+`;
+
 module.exports = createUsersTable;
+module.exports.alterUsersProfileColumns = alterUsersProfileColumns;

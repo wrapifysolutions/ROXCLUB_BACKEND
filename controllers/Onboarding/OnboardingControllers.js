@@ -1,5 +1,6 @@
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
 const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+const { applyConsent } = require('../../lib/onboarding/completeOnboarding');
 
 let usersTableReady = false;
 
@@ -255,6 +256,8 @@ const UserOnboarding = async (req, res) => {
             supabaseUserId,
         });
 
+        const consent = await applyConsent(saved?.id, req.body || {});
+
         console.log('UserOnboarding: success', {
             ms: Date.now() - startedAt,
             userId: saved?.id,
@@ -265,6 +268,12 @@ const UserOnboarding = async (req, res) => {
         return respond(200, {
             message: 'User onboarded successfully',
             user: saved,
+            consent: consent
+                ? {
+                      accepted_at: consent.consent_accepted_at,
+                      version: consent.consent_version,
+                  }
+                : null,
         });
     } catch (error) {
         console.error('UserOnboarding error', {

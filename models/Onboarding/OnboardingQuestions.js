@@ -29,6 +29,10 @@ CREATE TABLE IF NOT EXISTS onboarding_questions (
     avatar_kit VARCHAR(50),
     avatar_skin_tone VARCHAR(30),
     avatar_skipped BOOLEAN DEFAULT FALSE,
+    avatar_config JSONB,
+
+    motion_enabled BOOLEAN DEFAULT FALSE,
+    push_token TEXT,
 
     is_completed BOOLEAN DEFAULT FALSE,
 
@@ -51,7 +55,10 @@ ALTER TABLE onboarding_questions
     ADD COLUMN IF NOT EXISTS avatar_hair VARCHAR(50),
     ADD COLUMN IF NOT EXISTS avatar_kit VARCHAR(50),
     ADD COLUMN IF NOT EXISTS avatar_skin_tone VARCHAR(30),
-    ADD COLUMN IF NOT EXISTS avatar_skipped BOOLEAN DEFAULT FALSE;
+    ADD COLUMN IF NOT EXISTS avatar_skipped BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS avatar_config JSONB,
+    ADD COLUMN IF NOT EXISTS motion_enabled BOOLEAN DEFAULT FALSE,
+    ADD COLUMN IF NOT EXISTS push_token TEXT;
 `;
 
 module.exports = {
