@@ -46,12 +46,18 @@ const VerifyEmailOTP = async (req, res) => {
         }
 
         if (user.is_email_verified) {
-            const token = createAccessToken(user);
+            const alreadyUser = {
+                id: user.id,
+                email: user.email,
+                auth_provider: user.auth_provider || 'email',
+            };
+            const token = createAccessToken(alreadyUser);
             setAuthCookie(res, token);
             return res.status(200).json({
                 message: 'Email is already verified',
                 redirect: '/home',
-                user: { id: user.id, email: user.email },
+                user: alreadyUser,
+                token,
             });
         }
 
@@ -102,10 +108,8 @@ const VerifyEmailOTP = async (req, res) => {
         return res.status(200).json({
             message: 'Email verified successfully',
             redirect: '/home',
-            user: {
-                id: verifiedUser.id,
-                email: verifiedUser.email,
-            },
+            user: verifiedUser,
+            token,
         });
     } catch (error) {
         console.error('VerifyEmailOTP error', error);

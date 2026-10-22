@@ -36,17 +36,19 @@ const CustomEmailLogin = async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = createAccessToken(user);
+        const sessionUser = {
+            id: user.id,
+            email: user.email,
+            auth_provider: user.auth_provider || 'email',
+        };
+        const token = createAccessToken(sessionUser);
         setAuthCookie(res, token);
 
         return res.status(200).json({
             message: 'Login successful',
             redirect: '/home',
-            user: {
-                id: user.id,
-                email: user.email,
-                auth_provider: user.auth_provider,
-            },
+            user: sessionUser,
+            token,
         });
     } catch (error) {
         console.error('CustomEmailLogin error', error);

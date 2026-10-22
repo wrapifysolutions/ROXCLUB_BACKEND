@@ -1,4 +1,5 @@
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
+const { getHomeWatchData } = require('../../lib/home/athleteDna');
 
 function firstNameFrom(displayName) {
     const trimmed = String(displayName || '').trim();
@@ -34,10 +35,13 @@ const GetHomeProfile = async (req, res) => {
         }
 
         const displayName = String(profile.display_name).trim();
+        const watchData = await getHomeWatchData(userId);
 
         return res.status(200).json({
             display_name: displayName,
             first_name: firstNameFrom(displayName),
+            this_week: watchData.this_week,
+            athlete_dna: watchData.athlete_dna,
         });
     } catch (error) {
         console.error('GetHomeProfile error', error);
