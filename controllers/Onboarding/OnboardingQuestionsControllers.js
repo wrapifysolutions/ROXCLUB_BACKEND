@@ -1,5 +1,5 @@
-const pool = require('../../lib/pool');
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
+const { resolveUserLocation } = require('../../lib/location');
 const {
     createOnboardingQuestionsTable,
     alterOnboardingExtraColumns,
@@ -57,6 +57,7 @@ const createOnboardingQuestions = async (req, res) => {
         const skippedAvatar = Boolean(avatar_skipped);
         const notificationsEnabled = Boolean(notifications_enabled);
         const locationEnabled = Boolean(location_enabled);
+        const location = await resolveUserLocation(req, req.body, locationEnabled);
 
         // If user did not skip avatar step, require the 4 avatar choices from "Create your athlete"
         if (
@@ -84,6 +85,12 @@ const createOnboardingQuestions = async (req, res) => {
                 training_goals,
                 notifications_enabled,
                 location_enabled,
+                latitude,
+                longitude,
+                location_city,
+                location_region,
+                location_country,
+                location_source,
                 avatar_smile,
                 avatar_hair,
                 avatar_kit,
@@ -95,7 +102,8 @@ const createOnboardingQuestions = async (req, res) => {
             VALUES (
                 $1, $2, $3, $4, $5, $6, $7, $8,
                 $9, $10,
-                $11, $12, $13, $14, $15,
+                $11, $12, $13, $14, $15, $16,
+                $17, $18, $19, $20, $21,
                 TRUE, NOW()
             )
             ON CONFLICT (user_id)
@@ -109,6 +117,12 @@ const createOnboardingQuestions = async (req, res) => {
                 training_goals = EXCLUDED.training_goals,
                 notifications_enabled = EXCLUDED.notifications_enabled,
                 location_enabled = EXCLUDED.location_enabled,
+                latitude = EXCLUDED.latitude,
+                longitude = EXCLUDED.longitude,
+                location_city = EXCLUDED.location_city,
+                location_region = EXCLUDED.location_region,
+                location_country = EXCLUDED.location_country,
+                location_source = EXCLUDED.location_source,
                 avatar_smile = EXCLUDED.avatar_smile,
                 avatar_hair = EXCLUDED.avatar_hair,
                 avatar_kit = EXCLUDED.avatar_kit,
@@ -129,6 +143,12 @@ const createOnboardingQuestions = async (req, res) => {
                 training_goals,
                 notificationsEnabled,
                 locationEnabled,
+                location.latitude,
+                location.longitude,
+                location.city,
+                location.region,
+                location.country,
+                location.source,
                 skippedAvatar ? null : avatar_smile,
                 skippedAvatar ? null : avatar_hair,
                 skippedAvatar ? null : avatar_kit,
