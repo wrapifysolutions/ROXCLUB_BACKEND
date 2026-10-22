@@ -9,6 +9,12 @@ const {
     getValidAccessToken,
     disconnectStrava,
 } = require('../../lib/strava/stravaTokens');
+const {
+    syncStravaDataSafe,
+    getStoredAthlete,
+    listStoredActivities,
+    countStoredActivities,
+} = require('../../lib/strava/stravaSync');
 const pool = require('../../lib/pool');
 
 async function createOAuthState(userId) {
@@ -133,6 +139,12 @@ const stravaCallback = async (req, res) => {
         const tokenPayload = await exchangeAuthorizationCode(String(code));
         await saveStravaConnection(userId, tokenPayload);
 
+        try {
+            await syncStravaDataSafe(userId, { days: 90, maxPages: 2 });
+        } catch (syncError) {
+            console.warn('Strava first sync warning:', syncError.message);
+        }
+
         return redirectWithStatus(res, starvaConfig.frontendSuccessUrl, {
             provider: 'strava',
         });
@@ -161,6 +173,11 @@ const getStravaStatus = async (req, res) => {
             });
         }
 
+        const activityCount =
+            integration.status === 'connected'
+                ? await countStoredActivities(userId)
+                : 0;
+
         return res.status(200).json({
             success: true,
             connected: integration.status === 'connected',
@@ -168,6 +185,9 @@ const getStravaStatus = async (req, res) => {
             providerUserId: integration.provider_user_id,
             tokenExpiresAt: integration.token_expires_at,
             connectedAt: integration.connected_at,
+            lastSyncedAt: integration.last_synced_at,
+            lastSyncStatus: integration.last_sync_status,
+            activityCount,
             lastError: integration.last_error,
         });
     } catch (error) {
@@ -215,9 +235,118 @@ const disconnectStravaAccount = async (req, res) => {
     }
 };
 
+const syncStravaAccount = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized Access' });
+        }
+
+        const days = Math.min(Math.max(Number(req.query.days) || 180, 1), 730);
+        const result = await syncStravaDataSafe(userId, { days, maxPages: 8 });
+
+        return res.status(200).json({
+            success: true,
+            synced: true,
+            athlete: {
+                id: result.athlete?.id || null,
+                firstname: result.athlete?.firstname || null,
+                lastname: result.athlete?.lastname || null,
+                username: result.athlete?.username || null,
+            },
+            saved: result.saved,
+            message: 'Strava activities synced',
+        });
+    } catch (error) {
+        console.error('Strava sync error:', error);
+        const status = error.message === 'Strava is not connected' ? 400 : 500;
+        return res.status(status).json({
+            success: false,
+            message: error.message || 'Unable to sync Strava',
+        });
+    }
+};
+
+const getStravaAthlete = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized Access' });
+        }
+
+        const integration = await getStravaIntegration(userId);
+        if (!integration || integration.status !== 'connected') {
+            return res.status(400).json({
+                success: false,
+                message: 'Connect Strava first',
+            });
+        }
+
+        const athlete = await getStoredAthlete(userId);
+        return res.status(200).json({
+            success: true,
+            athlete: athlete
+                ? {
+                      id: athlete.athlete_id,
+                      username: athlete.username,
+                      firstname: athlete.firstname,
+                      lastname: athlete.lastname,
+                      city: athlete.city,
+                      country: athlete.country,
+                      sex: athlete.sex,
+                      profileUrl: athlete.profile_url,
+                  }
+                : null,
+        });
+    } catch (error) {
+        console.error('Strava athlete error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to fetch Strava athlete',
+        });
+    }
+};
+
+const getStravaActivities = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized Access' });
+        }
+
+        const integration = await getStravaIntegration(userId);
+        if (!integration || integration.status !== 'connected') {
+            return res.status(400).json({
+                success: false,
+                message: 'Connect Strava first',
+            });
+        }
+
+        const activities = await listStoredActivities(userId, {
+            limit: req.query.limit,
+            offset: req.query.offset,
+        });
+
+        return res.status(200).json({
+            success: true,
+            count: activities.length,
+            activities,
+        });
+    } catch (error) {
+        console.error('Strava activities error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to fetch Strava activities',
+        });
+    }
+};
+
 module.exports = {
     connectStrava,
     stravaCallback,
     getStravaStatus,
     disconnectStravaAccount,
+    syncStravaAccount,
+    getStravaAthlete,
+    getStravaActivities,
 };

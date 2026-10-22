@@ -31,9 +31,15 @@ const GetAuthSession = async (req, res) => {
 
         const { rows } = await pool.query(
             `
-            SELECT id, email, auth_provider, is_email_verified
-            FROM users
-            WHERE id = $1
+            SELECT
+                u.id,
+                u.email,
+                u.auth_provider,
+                u.is_email_verified,
+                oq.is_completed AS onboarding_is_completed
+            FROM users u
+            LEFT JOIN onboarding_questions oq ON oq.user_id = u.id
+            WHERE u.id = $1
             `,
             [payload.sub]
         );
@@ -49,13 +55,16 @@ const GetAuthSession = async (req, res) => {
             });
         }
 
+        const onboardingCompleted = Boolean(user.onboarding_is_completed);
+
         return res.status(200).json({
             authenticated: true,
-            redirect: '/home',
+            redirect: onboardingCompleted ? '/home' : '/onboarding/name',
             user: {
                 id: user.id,
                 email: user.email,
                 auth_provider: user.auth_provider,
+                onboarding_completed: onboardingCompleted,
             },
         });
     } catch (error) {

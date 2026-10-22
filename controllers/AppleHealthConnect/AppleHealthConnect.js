@@ -4,6 +4,8 @@ const {
     getAppleHealthIntegration,
     disconnectAppleHealth,
     upsertAppleHealthSamples,
+    listAppleHealthSamples,
+    summarizeAppleHealth,
 } = require('../../lib/appleHealth/appleHealthStore');
 
 const ALLOWED_TYPES = new Set(['hrv', 'sleep', 'resting_hr', 'steps', 'workout']);
@@ -70,6 +72,11 @@ const getAppleHealthStatus = async (req, res) => {
             });
         }
 
+        const summary =
+            integration.status === 'connected'
+                ? await summarizeAppleHealth(userId)
+                : {};
+
         return res.status(200).json({
             success: true,
             connected: integration.status === 'connected',
@@ -79,6 +86,7 @@ const getAppleHealthStatus = async (req, res) => {
             connectedAt: integration.connected_at,
             lastSyncedAt: integration.last_synced_at,
             lastSyncStatus: integration.last_sync_status,
+            summary,
             lastError: integration.last_error,
         });
     } catch (error) {
@@ -166,9 +174,53 @@ const disconnectAppleHealthAccount = async (req, res) => {
     }
 };
 
+const getAppleHealthSamples = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized Access' });
+        }
+
+        const integration = await getAppleHealthIntegration(userId);
+        if (!integration || integration.status !== 'connected') {
+            return res.status(400).json({
+                success: false,
+                message: 'Connect Apple Health first',
+            });
+        }
+
+        const type = req.query.type ? String(req.query.type).toLowerCase() : undefined;
+        if (type && !ALLOWED_TYPES.has(type)) {
+            return res.status(400).json({
+                success: false,
+                message: 'type must be hrv | sleep | resting_hr | steps | workout',
+            });
+        }
+
+        const samples = await listAppleHealthSamples(userId, {
+            type,
+            limit: req.query.limit,
+            offset: req.query.offset,
+        });
+
+        return res.status(200).json({
+            success: true,
+            count: samples.length,
+            samples,
+        });
+    } catch (error) {
+        console.error('Apple Health list error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to fetch Apple Health samples',
+        });
+    }
+};
+
 module.exports = {
     connectAppleHealthAccount,
     getAppleHealthStatus,
     syncAppleHealthSamples,
+    getAppleHealthSamples,
     disconnectAppleHealthAccount,
 };

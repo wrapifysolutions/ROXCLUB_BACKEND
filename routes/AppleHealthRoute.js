@@ -4,9 +4,13 @@ const {
     connectAppleHealthAccount,
     getAppleHealthStatus,
     syncAppleHealthSamples,
+    getAppleHealthSamples,
     disconnectAppleHealthAccount,
 } = require('../controllers/AppleHealthConnect/AppleHealthConnect');
-const { getAllIntegrationsStatus } = require('../controllers/Integrations/IntegrationsStatus');
+const {
+    getAllIntegrationsStatus,
+    getWorkoutsFeed,
+} = require('../controllers/Integrations/IntegrationsStatus');
 
 const AppleHealthRouter = express.Router();
 
@@ -15,6 +19,11 @@ AppleHealthRouter.get(
     '/api/integrations',
     authMiddleware,
     getAllIntegrationsStatus
+);
+AppleHealthRouter.get(
+    '/api/integrations/workouts',
+    authMiddleware,
+    getWorkoutsFeed
 );
 
 // Apple Health (HealthKit via iOS app — no web OAuth)
@@ -32,6 +41,11 @@ AppleHealthRouter.post(
     '/api/integrations/apple-health/sync',
     authMiddleware,
     syncAppleHealthSamples
+);
+AppleHealthRouter.get(
+    '/api/integrations/apple-health/samples',
+    authMiddleware,
+    getAppleHealthSamples
 );
 AppleHealthRouter.delete(
     '/api/integrations/apple-health',

@@ -1,5 +1,5 @@
 const crypto = require('node:crypto');
-const { zeppConfig, assertZeppConfig } = require('../../lib/zeppConfig/zeppConfig');
+const { zeppConfig, assertZeppConfig, getZeppAvailability } = require('../../lib/zeppConfig/zeppConfig');
 const { completeZeppTokenExchange } = require('../../lib/zepp/zeppClient');
 const {
     ensureZeppTables,
@@ -8,6 +8,7 @@ const {
     getZeppIntegration,
     disconnectZepp,
 } = require('../../lib/zepp/zeppTokens');
+const { listZeppSamples, countZeppSamples } = require('../../lib/zepp/zeppDataStore');
 const pool = require('../../lib/pool');
 
 async function createOAuthState(userId) {
@@ -65,6 +66,19 @@ function getClientIp(req) {
 
 const connectZepp = async (req, res) => {
     try {
+        const availability = getZeppAvailability();
+        if (!availability.ready) {
+            return res.status(503).json({
+                success: false,
+                available: false,
+                provider: 'zepp',
+                suggestProvider: 'strava',
+                message:
+                    'Amazfit/Zepp direct login is not enabled yet. Connect Strava if your Zepp app already syncs workouts there.',
+                hint: availability.hint,
+            });
+        }
+
         assertZeppConfig();
 
         const userId = req.user?.id;
@@ -169,6 +183,9 @@ const getZeppStatus = async (req, res) => {
             });
         }
 
+        const sampleCounts =
+            integration.status === 'connected' ? await countZeppSamples(userId) : {};
+
         return res.status(200).json({
             success: true,
             connected: integration.status === 'connected',
@@ -176,6 +193,9 @@ const getZeppStatus = async (req, res) => {
             providerUserId: integration.provider_user_id,
             tokenExpiresAt: integration.token_expires_at,
             connectedAt: integration.connected_at,
+            lastSyncedAt: integration.last_synced_at,
+            lastSyncStatus: integration.last_sync_status,
+            sampleCounts,
             lastError: integration.last_error,
         });
     } catch (error) {
@@ -209,9 +229,42 @@ const disconnectZeppAccount = async (req, res) => {
     }
 };
 
+const getZeppData = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'Unauthorized Access' });
+        }
+
+        const samples = await listZeppSamples(userId, {
+            type: req.query.type,
+            limit: req.query.limit,
+            offset: req.query.offset,
+        });
+
+        return res.status(200).json({
+            success: true,
+            count: samples.length,
+            samples,
+            source: 'zepp',
+            note:
+                samples.length === 0
+                    ? 'No Zepp samples yet. Connect Zepp, then wait for watch webhooks or partner push.'
+                    : undefined,
+        });
+    } catch (error) {
+        console.error('Zepp data error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Unable to fetch Zepp data',
+        });
+    }
+};
+
 module.exports = {
     connectZepp,
     zeppCallback,
     getZeppStatus,
     disconnectZeppAccount,
+    getZeppData,
 };

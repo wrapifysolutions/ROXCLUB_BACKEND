@@ -26,6 +26,31 @@ function isLikelySupabaseToken(token) {
     );
 }
 
+/** Extract Bearer token (case-insensitive). Also accepts x-access-token. */
+function extractBearerToken(req) {
+    const rawAuth = req.headers.authorization || req.headers.Authorization;
+    if (typeof rawAuth === 'string') {
+        const match = rawAuth.match(/^Bearer\s+(.+)$/i);
+        if (match?.[1]) {
+            let token = match[1].trim();
+            // Guard: "Bearer Bearer <jwt>" from double interceptors
+            if (/^Bearer\s+/i.test(token)) {
+                token = token.replace(/^Bearer\s+/i, '').trim();
+            }
+            if (token) return token;
+        }
+    }
+
+    const alt =
+        req.headers['x-access-token'] ||
+        req.headers['x-supabase-access-token'];
+    if (typeof alt === 'string' && alt.trim()) {
+        return alt.trim();
+    }
+
+    return null;
+}
+
 async function findDbUser({ supabaseUserId, email }) {
     const { rows } = await queryWithHardTimeout(
         `
@@ -91,11 +116,17 @@ const authMiddleware = async (req, res, next) => {
     try {
         console.log('auth: start', req.method, req.path);
 
-        const authorization = req.headers.authorization;
-        const bearer = authorization?.startsWith('Bearer ')
-            ? authorization.slice(7).trim()
-            : null;
+        const bearer = extractBearerToken(req);
         const cookieToken = req.cookies?.[COOKIE_NAME];
+
+        if (!bearer && !cookieToken) {
+            console.warn('auth: no token', {
+                hasAuthorizationHeader: Boolean(
+                    req.headers.authorization || req.headers.Authorization
+                ),
+                path: req.path,
+            });
+        }
 
         // Production mobile: Bearer wins over cookie (Flutter Dio + optional CookieJar).
         if (bearer && isLikelySupabaseToken(bearer)) {

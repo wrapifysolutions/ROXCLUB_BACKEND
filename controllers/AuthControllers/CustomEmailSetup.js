@@ -13,6 +13,15 @@ async function ensureUsersTable() {
     usersTableReady = true;
 }
 
+function setSignupSession(req, email) {
+    // express-session is disabled on Vercel — mobile uses email in body for verify/resend.
+    if (!req.session) {
+        return;
+    }
+    req.session.email = email;
+    req.session.emailExpireAt = Date.now() + 5 * 60 * 1000;
+}
+
 const CustomEmailSetup = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -37,6 +46,32 @@ const CustomEmailSetup = async (req, res) => {
         const otp = String(Math.floor(100000 + Math.random() * 900000));
         const hashedPassword = await hashPassword(password);
         const hashedOTP = await hashPassword(otp);
+
+        // Persist OTP first (Vercel has no session — DB is source of truth for verify/resend).
+        await pool.query(
+            `
+            INSERT INTO users (
+                email,
+                password_hash,
+                otp_hash,
+                otp_expires_at,
+                auth_provider,
+                is_email_verified,
+                updated_at
+            )
+            VALUES ($1, $2, $3, NOW() + INTERVAL '1 minute', 'email', FALSE, NOW())
+            ON CONFLICT (email)
+            DO UPDATE SET
+                password_hash = EXCLUDED.password_hash,
+                otp_hash = EXCLUDED.otp_hash,
+                otp_expires_at = EXCLUDED.otp_expires_at,
+                auth_provider = 'email',
+                is_email_verified = FALSE,
+                updated_at = NOW()
+            WHERE users.is_email_verified = FALSE
+            `,
+            [normalizedEmail, hashedPassword, hashedOTP]
+        );
 
         const result = await transporter.sendMail({
             from: '"ROXCLUB" <wrapifysolutions@gmail.com>',
@@ -63,34 +98,7 @@ Powered by Wrapify Solutions
             return res.status(400).json({ message: 'Failed to send email' });
         }
 
-        req.session.email = normalizedEmail;
-        req.session.emailExpireAt = Date.now() + 5* 60 * 1000;
-
-        // OTP lives for 1 minute only. After otp_expires_at it is cleared and invalid.
-        await pool.query(
-            `
-            INSERT INTO users (
-                email,
-                password_hash,
-                otp_hash,
-                otp_expires_at,
-                auth_provider,
-                is_email_verified,
-                updated_at
-            )
-            VALUES ($1, $2, $3, NOW() + INTERVAL '1 minute', 'email', FALSE, NOW())
-            ON CONFLICT (email)
-            DO UPDATE SET
-                password_hash = EXCLUDED.password_hash,
-                otp_hash = EXCLUDED.otp_hash,
-                otp_expires_at = EXCLUDED.otp_expires_at,
-                auth_provider = 'email',
-                is_email_verified = FALSE,
-                updated_at = NOW()
-            WHERE users.is_email_verified = FALSE
-            `,
-            [normalizedEmail, hashedPassword, hashedOTP]
-        );
+        setSignupSession(req, normalizedEmail);
 
         return res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
