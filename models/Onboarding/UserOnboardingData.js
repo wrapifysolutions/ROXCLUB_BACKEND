@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS users (
     dob DATE,
     gender VARCHAR(20),
     experience_level VARCHAR(30),
+    onboarding_completed BOOLEAN DEFAULT FALSE,
 
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -46,7 +47,8 @@ ALTER TABLE users
     ADD COLUMN IF NOT EXISTS display_name VARCHAR(100),
     ADD COLUMN IF NOT EXISTS dob DATE,
     ADD COLUMN IF NOT EXISTS gender VARCHAR(20),
-    ADD COLUMN IF NOT EXISTS experience_level VARCHAR(30);
+    ADD COLUMN IF NOT EXISTS experience_level VARCHAR(30),
+    ADD COLUMN IF NOT EXISTS onboarding_completed BOOLEAN DEFAULT FALSE;
 `;
 
 module.exports = createUsersTable;

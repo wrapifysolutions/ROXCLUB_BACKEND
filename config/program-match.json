@@ -1,0 +1,14 @@
+{
+  "defaultProgramId": "general_start_8w",
+  "rules": [
+    { "goal": "hyrox", "level": "Beginner", "programId": "hyrox_base_8w" },
+    { "goal": "hyrox", "level": "Intermediate", "programId": "race_build_12w" },
+    { "goal": "hyrox", "level": "Advanced", "programId": "hyrox_peak_8w" },
+    { "goal": "hybrid", "level": "Beginner", "programId": "hybrid_base_8w" },
+    { "goal": "hybrid", "level": "Intermediate", "programId": "hybrid_engine_12w" },
+    { "goal": "hybrid", "level": "Advanced", "programId": "hybrid_race_8w" },
+    { "goal": "general_fitness", "level": "Beginner", "programId": "general_start_8w" },
+    { "goal": "general_fitness", "level": "Intermediate", "programId": "general_build_8w" },
+    { "goal": "general_fitness", "level": "Advanced", "programId": "general_perform_8w" }
+  ]
+}

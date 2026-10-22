@@ -13,10 +13,12 @@ const {
     ResetPassword,
 } = require('../controllers/AuthControllers/ForgotPassword');
 const { GetHomeProfile } = require('../controllers/Home/HomeControllers');
+const CompleteOnboarding = require('../controllers/Onboarding/CompleteOnboardingController');
 
 Onboardingrouter.post('/onboarding', authMiddleware, UserOnboarding);
 Onboardingrouter.post('/onboarding-questions', authMiddleware, CreateOnboardingQuestions);
-Onboardingrouter.get('/welcome/user-name', authMiddleware, GetHomeProfile);
+Onboardingrouter.post('/api/onboarding/complete', authMiddleware, CompleteOnboarding);
+Onboardingrouter.get('/api/home', authMiddleware, GetHomeProfile);
 Onboardingrouter.post('/auth/email-signup', CustomEmailSetup);
 Onboardingrouter.post('/auth/verify-email-otp', VerifyEmailOTP);
 Onboardingrouter.post('/auth/email-login', CustomEmailLogin);

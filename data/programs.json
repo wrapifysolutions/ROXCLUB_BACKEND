@@ -1,0 +1,1794 @@
+{
+  "workouts": {
+    "wk_foundation_a": {
+      "id": "wk_foundation_a",
+      "title": "Foundation Protocol A",
+      "durationMin": 45,
+      "category": "strength"
+    },
+    "wk_zone2_run": {
+      "id": "wk_zone2_run",
+      "title": "Zone 2 Run",
+      "durationMin": 40,
+      "category": "engine"
+    },
+    "wk_engine_intervals": {
+      "id": "wk_engine_intervals",
+      "title": "Engine Intervals",
+      "durationMin": 35,
+      "category": "engine"
+    },
+    "wk_foundation_b": {
+      "id": "wk_foundation_b",
+      "title": "Foundation Protocol B",
+      "durationMin": 45,
+      "category": "strength"
+    },
+    "wk_simulation": {
+      "id": "wk_simulation",
+      "title": "Race Simulation",
+      "durationMin": 50,
+      "category": "race"
+    },
+    "wk_hybrid_base": {
+      "id": "wk_hybrid_base",
+      "title": "Hybrid Base",
+      "durationMin": 40,
+      "category": "hybrid"
+    },
+    "wk_hybrid_engine": {
+      "id": "wk_hybrid_engine",
+      "title": "Hybrid Engine",
+      "durationMin": 45,
+      "category": "hybrid"
+    },
+    "wk_general_a": {
+      "id": "wk_general_a",
+      "title": "Full Body A",
+      "durationMin": 40,
+      "category": "strength"
+    },
+    "wk_easy_cardio": {
+      "id": "wk_easy_cardio",
+      "title": "Easy Cardio",
+      "durationMin": 30,
+      "category": "engine"
+    }
+  },
+  "programs": {
+    "race_build_12w": {
+      "id": "race_build_12w",
+      "name": "Race Build 12 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 9,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 10,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 11,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 12,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 6,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        }
+      ]
+    },
+    "hyrox_base_8w": {
+      "id": "hyrox_base_8w",
+      "name": "HYROX Base 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 5,
+              "workoutId": "wk_simulation"
+            }
+          ]
+        }
+      ]
+    },
+    "hyrox_peak_8w": {
+      "id": "hyrox_peak_8w",
+      "name": "HYROX Peak 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_foundation_b"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        }
+      ]
+    },
+    "hybrid_base_8w": {
+      "id": "hybrid_base_8w",
+      "name": "Hybrid Base 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            }
+          ]
+        }
+      ]
+    },
+    "hybrid_engine_12w": {
+      "id": "hybrid_engine_12w",
+      "name": "Hybrid Engine 12 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 9,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 10,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 11,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 12,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_zone2_run"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        }
+      ]
+    },
+    "hybrid_race_8w": {
+      "id": "hybrid_race_8w",
+      "name": "Hybrid Race 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_simulation"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_engine_intervals"
+            }
+          ]
+        }
+      ]
+    },
+    "general_start_8w": {
+      "id": "general_start_8w",
+      "name": "General Start 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        }
+      ]
+    },
+    "general_build_8w": {
+      "id": "general_build_8w",
+      "name": "General Build 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_general_a"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_easy_cardio"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_hybrid_base"
+            },
+            {
+              "day": 4,
+              "workoutId": "wk_zone2_run"
+            }
+          ]
+        }
+      ]
+    },
+    "general_perform_8w": {
+      "id": "general_perform_8w",
+      "name": "General Perform 8 Week",
+      "weeks": [
+        {
+          "week": 1,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 2,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 3,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 4,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 5,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 6,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 7,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        },
+        {
+          "week": 8,
+          "days": [
+            {
+              "day": 1,
+              "workoutId": "wk_hybrid_engine"
+            },
+            {
+              "day": 2,
+              "workoutId": "wk_engine_intervals"
+            },
+            {
+              "day": 3,
+              "workoutId": "wk_general_a"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

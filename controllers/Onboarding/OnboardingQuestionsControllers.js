@@ -15,10 +15,7 @@ const createOnboardingQuestions = async (req, res) => {
 
         return res.status(200).json({
             message: 'Onboarding questions saved successfully',
-            redirect: '/home',
             data: saved.data,
-            program: saved.program,
-            athlete: saved.athlete,
         });
     } catch (error) {
         if (error.status === 400) {

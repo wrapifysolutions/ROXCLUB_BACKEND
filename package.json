@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "test": "node --test",
     "vercel-dev": "vercel dev",
     "deploy": "vercel --prod"
   },

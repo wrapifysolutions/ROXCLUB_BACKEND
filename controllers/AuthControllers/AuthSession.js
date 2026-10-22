@@ -1,4 +1,5 @@
 const pool = require('../../lib/pool');
+const { ensureOnboardingProfileSchema } = require('../../lib/onboarding/schema');
 const {
     verifyAccessToken,
     clearAuthCookie,
@@ -29,6 +30,8 @@ const GetAuthSession = async (req, res) => {
             });
         }
 
+        await ensureOnboardingProfileSchema();
+
         const { rows } = await pool.query(
             `
             SELECT
@@ -36,7 +39,7 @@ const GetAuthSession = async (req, res) => {
                 u.email,
                 u.auth_provider,
                 u.is_email_verified,
-                oq.is_completed AS onboarding_is_completed
+                (u.onboarding_completed IS TRUE OR oq.is_completed IS TRUE) AS onboarding_is_completed
             FROM users u
             LEFT JOIN onboarding_questions oq ON oq.user_id = u.id
             WHERE u.id = $1
