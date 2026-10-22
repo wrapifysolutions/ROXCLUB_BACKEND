@@ -16,7 +16,7 @@ const { GetHomeProfile } = require('../controllers/Home/HomeControllers');
 
 Onboardingrouter.post('/onboarding', authMiddleware, UserOnboarding);
 Onboardingrouter.post('/onboarding-questions', authMiddleware, CreateOnboardingQuestions);
-Onboardingrouter.get('/home', authMiddleware, GetHomeProfile);
+Onboardingrouter.get('/welcome/user-name', authMiddleware, GetHomeProfile);
 Onboardingrouter.post('/auth/email-signup', CustomEmailSetup);
 Onboardingrouter.post('/auth/verify-email-otp', VerifyEmailOTP);
 Onboardingrouter.post('/auth/email-login', CustomEmailLogin);
