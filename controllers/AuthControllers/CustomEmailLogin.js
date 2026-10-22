@@ -47,7 +47,6 @@ const CustomEmailLogin = async (req, res) => {
                 email: user.email,
                 auth_provider: user.auth_provider,
             },
-            token,
         });
     } catch (error) {
         console.error('CustomEmailLogin error', error);

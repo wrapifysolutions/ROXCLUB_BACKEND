@@ -52,7 +52,6 @@ const VerifyEmailOTP = async (req, res) => {
                 message: 'Email is already verified',
                 redirect: '/home',
                 user: { id: user.id, email: user.email },
-                token,
             });
         }
 
@@ -103,8 +102,10 @@ const VerifyEmailOTP = async (req, res) => {
         return res.status(200).json({
             message: 'Email verified successfully',
             redirect: '/home',
-            user: verifiedUser,
-            token,
+            user: {
+                id: verifiedUser.id,
+                email: verifiedUser.email,
+            },
         });
     } catch (error) {
         console.error('VerifyEmailOTP error', error);

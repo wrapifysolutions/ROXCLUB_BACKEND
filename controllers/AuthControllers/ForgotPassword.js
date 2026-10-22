@@ -203,8 +203,10 @@ const ResetPassword = async (req, res) => {
         return res.status(200).json({
             message: 'Password reset successfully',
             redirect: '/home',
-            user: sessionUser,
-            token,
+            user: {
+                id: sessionUser.id,
+                email: sessionUser.email,
+            },
         });
     } catch (error) {
         console.error('ResetPassword error', error);
