@@ -125,8 +125,8 @@ JWT_EXPIRES_IN=7d
 STRAVA_CLIENT_ID=
 STRAVA_CLIENT_SECRET=
 STRAVA_REDIRECT_URI=https://your-api.com/api/integrations/strava/callback
-STRAVA_FRONTEND_SUCCESS_URL=https://your-app.com/integrations/strava?status=connected
-STRAVA_FRONTEND_ERROR_URL=https://your-app.com/integrations/strava?status=error
+STRAVA_FRONTEND_SUCCESS_URL=roxclub://integrations/strava?status=connected&provider=strava
+STRAVA_FRONTEND_ERROR_URL=roxclub://integrations/strava?status=error
 TOKEN_ENCRYPTION_KEY=   # 64-char hex (32 bytes)
 ZEPP_XIAOMI_CLIENT_ID=
 ZEPP_XIAOMI_CLIENT_SECRET=
