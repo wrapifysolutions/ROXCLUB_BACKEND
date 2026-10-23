@@ -51,5 +51,7 @@ ALTER TABLE users
     ADD COLUMN IF NOT EXISTS onboarding_completed BOOLEAN DEFAULT FALSE;
 `;
 
-module.exports = createUsersTable;
-module.exports.alterUsersProfileColumns = alterUsersProfileColumns;
+module.exports = {
+    createUsersTable,
+    alterUsersProfileColumns,
+};

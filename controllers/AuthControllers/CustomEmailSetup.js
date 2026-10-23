@@ -3,7 +3,7 @@ const transporter = require('../../lib/nodemailer');
 const { hashPassword } = require('../../data/encryption');
 const pool = require('../../lib/pool');
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
-const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+const { createUsersTable } = require('../../models/Onboarding/UserOnboardingData');
 const { applyConsentByEmail } = require('../../lib/onboarding/completeOnboarding');
 
 let usersTableReady = false;

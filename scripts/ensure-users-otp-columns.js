@@ -1,5 +1,5 @@
 const pool = require('../lib/pool');
-const createUsersTable = require('../models/Onboarding/UserOnboardingData');
+const { createUsersTable } = require('../models/Onboarding/UserOnboardingData');
 
 async function main() {
     await pool.query(createUsersTable);

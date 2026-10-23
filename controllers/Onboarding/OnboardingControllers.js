@@ -1,5 +1,5 @@
 const { queryWithHardTimeout } = require('../../lib/dbQuery');
-const createUsersTable = require('../../models/Onboarding/UserOnboardingData');
+const { createUsersTable } = require('../../models/Onboarding/UserOnboardingData');
 const { applyConsent } = require('../../lib/onboarding/completeOnboarding');
 
 let usersTableReady = false;
