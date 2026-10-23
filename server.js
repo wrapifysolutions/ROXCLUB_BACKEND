@@ -6,7 +6,11 @@ const Onboardingrouter = require('./routes/OnboardingRoute');
 const StravaRouter = require('./routes/StravaRoute');
 const ZeppRouter = require('./routes/ZeppRoute');
 const AppleHealthRouter = require('./routes/AppleHealthRoute');
+const WorkoutRouter = require('./routes/WorkoutRoute');
+const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
+
+loadWorkoutCatalog();
 
 const app = express();
 const isVercel = Boolean(process.env.VERCEL);
@@ -119,6 +123,7 @@ app.use('/', Onboardingrouter);
 app.use('/', StravaRouter);
 app.use('/', ZeppRouter);
 app.use('/', AppleHealthRouter);
+app.use('/', WorkoutRouter);
 
 const port = Number(process.env.PORT) || 5000;
 

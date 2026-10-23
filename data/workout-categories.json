@@ -1,0 +1,6 @@
+[
+  { "id": "hybrid", "name": "Hybrid" },
+  { "id": "engine", "name": "Engine" },
+  { "id": "strength", "name": "Strength" },
+  { "id": "recovery", "name": "Recovery" }
+]

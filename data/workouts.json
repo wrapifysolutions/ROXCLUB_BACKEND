@@ -1,0 +1,132 @@
+[
+  {
+    "id": "wk_foundation_a",
+    "categoryId": "hybrid",
+    "type": "hybrid",
+    "title": "Foundation Protocol A",
+    "imageUrl": "workouts/wk_foundation_a.jpg",
+    "durationMin": 45,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Open the HYROX engine with the full station sequence at foundation loads.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": { "distanceM": 1000 }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "20 reps",
+        "target": { "reps": 20 }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Sandbag Lunges",
+        "iconUrl": "icons/sandbag.png",
+        "label": "30 m (20 kg)",
+        "target": { "distanceM": 30, "loadKg": 20 }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "10 reps",
+        "target": { "reps": 10 }
+      },
+      {
+        "order": 5,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": { "distanceM": 20, "loadKg": 102 }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": { "distanceM": 500 }
+      },
+      {
+        "order": 7,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1 km",
+        "target": { "distanceM": 1000 }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "20 m (2x32 kg)",
+        "target": { "distanceM": 20, "loadKg": 32 }
+      }
+    ]
+  },
+  {
+    "id": "wk_zone2_run",
+    "categoryId": "engine",
+    "type": "run",
+    "title": "Zone 2 Run",
+    "imageUrl": "workouts/wk_zone2_run.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Easy aerobic running to build the base under the race pace.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Zone 2 Run",
+        "iconUrl": "icons/run.png",
+        "label": "5 km",
+        "target": { "distanceM": 5000, "durationSec": 2400 }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_flush",
+    "categoryId": "recovery",
+    "type": "recovery",
+    "title": "Recovery Flush",
+    "imageUrl": "workouts/wk_recovery_flush.jpg",
+    "durationMin": 25,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Mat",
+    "purpose": "Downshift the day with easy movement and breathing.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "recovery_block",
+        "name": "Easy Spin",
+        "iconUrl": "icons/bike.png",
+        "label": "10 min",
+        "target": { "durationSec": 600 }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Breathing Squat Hold",
+        "iconUrl": "icons/mobility.png",
+        "label": "3 sets",
+        "target": { "sets": 3, "restSec": 30, "durationSec": 40 }
+      }
+    ]
+  }
+]
