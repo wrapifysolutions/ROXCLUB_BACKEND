@@ -1,15 +1,16 @@
 [
   {
     "id": "wk_foundation_a",
-    "categoryId": "hybrid",
+    "categoryId": "cat_hybrid_race",
     "type": "hybrid",
     "title": "Foundation Protocol A",
-    "imageUrl": "workouts/wk_foundation_a.jpg",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
     "durationMin": 45,
     "difficulty": "Intermediate",
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Open the HYROX engine with the full station sequence at foundation loads.",
+    "isSample": true,
     "activities": [
       {
         "order": 1,
@@ -17,7 +18,9 @@
         "name": "Running",
         "iconUrl": "icons/run.png",
         "label": "1 km",
-        "target": { "distanceM": 1000 }
+        "target": {
+          "distanceM": 1000
+        }
       },
       {
         "order": 2,
@@ -25,7 +28,9 @@
         "name": "Wall Balls",
         "iconUrl": "icons/wall-ball.png",
         "label": "20 reps",
-        "target": { "reps": 20 }
+        "target": {
+          "reps": 20
+        }
       },
       {
         "order": 3,
@@ -33,7 +38,10 @@
         "name": "Sandbag Lunges",
         "iconUrl": "icons/sandbag.png",
         "label": "30 m (20 kg)",
-        "target": { "distanceM": 30, "loadKg": 20 }
+        "target": {
+          "distanceM": 30,
+          "loadKg": 20
+        }
       },
       {
         "order": 4,
@@ -41,7 +49,9 @@
         "name": "Burpee Broad Jump",
         "iconUrl": "icons/burpee.png",
         "label": "10 reps",
-        "target": { "reps": 10 }
+        "target": {
+          "reps": 10
+        }
       },
       {
         "order": 5,
@@ -49,7 +59,10 @@
         "name": "Sled Push",
         "iconUrl": "icons/sled.png",
         "label": "20 m (102 kg)",
-        "target": { "distanceM": 20, "loadKg": 102 }
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
       },
       {
         "order": 6,
@@ -57,7 +70,9 @@
         "name": "Row",
         "iconUrl": "icons/row.png",
         "label": "500 m",
-        "target": { "distanceM": 500 }
+        "target": {
+          "distanceM": 500
+        }
       },
       {
         "order": 7,
@@ -65,7 +80,9 @@
         "name": "SkiErg",
         "iconUrl": "icons/skierg.png",
         "label": "1 km",
-        "target": { "distanceM": 1000 }
+        "target": {
+          "distanceM": 1000
+        }
       },
       {
         "order": 8,
@@ -73,43 +90,1934 @@
         "name": "Farmers Carry",
         "iconUrl": "icons/farmers.png",
         "label": "20 m (2x32 kg)",
-        "target": { "distanceM": 20, "loadKg": 32 }
+        "target": {
+          "distanceM": 20,
+          "loadKg": 32
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_hybrid_01",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Race Intro",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 24,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "1 km runs alternating with HYROX stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_hybrid_02",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Station Builder",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 36,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "1 km runs alternating with HYROX stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Sled Pull",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (78 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 78
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_hybrid_03",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Mixed Relay",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 48,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "1 km runs alternating with HYROX stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Pull",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (78 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 78
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      },
+      {
+        "order": 7,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "200 m (2x24 kg)",
+        "target": {
+          "distanceM": 200,
+          "loadKg": 24
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_hybrid_04",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Full Send",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 48,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "1 km runs alternating with HYROX stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "200 m (2x24 kg)",
+        "target": {
+          "distanceM": 200,
+          "loadKg": 24
+        }
+      },
+      {
+        "order": 7,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Sandbag Lunges",
+        "iconUrl": "icons/sandbag.png",
+        "label": "100 m (20 kg)",
+        "target": {
+          "distanceM": 100,
+          "loadKg": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_track_01",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "Track Primer",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 25,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Spikes or trainers",
+    "purpose": "Track session with warm-up, work, and notes on pace.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Warm-up",
+        "iconUrl": "icons/run.png",
+        "label": "1 km easy, 6:30 /km",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 390
+        }
+      },
+      {
+        "order": 2,
+        "kind": "run",
+        "name": "Strides",
+        "iconUrl": "icons/run.png",
+        "label": "4 x 100 m, relaxed",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 90
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_track_02",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "400 Repeats",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 40,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Spikes or trainers",
+    "purpose": "Track session with warm-up, work, and notes on pace.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Warm-up",
+        "iconUrl": "icons/run.png",
+        "label": "1.5 km easy",
+        "target": {
+          "distanceM": 1500,
+          "durationSec": 540
+        }
+      },
+      {
+        "order": 2,
+        "kind": "run",
+        "name": "Intervals",
+        "iconUrl": "icons/run.png",
+        "label": "6 x 400 m @ 3:40 /km",
+        "target": {
+          "distanceM": 2400,
+          "durationSec": 530
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Cool-down",
+        "iconUrl": "icons/run.png",
+        "label": "1 km easy",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 390
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_track_03",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "Tempo Kilometres",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 45,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Spikes or trainers",
+    "purpose": "Track session with warm-up, work, and notes on pace.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Warm-up",
+        "iconUrl": "icons/run.png",
+        "label": "2 km easy",
+        "target": {
+          "distanceM": 2000,
+          "durationSec": 720
+        }
+      },
+      {
+        "order": 2,
+        "kind": "run",
+        "name": "Tempo",
+        "iconUrl": "icons/run.png",
+        "label": "4 x 1 km @ 4:30 /km",
+        "target": {
+          "distanceM": 4000,
+          "durationSec": 1080
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Cool-down",
+        "iconUrl": "icons/run.png",
+        "label": "1 km easy",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 360
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_track_04",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "Speed Endurance",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 50,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Spikes or trainers",
+    "purpose": "Track session with warm-up, work, and notes on pace.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Warm-up",
+        "iconUrl": "icons/run.png",
+        "label": "2 km + drills",
+        "target": {
+          "distanceM": 2000,
+          "durationSec": 780
+        }
+      },
+      {
+        "order": 2,
+        "kind": "run",
+        "name": "Reps",
+        "iconUrl": "icons/run.png",
+        "label": "5 x 800 m @ 3:50 /km",
+        "target": {
+          "distanceM": 4000,
+          "durationSec": 920
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Cool-down",
+        "iconUrl": "icons/run.png",
+        "label": "1 km jog",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 420
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_track_05",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "Race Pace Sharpening",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 35,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Spikes or trainers",
+    "purpose": "Track session with warm-up, work, and notes on pace.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Warm-up",
+        "iconUrl": "icons/run.png",
+        "label": "1 km easy",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 360
+        }
+      },
+      {
+        "order": 2,
+        "kind": "run",
+        "name": "Race pace",
+        "iconUrl": "icons/run.png",
+        "label": "3 x 1 km @ goal pace",
+        "target": {
+          "distanceM": 3000,
+          "durationSec": 780
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Cool-down",
+        "iconUrl": "icons/run.png",
+        "label": "800 m easy",
+        "target": {
+          "distanceM": 800,
+          "durationSec": 300
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_strength_01",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Lower Base",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Barbell and rack",
+    "purpose": "Strength session with sets, reps, load, and rest.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Back Squat",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8 @ 60 kg",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "loadKg": 60,
+          "restSec": 90
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Romanian Deadlift",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8 @ 50 kg",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "loadKg": 50,
+          "restSec": 90
+        }
+      },
+      {
+        "order": 3,
+        "kind": "strength_exercise",
+        "name": "Split Squat",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8 @ 20 kg",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "loadKg": 20,
+          "restSec": 60
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_strength_02",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Upper Builder",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 45,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Barbell and rack",
+    "purpose": "Strength session with sets, reps, load, and rest.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Bench Press",
+        "iconUrl": "icons/strength.png",
+        "label": "4 x 6 @ 50 kg",
+        "target": {
+          "sets": 4,
+          "reps": 6,
+          "loadKg": 50,
+          "restSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Bent-over Row",
+        "iconUrl": "icons/strength.png",
+        "label": "4 x 8 @ 40 kg",
+        "target": {
+          "sets": 4,
+          "reps": 8,
+          "loadKg": 40,
+          "restSec": 90
+        }
+      },
+      {
+        "order": 3,
+        "kind": "strength_exercise",
+        "name": "Overhead Press",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8 @ 30 kg",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "loadKg": 30,
+          "restSec": 90
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_strength_03",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Posterior Chain",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 50,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Barbell and rack",
+    "purpose": "Strength session with sets, reps, load, and rest.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Deadlift",
+        "iconUrl": "icons/strength.png",
+        "label": "5 x 3 @ 100 kg",
+        "target": {
+          "sets": 5,
+          "reps": 3,
+          "loadKg": 100,
+          "restSec": 180
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Hip Thrust",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8 @ 80 kg",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "loadKg": 80,
+          "restSec": 90
+        }
+      },
+      {
+        "order": 3,
+        "kind": "strength_exercise",
+        "name": "Hamstring Curl",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 10 @ 30 kg",
+        "target": {
+          "sets": 3,
+          "reps": 10,
+          "loadKg": 30,
+          "restSec": 60
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_strength_04",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Full Body Strength",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 55,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Barbell and rack",
+    "purpose": "Strength session with sets, reps, load, and rest.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Front Squat",
+        "iconUrl": "icons/strength.png",
+        "label": "4 x 5 @ 70 kg",
+        "target": {
+          "sets": 4,
+          "reps": 5,
+          "loadKg": 70,
+          "restSec": 150
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Pull-up",
+        "iconUrl": "icons/strength.png",
+        "label": "4 x 6 @ 0 kg",
+        "target": {
+          "sets": 4,
+          "reps": 6,
+          "loadKg": 0,
+          "restSec": 120
+        }
+      },
+      {
+        "order": 3,
+        "kind": "strength_exercise",
+        "name": "Walking Lunge",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 10 @ 24 kg",
+        "target": {
+          "sets": 3,
+          "reps": 10,
+          "loadKg": 24,
+          "restSec": 90
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_strength_05",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Heavy Doubles",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 35,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Barbell and rack",
+    "purpose": "Strength session with sets, reps, load, and rest.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Back Squat",
+        "iconUrl": "icons/strength.png",
+        "label": "6 x 2 @ 110 kg",
+        "target": {
+          "sets": 6,
+          "reps": 2,
+          "loadKg": 110,
+          "restSec": 180
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Bench Press",
+        "iconUrl": "icons/strength.png",
+        "label": "6 x 2 @ 70 kg",
+        "target": {
+          "sets": 6,
+          "reps": 2,
+          "loadKg": 70,
+          "restSec": 180
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_ergs_01",
+    "categoryId": "cat_ergs",
+    "type": "hybrid",
+    "title": "SkiErg Primer",
+    "imageUrl": "/workouts/placeholder-ergs.jpg",
+    "durationMin": 20,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "SkiErg and rower",
+    "purpose": "SkiErg and Row intervals.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 120
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_ergs_02",
+    "categoryId": "cat_ergs",
+    "type": "hybrid",
+    "title": "Erg Intervals",
+    "imageUrl": "/workouts/placeholder-ergs.jpg",
+    "durationMin": 30,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "SkiErg and rower",
+    "purpose": "SkiErg and Row intervals.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "250 m",
+        "target": {
+          "distanceM": 250,
+          "durationSec": 60
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "250 m",
+        "target": {
+          "distanceM": 250,
+          "durationSec": 60
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "250 m",
+        "target": {
+          "distanceM": 250,
+          "durationSec": 60
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "250 m",
+        "target": {
+          "distanceM": 250,
+          "durationSec": 60
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_ergs_03",
+    "categoryId": "cat_ergs",
+    "type": "hybrid",
+    "title": "SkiErg Threshold",
+    "imageUrl": "/workouts/placeholder-ergs.jpg",
+    "durationMin": 35,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "SkiErg and rower",
+    "purpose": "SkiErg and Row intervals.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1000 m",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 240
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1000 m",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 240
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "1000 m",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 240
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_ergs_04",
+    "categoryId": "cat_ergs",
+    "type": "hybrid",
+    "title": "Row Repeats",
+    "imageUrl": "/workouts/placeholder-ergs.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "SkiErg and rower",
+    "purpose": "SkiErg and Row intervals.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 110
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 110
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 110
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1000 m",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 240
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_ergs_05",
+    "categoryId": "cat_ergs",
+    "type": "hybrid",
+    "title": "Mixed Erg Finisher",
+    "imageUrl": "/workouts/placeholder-ergs.jpg",
+    "durationMin": 25,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "SkiErg and rower",
+    "purpose": "SkiErg and Row intervals.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "250 m",
+        "target": {
+          "distanceM": 250,
+          "durationSec": 55
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_power_01",
+    "categoryId": "cat_power",
+    "type": "hybrid",
+    "title": "Power Primer",
+    "imageUrl": "/workouts/placeholder-power.jpg",
+    "durationMin": 20,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "15 reps",
+        "target": {
+          "reps": 15
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "8 reps",
+        "target": {
+          "reps": 8
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "15 m (70 kg)",
+        "target": {
+          "distanceM": 15,
+          "loadKg": 70
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_power_02",
+    "categoryId": "cat_power",
+    "type": "hybrid",
+    "title": "Jump Repeat",
+    "imageUrl": "/workouts/placeholder-power.jpg",
+    "durationMin": 25,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "10 reps",
+        "target": {
+          "reps": 10
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "20 reps",
+        "target": {
+          "reps": 20
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "10 reps",
+        "target": {
+          "reps": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_power_03",
+    "categoryId": "cat_power",
+    "type": "hybrid",
+    "title": "Sled Power",
+    "imageUrl": "/workouts/placeholder-power.jpg",
+    "durationMin": 30,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "15 reps",
+        "target": {
+          "reps": 15
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (120 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 120
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_power_04",
+    "categoryId": "cat_power",
+    "type": "hybrid",
+    "title": "Explosive Circuit",
+    "imageUrl": "/workouts/placeholder-power.jpg",
+    "durationMin": 35,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "20 reps",
+        "target": {
+          "reps": 20
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      },
+      {
+        "order": 3,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "12 reps",
+        "target": {
+          "reps": 12
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "20 reps",
+        "target": {
+          "reps": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_power_05",
+    "categoryId": "cat_power",
+    "type": "hybrid",
+    "title": "Peak Power",
+    "imageUrl": "/workouts/placeholder-power.jpg",
+    "durationMin": 15,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "6 reps",
+        "target": {
+          "reps": 6
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "10 m (140 kg)",
+        "target": {
+          "distanceM": 10,
+          "loadKg": 140
+        }
       }
     ]
   },
   {
     "id": "wk_zone2_run",
-    "categoryId": "engine",
+    "categoryId": "cat_aerobic",
     "type": "run",
     "title": "Zone 2 Run",
-    "imageUrl": "workouts/wk_zone2_run.jpg",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
     "durationMin": 40,
     "difficulty": "Beginner",
     "author": "ROX CLUB",
     "equipment": "Watch",
-    "purpose": "Easy aerobic running to build the base under the race pace.",
+    "purpose": "Easy aerobic running to build the base under race pace.",
+    "isSample": true,
     "activities": [
       {
         "order": 1,
         "kind": "run",
         "name": "Zone 2 Run",
         "iconUrl": "icons/run.png",
-        "label": "5 km",
-        "target": { "distanceM": 5000, "durationSec": 2400 }
+        "label": "5 km, Zone 2, easy pace",
+        "target": {
+          "distanceM": 5000,
+          "durationSec": 2400
+        }
       }
     ]
   },
   {
-    "id": "wk_recovery_flush",
-    "categoryId": "recovery",
+    "id": "wk_aerobic_01",
+    "categoryId": "cat_aerobic",
+    "type": "run",
+    "title": "Easy Spin Out",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
+    "durationMin": 30,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Zone 2 and long easy running.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Easy Spin Out",
+        "iconUrl": "icons/run.png",
+        "label": "4 km easy, conversational",
+        "target": {
+          "distanceM": 4000,
+          "durationSec": 1800
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_aerobic_02",
+    "categoryId": "cat_aerobic",
+    "type": "run",
+    "title": "Long Easy",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
+    "durationMin": 70,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Zone 2 and long easy running.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Long Easy",
+        "iconUrl": "icons/run.png",
+        "label": "10 km Zone 2",
+        "target": {
+          "distanceM": 10000,
+          "durationSec": 4200
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_aerobic_03",
+    "categoryId": "cat_aerobic",
+    "type": "run",
+    "title": "Steady Aerobic",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
+    "durationMin": 55,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Zone 2 and long easy running.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Steady Aerobic",
+        "iconUrl": "icons/run.png",
+        "label": "8 km steady, nose breathing",
+        "target": {
+          "distanceM": 8000,
+          "durationSec": 3000
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_aerobic_04",
+    "categoryId": "cat_aerobic",
+    "type": "run",
+    "title": "Recovery Miles",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
+    "durationMin": 35,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Zone 2 and long easy running.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Recovery Miles",
+        "iconUrl": "icons/run.png",
+        "label": "5 km very easy",
+        "target": {
+          "distanceM": 5000,
+          "durationSec": 2100
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_conditioning_01",
+    "categoryId": "cat_conditioning",
+    "type": "hybrid",
+    "title": "Chipper",
+    "imageUrl": "/workouts/placeholder-conditioning.jpg",
+    "durationMin": 24,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Mixed circuits of short runs and stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Sled Pull",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (78 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 78
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_conditioning_02",
+    "categoryId": "cat_conditioning",
+    "type": "hybrid",
+    "title": "Engine Circuit",
+    "imageUrl": "/workouts/placeholder-conditioning.jpg",
+    "durationMin": 32,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Mixed circuits of short runs and stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (102 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 102
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Sled Pull",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (78 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 78
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      },
+      {
+        "order": 7,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_conditioning_03",
+    "categoryId": "cat_conditioning",
+    "type": "hybrid",
+    "title": "Mixed Grinder",
+    "imageUrl": "/workouts/placeholder-conditioning.jpg",
+    "durationMin": 32,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Mixed circuits of short runs and stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Pull",
+        "iconUrl": "icons/sled.png",
+        "label": "20 m (78 kg)",
+        "target": {
+          "distanceM": 20,
+          "loadKg": 78
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      },
+      {
+        "order": 7,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "200 m (2x24 kg)",
+        "target": {
+          "distanceM": 200,
+          "loadKg": 24
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_conditioning_04",
+    "categoryId": "cat_conditioning",
+    "type": "hybrid",
+    "title": "Station Ladder",
+    "imageUrl": "/workouts/placeholder-conditioning.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Mixed circuits of short runs and stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Burpee Broad Jump",
+        "iconUrl": "icons/burpee.png",
+        "label": "80 m",
+        "target": {
+          "distanceM": 80
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "200 m (2x24 kg)",
+        "target": {
+          "distanceM": 200,
+          "loadKg": 24
+        }
+      },
+      {
+        "order": 7,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 8,
+        "kind": "station",
+        "name": "Sandbag Lunges",
+        "iconUrl": "icons/sandbag.png",
+        "label": "100 m (20 kg)",
+        "target": {
+          "distanceM": 100,
+          "loadKg": 20
+        }
+      },
+      {
+        "order": 9,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 10,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "100 reps",
+        "target": {
+          "reps": 100
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_conditioning_05",
+    "categoryId": "cat_conditioning",
+    "type": "hybrid",
+    "title": "Short Fuse",
+    "imageUrl": "/workouts/placeholder-conditioning.jpg",
+    "durationMin": 24,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Mixed circuits of short runs and stations.",
+    "isSample": true,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Row",
+        "iconUrl": "icons/row.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500
+        }
+      },
+      {
+        "order": 3,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 4,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/farmers.png",
+        "label": "200 m (2x24 kg)",
+        "target": {
+          "distanceM": 200,
+          "loadKg": 24
+        }
+      },
+      {
+        "order": 5,
+        "kind": "run",
+        "name": "Short Run",
+        "iconUrl": "icons/run.png",
+        "label": "400 m",
+        "target": {
+          "distanceM": 400,
+          "durationSec": 120
+        }
+      },
+      {
+        "order": 6,
+        "kind": "station",
+        "name": "Sandbag Lunges",
+        "iconUrl": "icons/sandbag.png",
+        "label": "100 m (20 kg)",
+        "target": {
+          "distanceM": 100,
+          "loadKg": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_01",
+    "categoryId": "cat_recovery",
     "type": "recovery",
-    "title": "Recovery Flush",
-    "imageUrl": "workouts/wk_recovery_flush.jpg",
-    "durationMin": 25,
+    "title": "Easy Spin",
+    "imageUrl": "/workouts/placeholder-recovery.jpg",
+    "durationMin": 15,
     "difficulty": "Beginner",
     "author": "ROX CLUB",
     "equipment": "Mat",
-    "purpose": "Downshift the day with easy movement and breathing.",
+    "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "isSample": true,
+    "xp": 0,
     "activities": [
       {
         "order": 1,
@@ -117,15 +2025,183 @@
         "name": "Easy Spin",
         "iconUrl": "icons/bike.png",
         "label": "10 min",
-        "target": { "durationSec": 600 }
+        "target": {
+          "durationSec": 600
+        }
       },
       {
         "order": 2,
-        "kind": "strength_exercise",
-        "name": "Breathing Squat Hold",
-        "iconUrl": "icons/mobility.png",
-        "label": "3 sets",
-        "target": { "sets": 3, "restSec": 30, "durationSec": 40 }
+        "kind": "recovery_block",
+        "name": "Breathing",
+        "iconUrl": "icons/bike.png",
+        "label": "5 min",
+        "target": {
+          "durationSec": 300
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_02",
+    "categoryId": "cat_recovery",
+    "type": "recovery",
+    "title": "Mobility Flow",
+    "imageUrl": "/workouts/placeholder-recovery.jpg",
+    "durationMin": 20,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Mat",
+    "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "isSample": true,
+    "xp": 0,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "recovery_block",
+        "name": "Hip Flow",
+        "iconUrl": "icons/bike.png",
+        "label": "8 min",
+        "target": {
+          "durationSec": 480
+        }
+      },
+      {
+        "order": 2,
+        "kind": "recovery_block",
+        "name": "Thoracic Openers",
+        "iconUrl": "icons/bike.png",
+        "label": "7 min",
+        "target": {
+          "durationSec": 420
+        }
+      },
+      {
+        "order": 3,
+        "kind": "recovery_block",
+        "name": "Breathing",
+        "iconUrl": "icons/bike.png",
+        "label": "5 min",
+        "target": {
+          "durationSec": 300
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_03",
+    "categoryId": "cat_recovery",
+    "type": "recovery",
+    "title": "Downshift",
+    "imageUrl": "/workouts/placeholder-recovery.jpg",
+    "durationMin": 25,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Mat",
+    "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "isSample": true,
+    "xp": 0,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "recovery_block",
+        "name": "Easy Bike",
+        "iconUrl": "icons/bike.png",
+        "label": "15 min",
+        "target": {
+          "durationSec": 900
+        }
+      },
+      {
+        "order": 2,
+        "kind": "recovery_block",
+        "name": "Walk",
+        "iconUrl": "icons/bike.png",
+        "label": "10 min",
+        "target": {
+          "durationSec": 600
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_04",
+    "categoryId": "cat_recovery",
+    "type": "recovery",
+    "title": "Breath Reset",
+    "imageUrl": "/workouts/placeholder-recovery.jpg",
+    "durationMin": 15,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Mat",
+    "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "isSample": true,
+    "xp": 0,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "recovery_block",
+        "name": "Box Breathing",
+        "iconUrl": "icons/bike.png",
+        "label": "8 min",
+        "target": {
+          "durationSec": 480
+        }
+      },
+      {
+        "order": 2,
+        "kind": "recovery_block",
+        "name": "Easy Spin",
+        "iconUrl": "icons/bike.png",
+        "label": "7 min",
+        "target": {
+          "durationSec": 420
+        }
+      }
+    ]
+  },
+  {
+    "id": "wk_recovery_05",
+    "categoryId": "cat_recovery",
+    "type": "recovery",
+    "title": "Flush and Stretch",
+    "imageUrl": "/workouts/placeholder-recovery.jpg",
+    "durationMin": 30,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Mat",
+    "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "isSample": true,
+    "xp": 0,
+    "activities": [
+      {
+        "order": 1,
+        "kind": "recovery_block",
+        "name": "Easy Spin",
+        "iconUrl": "icons/bike.png",
+        "label": "10 min",
+        "target": {
+          "durationSec": 600
+        }
+      },
+      {
+        "order": 2,
+        "kind": "recovery_block",
+        "name": "Mobility",
+        "iconUrl": "icons/bike.png",
+        "label": "12 min",
+        "target": {
+          "durationSec": 720
+        }
+      },
+      {
+        "order": 3,
+        "kind": "recovery_block",
+        "name": "Breathing",
+        "iconUrl": "icons/bike.png",
+        "label": "8 min",
+        "target": {
+          "durationSec": 480
+        }
       }
     ]
   }

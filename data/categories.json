@@ -1,0 +1,58 @@
+[
+  {
+    "id": "cat_hybrid_race",
+    "name": "Hybrid Race",
+    "sortOrder": 1,
+    "showOnHome": true,
+    "imageUrl": "/categories/hybrid-race.jpg"
+  },
+  {
+    "id": "cat_track",
+    "name": "Track",
+    "sortOrder": 2,
+    "showOnHome": true,
+    "imageUrl": "/categories/track.jpg"
+  },
+  {
+    "id": "cat_strength",
+    "name": "Strength",
+    "sortOrder": 3,
+    "showOnHome": true,
+    "imageUrl": "/categories/strength.jpg"
+  },
+  {
+    "id": "cat_ergs",
+    "name": "Ergs",
+    "sortOrder": 4,
+    "showOnHome": false,
+    "imageUrl": "/categories/ergs.jpg"
+  },
+  {
+    "id": "cat_power",
+    "name": "Power",
+    "sortOrder": 5,
+    "showOnHome": false,
+    "imageUrl": "/categories/power.jpg"
+  },
+  {
+    "id": "cat_aerobic",
+    "name": "Aerobic",
+    "sortOrder": 6,
+    "showOnHome": false,
+    "imageUrl": "/categories/aerobic.jpg"
+  },
+  {
+    "id": "cat_conditioning",
+    "name": "Conditioning",
+    "sortOrder": 7,
+    "showOnHome": false,
+    "imageUrl": "/categories/conditioning.jpg"
+  },
+  {
+    "id": "cat_recovery",
+    "name": "Recovery",
+    "sortOrder": 8,
+    "showOnHome": false,
+    "imageUrl": "/categories/recovery.jpg"
+  }
+]

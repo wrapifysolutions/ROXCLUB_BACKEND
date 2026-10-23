@@ -5,6 +5,7 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "test": "node --test",
+    "content:list-samples": "node scripts/list-sample-workouts.js",
     "vercel-dev": "vercel dev",
     "deploy": "vercel --prod"
   },
