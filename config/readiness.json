@@ -1,0 +1,71 @@
+{
+  "modelVersion": "v0",
+  "todo": "formula TBD - sports science",
+  "weights": {
+    "trainingLoad": 0.2,
+    "sleep": 0.2,
+    "hrv": 0.2,
+    "restingHr": 0.1,
+    "checkin": 0.2,
+    "lastRpe": 0.1
+  },
+  "wellnessSourcePriority": ["zepp", "apple_health", "manual"],
+  "baselineDays": 14,
+  "minBaselineDays": 4,
+  "loadLabels": [
+    { "min": 75, "label": "Light" },
+    { "min": 50, "label": "Moderate" },
+    { "min": 25, "label": "High" },
+    { "min": 0, "label": "Very high" }
+  ],
+  "statusThresholds": [
+    { "min": 85, "status": "PRIMED" },
+    { "min": 70, "status": "READY" },
+    { "min": 55, "status": "MODERATE" },
+    { "min": 40, "status": "FATIGUED" },
+    { "min": 0, "status": "RECOVERY_NEEDED" }
+  ],
+  "load": {
+    "acuteDays": [3, 7],
+    "chronicDays": 28,
+    "neutralScore": 70,
+    "ratioBand": 0.2,
+    "scorePerBand": 30,
+    "debriefMatchHours": 12,
+    "rpe": {
+      "neutral": 5
+    },
+    "heartRate": {
+      "restBpm": 60,
+      "maxBpm": 190,
+      "scale": 1.5,
+      "minFactor": 0.4,
+      "maxFactor": 1.8
+    },
+    "typeIntensity": {
+      "run": 1,
+      "trailrun": 1,
+      "virtualrun": 1,
+      "ride": 0.85,
+      "virtualride": 0.85,
+      "cycling": 0.85,
+      "swim": 1,
+      "rowing": 1,
+      "strength": 1.1,
+      "weighttraining": 1.1,
+      "crossfit": 1.1,
+      "hybrid": 1.05,
+      "engine": 1,
+      "workout": 1,
+      "walk": 0.6,
+      "hike": 0.75,
+      "yoga": 0.5,
+      "default": 1
+    }
+  },
+  "debrief": {
+    "flagPenalty": 10
+  },
+  "contradictionGap": 40,
+  "conflictPenalty": 15
+}

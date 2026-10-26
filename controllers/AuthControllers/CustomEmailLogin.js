@@ -43,6 +43,8 @@ const CustomEmailLogin = async (req, res) => {
         };
         const token = createAccessToken(sessionUser);
         setAuthCookie(res, token);
+        const { saveUserTimezone } = require('../../lib/readiness/userTimezone');
+        await saveUserTimezone(user.id, req.body?.timezone).catch(() => {});
 
         return res.status(200).json({
             message: 'Login successful',

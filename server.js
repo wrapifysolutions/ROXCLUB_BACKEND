@@ -7,6 +7,7 @@ const StravaRouter = require('./routes/StravaRoute');
 const ZeppRouter = require('./routes/ZeppRoute');
 const AppleHealthRouter = require('./routes/AppleHealthRoute');
 const WorkoutRouter = require('./routes/WorkoutRoute');
+const ReadinessRouter = require('./routes/ReadinessRoute');
 const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
 
@@ -124,6 +125,7 @@ app.use('/', StravaRouter);
 app.use('/', ZeppRouter);
 app.use('/', AppleHealthRouter);
 app.use('/', WorkoutRouter);
+app.use('/', ReadinessRouter);
 
 const port = Number(process.env.PORT) || 5000;
 
