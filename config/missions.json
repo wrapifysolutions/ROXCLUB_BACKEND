@@ -1,0 +1,12 @@
+{
+  "todo": "stub rules — formulas TBD",
+  "missions": [
+    {
+      "id": "complete_3_sessions",
+      "title": "Complete 3 sessions",
+      "rule": "completed_sessions",
+      "count": 3,
+      "coins": 50
+    }
+  ]
+}

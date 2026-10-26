@@ -9,6 +9,7 @@
   "dailyMultipliers": [1, 0.5, 0.25],
   "levelThresholds": [0, 500, 1200, 2000],
   "streak": {
-    "recoveryKeepsStreak": true
+    "recoveryKeepsStreak": true,
+    "coins": 10
   }
 }

@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const xpConfig = require('../config/xp.json');
+const badgeConfig = require('../config/badges.json');
 const programs = require('../data/programs.json');
 const { getWorkout, assertProgramWorkouts } = require('../lib/workouts/workoutCatalog');
 const { playerActivities, workActivities } = require('../lib/workout/playerPlan');
@@ -134,7 +135,7 @@ function memoryWorkout() {
             return { rows: db.streak ? [db.streak] : [] };
         }
         if (sql.includes('workout:load_badges')) {
-            return { rows: db.rewards.filter((row) => row.user_id === params[0] && row.kind === 'BADGE') };
+            return { rows: db.rewards.filter((row) => row.user_id === params[0]) };
         }
         if (sql.includes('workout:today_plan')) {
             return {
@@ -275,6 +276,16 @@ function memoryWorkout() {
     return db;
 }
 
+function assertCoinsMatchLedger(done, db) {
+    const sum = done.coinsBreakdown.reduce((total, row) => total + row.coins, 0);
+    assert.equal(sum, done.coinsEarned);
+    const written = db.coins.filter((row) => row.activity_id === done.activityId);
+    assert.deepEqual(
+        written.map((row) => ({ source: row.reason, coins: row.coins })),
+        done.coinsBreakdown
+    );
+}
+
 function opts(db, enqueue, localDate = DAY) {
     return { query: db.query, localDate, enqueueReadinessRecompute: enqueue };
 }
@@ -386,7 +397,9 @@ test('ending a hybrid early pays XP only for the finished activities', async () 
 
     assert.equal(done.completedCount, 3);
     assert.equal(done.totalCount, 8);
+    assert.equal(done.subtitle, '3/8 completed');
     assert.equal(done.totalXp, 3 * xpConfig.activityXp);
+    assert.ok(done.xpBreakdown.every((row) => row.coins == null));
     assert.equal(done.xpBreakdown.some((row) => row.reason === 'session_base'), false);
     assert.equal(db.sessions[0].status, 'partial');
     assert.equal(db.scheduled[0].status, 'partial');
@@ -419,6 +432,12 @@ test('outdoor GPS run keeps splits and a treadmill run is LIMITED', async () => 
         opts(outdoor, enqueue)
     );
     assert.equal(gps.evidenceStatus, 'STANDARD');
+    assert.equal(gps.subtitle, undefined);
+    assert.deepEqual(gps.evidence, {
+        status: 'STANDARD',
+        confidence: 'MODERATE',
+        sources: [{ provider: 'ROXCLUB', signals: ['Timer', 'GPS'] }],
+    });
     assert.equal(outdoor.gps.length, 2);
     assert.deepEqual(outdoor.splits[0].data.kmSplits, [{ km: 1, sec: 480 }]);
 
@@ -437,6 +456,11 @@ test('outdoor GPS run keeps splits and a treadmill run is LIMITED', async () => 
         opts(treadmill, enqueue)
     );
     assert.equal(manual.evidenceStatus, 'LIMITED');
+    assert.deepEqual(manual.evidence, {
+        status: 'LIMITED',
+        confidence: 'LOW',
+        sources: [{ provider: 'ROXCLUB', signals: ['Timer'] }],
+    });
     assert.equal(treadmill.splits[0].input_method, 'manual');
     assert.equal(treadmill.splits[0].distance_m, 4000);
 });
@@ -507,10 +531,14 @@ test('recovery earns 0 XP and coins, and keeps the streak alive', async () => {
     );
 
     assert.equal(done.totalXp, 0);
-    assert.equal(done.coinsEarned, xpConfig.recoveryCoins);
+    assert.equal(done.coinsEarned, xpConfig.recoveryCoins + xpConfig.streak.coins);
+    assert.deepEqual(done.coinsBreakdown, [
+        { source: 'session', coins: xpConfig.recoveryCoins },
+        { source: 'streak', coins: xpConfig.streak.coins },
+    ]);
+    assertCoinsMatchLedger(done, db);
     assert.equal(done.streak, 2);
     assert.equal(db.xp.length, 2);
-    assert.equal(db.coins.filter((row) => row.reason === 'recovery').length, 1);
 });
 
 test('the second session on the same local day gets reduced XP', async () => {
@@ -540,6 +568,45 @@ test('the second session on the same local day gets reduced XP', async () => {
             Math.round(xpConfig.activityXp * xpConfig.dailyMultipliers[1])
     );
     assert.ok(second.totalXp < first.totalXp);
+    assert.equal(second.rewards.some((reward) => reward.type === 'STREAK_COINS'), false);
+    assert.ok(second.xpBreakdown.every((row) => row.coins == null));
+});
+
+test('the third completed session grants the stub mission coins once', async () => {
+    const db = memoryWorkout();
+    const enqueue = () => {};
+    const plan = playerActivities(getWorkout('wk_zone2_run'));
+    const runData = [activityEntry(plan[0], { durationSec: 2400, distanceM: 5000, inputMethod: 'gps' })];
+    let mission = null;
+    let third = null;
+    for (let index = 0; index < 3; index += 1) {
+        const started = await start(db, 'wk_zone2_run', `mission-${index}`, enqueue, { localDate: `2026-10-${24 + index}` });
+        const done = await completeSession(
+            'user-1',
+            started.sessionId,
+            { endedAt: STARTED, totalDurationSec: 2400, completedActivities: runData },
+            opts(db, enqueue, `2026-10-${24 + index}`)
+        );
+        mission = done.rewards.find((reward) => reward.type === 'MISSION') || mission;
+        if (index < 2) assert.equal(done.rewards.some((reward) => reward.type === 'MISSION'), false);
+        if (index === 2) third = done;
+    }
+    assert.deepEqual(mission, { type: 'MISSION', id: 'complete_3_sessions', title: 'Complete 3 sessions', coins: 50 });
+    assert.equal(third.coinsEarned, xpConfig.coinsPerSession + xpConfig.streak.coins + 50);
+    assertCoinsMatchLedger(third, db);
+    assert.equal(db.coins.filter((row) => row.reason === 'mission').length, 1);
+    assert.equal(db.coins.find((row) => row.reason === 'mission').coins, 50);
+
+    const again = await start(db, 'wk_zone2_run', 'mission-again', enqueue, { localDate: '2026-10-27' });
+    const fourth = await completeSession(
+        'user-1',
+        again.sessionId,
+        { endedAt: STARTED, totalDurationSec: 2400, completedActivities: runData },
+        opts(db, enqueue, '2026-10-27')
+    );
+    assert.equal(fourth.rewards.some((reward) => reward.type === 'MISSION'), false);
+    assert.equal(db.coins.filter((row) => row.reason === 'mission').length, 1);
+    assert.ok(fourth.xpBreakdown.every((row) => row.reason !== 'mission' && row.coins == null));
 });
 
 test('a duplicate complete does not write XP twice', async () => {
@@ -611,8 +678,13 @@ test('crossing a level threshold returns a LEVEL_UP reward', async () => {
     assert.equal(done.levelBefore, 1);
     assert.equal(done.levelAfter, 2);
     assert.equal(done.xpIntoLevel, 10);
-    assert.ok(done.rewards.some((reward) => reward.type === 'LEVEL_UP' && reward.level === 2));
-    assert.ok(done.rewards.some((reward) => reward.type === 'BADGE' && reward.id === 'first_workout'));
+    assert.ok(done.rewards.some((reward) => reward.type === 'LEVEL_UP' && reward.level === 2 && reward.title === 'Level 2' && reward.coins === 0));
+    const firstBadge = badgeConfig.badges.find((badge) => badge.id === 'first_workout');
+    assert.ok(done.rewards.some((reward) => reward.type === 'BADGE' && reward.id === 'first_workout' && reward.title === 'First Workout' && reward.coins === firstBadge.coins));
+    assert.equal(done.coinsEarned, xpConfig.coinsPerSession + xpConfig.streak.coins + firstBadge.coins);
+    assertCoinsMatchLedger(done, db);
+    assert.ok(done.rewards.some((reward) => reward.type === 'STREAK_COINS' && reward.title === '1 day streak' && reward.coins === xpConfig.streak.coins));
+    assert.ok(done.xpBreakdown.every((row) => row.coins == null));
 });
 
 test('a native session merges with a Zepp import and keeps the watch heart rate', async () => {
@@ -625,6 +697,7 @@ test('a native session merges with a Zepp import and keeps the watch heart rate'
         start_at: STARTED,
         duration_seconds: 1200,
         average_heartrate: 150,
+        raw: { deviceName: 'Amazfit Balance' },
     });
     const plan = playerActivities(getWorkout('wk_foundation_a'));
     const started = await start(db, 'wk_foundation_a', 'merge', enqueue);
@@ -645,6 +718,14 @@ test('a native session merges with a Zepp import and keeps the watch heart rate'
     assert.equal(db.activities[0].avg_hr, 150);
     assert.equal(done.avgHr, 150);
     assert.equal(done.evidenceStatus, 'VERIFIED');
+    assert.deepEqual(done.evidence, {
+        status: 'VERIFIED',
+        confidence: 'HIGH',
+        sources: [
+            { provider: 'ROXCLUB', signals: ['Timer'] },
+            { provider: 'ZEPP', deviceName: 'Amazfit Balance', signals: ['HR'] },
+        ],
+    });
     assert.equal(db.splits[0].name, 'Running');
 });
 

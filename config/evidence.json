@@ -5,5 +5,10 @@
     "VERIFIED": "native + HR for most of the session",
     "STANDARD": "native without HR",
     "LIMITED": "mostly manual entries"
+  },
+  "confidence": {
+    "VERIFIED": "HIGH",
+    "STANDARD": "MODERATE",
+    "LIMITED": "LOW"
   }
 }

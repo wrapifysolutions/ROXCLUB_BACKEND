@@ -4,7 +4,8 @@
     {
       "id": "first_workout",
       "name": "First Workout",
-      "rule": "first_completed_session"
+      "rule": "first_completed_session",
+      "coins": 25
     }
   ]
 }
