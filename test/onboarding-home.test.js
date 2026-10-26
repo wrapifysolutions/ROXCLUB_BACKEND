@@ -157,7 +157,9 @@ test('connected watch fills readiness and dna while workout and level stay ours'
         },
     });
 
-    assert.equal(home.state, 'NORMAL');
+    assert.equal(home.state, 'NEW_ATHLETE');
+    assert.equal(home.recoveryNeeded, false);
+    assert.equal(home.thisWeek, undefined);
     assert.equal(home.readiness.score, 82);
     assert.equal(home.readiness.source, 'apple_health');
     assert.equal(home.dna.status, 'READY');
@@ -165,4 +167,36 @@ test('connected watch fills readiness and dna while workout and level stay ours'
     assert.equal(home.dna.attributes.sleep, 7.5);
     assert.equal(home.todayWorkout.id, 'wk_foundation_a');
     assert.deepEqual(home.level, { level: 1, xp: 0, nextLevelXp: 500 });
+});
+
+test('one session and a check-in stays NEW_ATHLETE with a readiness score', () => {
+    const home = buildHomeResponse({
+        name: 'Alex',
+        completedSessions: 1,
+        checkInScore: 78,
+        xpTotal: 0,
+        todaySession: null,
+    });
+
+    assert.equal(home.state, 'NEW_ATHLETE');
+    assert.equal(home.readiness.score, 78);
+    assert.equal(home.recoveryNeeded, false);
+    assert.equal(home.thisWeek, undefined);
+});
+
+test('three sessions makes home NORMAL with thisWeek', () => {
+    const thisWeek = { completed: 1, total: 3, days: [{ date: '2026-10-26', status: 'done' }] };
+    const home = buildHomeResponse({
+        name: 'Alex',
+        completedSessions: 3,
+        checkInScore: 78,
+        xpTotal: 40,
+        thisWeek,
+        todaySession: null,
+    });
+
+    assert.equal(home.state, 'NORMAL');
+    assert.equal(home.recoveryNeeded, false);
+    assert.equal(home.readiness.score, 78);
+    assert.equal(home.thisWeek, thisWeek);
 });

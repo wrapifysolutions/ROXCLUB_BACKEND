@@ -1,0 +1,14 @@
+{
+  "todo": "formula TBD - sports science",
+  "calcVersion": "v0",
+  "sessionBaseXp": 50,
+  "activityXp": 10,
+  "recoveryXp": 0,
+  "coinsPerSession": 15,
+  "recoveryCoins": 5,
+  "dailyMultipliers": [1, 0.5, 0.25],
+  "levelThresholds": [0, 500, 1200, 2000],
+  "streak": {
+    "recoveryKeepsStreak": true
+  }
+}

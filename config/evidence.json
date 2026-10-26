@@ -1,0 +1,9 @@
+{
+  "verifiedHrCoverage": 0.5,
+  "limitedManualCoverage": 0.5,
+  "statuses": {
+    "VERIFIED": "native + HR for most of the session",
+    "STANDARD": "native without HR",
+    "LIMITED": "mostly manual entries"
+  }
+}

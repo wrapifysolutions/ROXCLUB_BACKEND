@@ -1,4 +1,5 @@
 {
   "recoveryScoreThreshold": 40,
-  "nextLevelXp": 500
+  "nextLevelXp": 500,
+  "newAthleteSessions": 3
 }

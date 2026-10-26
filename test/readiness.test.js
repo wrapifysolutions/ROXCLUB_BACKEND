@@ -728,7 +728,9 @@ test('a low readiness score makes home state RECOVERY_NEEDED', () => {
 
     assert.equal(readiness.status, 'RECOVERY_NEEDED');
     assert.ok(readiness.score < 40);
-    assert.equal(home.state, 'RECOVERY_NEEDED');
+    assert.equal(home.state, 'NEW_ATHLETE');
+    assert.equal(home.recoveryNeeded, true);
+    assert.equal(home.thisWeek, undefined);
     assert.equal(home.readiness.status, 'RECOVERY_NEEDED');
     assert.equal(home.readiness.source, 'daily_readiness');
     assert.equal(home.level.xp, 0);

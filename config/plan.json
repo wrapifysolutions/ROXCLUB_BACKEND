@@ -1,0 +1,36 @@
+{
+  "todo": "rules TBD",
+  "phases": [
+    { "name": "Base", "untilPct": 0.25 },
+    { "name": "Build", "untilPct": 0.75 },
+    { "name": "Peak", "untilPct": 0.85 },
+    { "name": "Race", "untilPct": 1 }
+  ],
+  "raceCrunchWeeks": 2,
+  "raceBufferDays": 2,
+  "minRestDaysPerWeek": 1,
+  "maxRescheduledPerWeek": 2,
+  "hardTypes": ["hybrid", "strength"],
+  "hardWorkoutIds": ["wk_engine_intervals", "wk_simulation"],
+  "easyWorkoutIds": ["wk_zone2_run", "wk_easy_cardio"],
+  "priorityGroups": {
+    "key": ["wk_simulation"],
+    "threshold": ["wk_engine_intervals"],
+    "long": ["wk_aerobic_02"]
+  },
+  "priority": {
+    "recovery": 0,
+    "easy": 1,
+    "run": 2,
+    "strength": 3,
+    "hybrid": 4,
+    "long": 5,
+    "threshold": 6,
+    "key": 7
+  },
+  "notes": {
+    "wk_zone2_run": "Zone 2",
+    "wk_easy_cardio": "Zone 2",
+    "wk_engine_intervals": "threshold"
+  }
+}

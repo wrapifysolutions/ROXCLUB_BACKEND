@@ -8,6 +8,7 @@ const {
     summarizeAppleHealth,
 } = require('../../lib/appleHealth/appleHealthStore');
 const { getZeppAvailability } = require('../../lib/zeppConfig/zeppConfig');
+const { ensureOnboardingProfileSchema } = require('../../lib/onboarding/schema');
 
 /**
  * For onboarding screen "Connect your data" (Strava / Zepp / Apple Health).
@@ -126,6 +127,7 @@ const getWorkoutsFeed = async (req, res) => {
         await ensureStravaDataTables();
         await ensureZeppDataTables();
         await ensureAppleHealthTables();
+        await ensureOnboardingProfileSchema();
 
         const { rows } = await pool.query(
             `
@@ -142,6 +144,13 @@ const getWorkoutsFeed = async (req, res) => {
                     average_heartrate
                 FROM strava_activities
                 WHERE user_id = $1
+                  AND NOT EXISTS (
+                    SELECT 1 FROM activities a
+                    WHERE a.user_id = strava_activities.user_id
+                      AND a.provenance @> jsonb_build_array(
+                        jsonb_build_object('source', 'strava', 'externalId', strava_activities.strava_activity_id::text)
+                      )
+                  )
             )
             UNION ALL
             (
@@ -157,6 +166,13 @@ const getWorkoutsFeed = async (req, res) => {
                     average_heartrate
                 FROM zepp_health_samples
                 WHERE user_id = $1 AND sample_type = 'activity'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM activities a
+                    WHERE a.user_id = zepp_health_samples.user_id
+                      AND a.provenance @> jsonb_build_array(
+                        jsonb_build_object('source', 'zepp', 'externalId', zepp_health_samples.external_id)
+                      )
+                  )
             )
             UNION ALL
             (
@@ -181,6 +197,28 @@ const getWorkoutsFeed = async (req, res) => {
                     END AS average_heartrate
                 FROM apple_health_samples
                 WHERE user_id = $1 AND sample_type = 'workout'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM activities a
+                    WHERE a.user_id = apple_health_samples.user_id
+                      AND a.provenance @> jsonb_build_array(
+                        jsonb_build_object('source', 'apple_health', 'externalId', apple_health_samples.external_id)
+                      )
+                  )
+            )
+            UNION ALL
+            (
+                SELECT
+                    'ROXCLUB_NATIVE'::text AS source,
+                    id::text AS external_id,
+                    name,
+                    activity_type AS sport_type,
+                    start_at,
+                    distance_m AS distance,
+                    duration_sec AS duration_seconds,
+                    NULL::numeric AS calories,
+                    avg_hr AS average_heartrate
+                FROM activities
+                WHERE user_id = $1
             )
             ORDER BY start_at DESC NULLS LAST
             LIMIT $2

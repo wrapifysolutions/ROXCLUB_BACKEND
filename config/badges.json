@@ -1,0 +1,10 @@
+{
+  "todo": "stub rules — formulas TBD",
+  "badges": [
+    {
+      "id": "first_workout",
+      "name": "First Workout",
+      "rule": "first_completed_session"
+    }
+  ]
+}
