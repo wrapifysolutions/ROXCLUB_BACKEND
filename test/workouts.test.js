@@ -216,6 +216,13 @@ test('categoryId filter only returns library workouts in that category', () => {
     assert.equal(page.workouts.some((workout) => workout.id === 'wk_foundation_b'), false);
 });
 
+test('category workouts endpoint hides program-only workouts', async () => {
+    const result = await listCategoryWorkouts('user-1', 'cat_hybrid_race', async () => ({ rows: [] }));
+    assert.ok(result.workouts.some((workout) => workout.id === 'wk_foundation_a'));
+    assert.equal(result.workouts.some((workout) => workout.id === 'wk_foundation_b'), false);
+    assert.equal(result.category.workoutCount, result.workouts.length);
+});
+
 test('program-only workouts stay startable and out of the library list', async () => {
     assert.equal(getWorkout('wk_foundation_b')?.showInLibrary, false);
     assert.equal(listWorkoutPage({ q: 'Foundation Protocol B' }).workouts.length, 0);
@@ -239,6 +246,7 @@ test('program-only workouts stay startable and out of the library list', async (
                                 workout_id: params[2],
                                 status: 'in_progress',
                                 started_at: params[4],
+                                paused_duration_sec: 0,
                             },
                         ],
                     };

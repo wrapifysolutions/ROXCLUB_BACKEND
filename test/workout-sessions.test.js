@@ -12,6 +12,7 @@ const {
     completeSession,
 } = require('../lib/workout/sessionService');
 const { submitDebrief } = require('../lib/workout/debriefService');
+const { listActivityHistory } = require('../lib/workout/activityHistory');
 const { buildHomeResponse } = require('../lib/home/homeState');
 
 const DAY = '2026-10-26';
@@ -58,11 +59,17 @@ function memoryWorkout() {
                 started_at: params[4],
                 idempotency_key: params[5],
                 local_date: params[6],
+                paused_duration_sec: 0,
                 result: null,
                 activity_id: null,
             };
             db.sessions.push(row);
             return { rows: [row] };
+        }
+        if (sql.includes('workout:save_paused')) {
+            const row = db.sessions.find((session) => session.id === params[0] && session.user_id === params[1]);
+            if (row && row.status === 'in_progress') row.paused_duration_sec = params[2];
+            return { rows: [] };
         }
         if (sql.includes('workout:session_by_workout')) {
             const row = db.sessions.find(
@@ -814,6 +821,132 @@ test('a different workout type than planned still earns normal XP and is not rep
     );
     assert.equal(done.totalXp, xpConfig.sessionBaseXp + plan.length * xpConfig.activityXp);
     assert.equal(db.scheduled[0].status, 'pending');
+});
+
+test('progress can persist pausedDurationSec for crash recovery', async () => {
+    const db = memoryWorkout();
+    const enqueue = () => {};
+    const started = await start(db, 'wk_zone2_run', 'pause', enqueue);
+    assert.equal(started.pausedDurationSec, 0);
+    const plan = playerActivities(getWorkout('wk_zone2_run'));
+    const saved = await saveProgress(
+        'user-1',
+        started.sessionId,
+        {
+            ...activityEntry(plan[0], { durationSec: 600, distanceM: 1000, inputMethod: 'manual' }),
+            pausedDurationSec: 45,
+        },
+        opts(db, enqueue)
+    );
+    assert.equal(saved.pausedDurationSec, 45);
+    assert.equal(db.sessions[0].paused_duration_sec, 45);
+    const active = await getActiveSession('user-1', opts(db, enqueue));
+    assert.equal(active.session.pausedDurationSec, 45);
+    assert.deepEqual(
+        active.session.activities.map((activity) => activity.activityIndex),
+        started.activities.map((activity) => activity.activityIndex)
+    );
+});
+
+test('activity history lists completed sessions with cursor pagination', async () => {
+    const db = memoryWorkout();
+    const enqueue = () => {};
+    const plan = playerActivities(getWorkout('wk_zone2_run'));
+    const runBody = (endedAt) => ({
+        endedAt,
+        totalDurationSec: 2400,
+        completedActivities: [activityEntry(plan[0], { durationSec: 2400, distanceM: 5000, inputMethod: 'gps' })],
+    });
+    const first = await completeSession(
+        'user-1',
+        (
+            await start(db, 'wk_zone2_run', 'hist-1', enqueue, {
+                localDate: '2026-10-24',
+                startedAt: '2026-10-24T08:00:00.000Z',
+            })
+        ).sessionId,
+        runBody('2026-10-24T08:40:00.000Z'),
+        opts(db, enqueue, '2026-10-24')
+    );
+    const second = await completeSession(
+        'user-1',
+        (
+            await start(db, 'wk_zone2_run', 'hist-2', enqueue, {
+                localDate: '2026-10-25',
+                startedAt: '2026-10-25T08:00:00.000Z',
+            })
+        ).sessionId,
+        runBody('2026-10-25T08:40:00.000Z'),
+        opts(db, enqueue, '2026-10-25')
+    );
+    const third = await completeSession(
+        'user-1',
+        (
+            await start(db, 'wk_zone2_run', 'hist-3', enqueue, {
+                localDate: '2026-10-26',
+                startedAt: '2026-10-26T08:00:00.000Z',
+            })
+        ).sessionId,
+        runBody('2026-10-26T08:40:00.000Z'),
+        opts(db, enqueue, '2026-10-26')
+    );
+
+    const query = async (sql, params) => {
+        if (sql.includes('workout:activity_history')) {
+            let rows = db.activities
+                .filter((activity) => activity.user_id === params[0])
+                .map((activity) => {
+                    const session = db.sessions.find((item) => item.id === activity.session_id);
+                    return {
+                        id: activity.id,
+                        session_id: activity.session_id,
+                        workout_id: activity.workout_id,
+                        name: activity.name,
+                        activity_type: activity.activity_type,
+                        start_at: activity.start_at,
+                        end_at: activity.end_at,
+                        duration_sec: activity.duration_sec,
+                        distance_m: activity.distance_m,
+                        avg_hr: activity.avg_hr,
+                        evidence_status: activity.evidence_status,
+                        roxzone_total_sec: activity.roxzone_total_sec,
+                        sources: activity.sources,
+                        result: session?.result || null,
+                        session_status: session?.status || null,
+                    };
+                })
+                .sort(
+                    (left, right) =>
+                        String(right.start_at).localeCompare(String(left.start_at)) ||
+                        String(right.id).localeCompare(String(left.id))
+                );
+            if (params.length >= 4) {
+                const startAt = params[1];
+                const id = params[2];
+                rows = rows.filter(
+                    (row) =>
+                        String(row.start_at) < String(startAt) ||
+                        (String(row.start_at) === String(startAt) && String(row.id) < String(id))
+                );
+            }
+            const limit = params[params.length - 1];
+            return { rows: rows.slice(0, limit) };
+        }
+        throw new Error(`unexpected sql: ${sql}`);
+    };
+
+    const page1 = await listActivityHistory('user-1', { query, limit: 2 });
+    assert.equal(page1.activities.length, 2);
+    assert.ok(page1.nextCursor);
+    assert.equal(page1.activities[0].activityId, third.activityId);
+    assert.equal(page1.activities[0].title, 'Zone 2 Run');
+    assert.equal(page1.activities[0].totalXp, third.totalXp);
+    assert.equal(page1.activities[1].activityId, second.activityId);
+    const page2 = await listActivityHistory('user-1', { query, limit: 2, cursor: page1.nextCursor });
+    assert.equal(page2.activities.length, 1);
+    assert.equal(page2.activities[0].activityId, first.activityId);
+    assert.equal(page2.nextCursor, null);
+    assert.equal(page1.activities.some((item) => item.activityId === page2.activities[0].activityId), false);
 });
 
 test('roxzone display counting shows Wall Balls as Activity 2 of 8', async () => {

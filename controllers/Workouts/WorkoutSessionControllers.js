@@ -8,6 +8,7 @@ const {
     completeSession,
 } = require('../../lib/workout/sessionService');
 const { submitDebrief } = require('../../lib/workout/debriefService');
+const { listActivityHistory } = require('../../lib/workout/activityHistory');
 
 function sendError(res, error, logLabel) {
     if (error.code === 'SESSION_IN_PROGRESS') {
@@ -93,6 +94,19 @@ const SubmitActivityDebrief = async (req, res) => {
     }
 };
 
+const ListActivityHistory = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await listActivityHistory(req.user.id, {
+            limit: req.query?.limit,
+            cursor: req.query?.cursor,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendError(res, error, 'ListActivityHistory error');
+    }
+};
+
 module.exports = {
     StartWorkoutSession,
     GetActiveWorkoutSession,
@@ -100,4 +114,5 @@ module.exports = {
     CancelWorkoutSession,
     CompleteWorkoutSession,
     SubmitActivityDebrief,
+    ListActivityHistory,
 };

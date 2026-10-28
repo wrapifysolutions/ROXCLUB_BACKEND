@@ -1,0 +1,1997 @@
+{
+  "summary": {
+    "sourceFile": "C:\\Users\\E VELLAY\\Downloads\\Roxclub_Backend_Workout_Database_v3_DeveloperReady.xlsx",
+    "excelWorkoutCount": 141,
+    "excelStepCount": 485,
+    "importedCount": 86,
+    "unsupportedCount": 55,
+    "excludedCount": 0,
+    "maxExpandedActivities": 20,
+    "unsupportedFormats": [
+      "AMRAP",
+      "EMOM",
+      "Partner"
+    ],
+    "excludedCategories": [
+      "Warm-Ups"
+    ],
+    "forceUnsupportedIds": [
+      "HYR-19",
+      "TRK-13"
+    ],
+    "legacyCatalogPreserved": true
+  },
+  "workouts": [
+    {
+      "id": "HYR-01",
+      "title": "Full Simulation",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 16,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-02",
+      "title": "Half Simulation — Front Half",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-03",
+      "title": "Half Simulation — Back Half",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-04",
+      "title": "Full Stations / Half Runs",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 16,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-05",
+      "title": "Half Stations / Full Runs",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 16,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-06",
+      "title": "Quarter Simulation",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-07",
+      "title": "Station Ladder",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "8 x 5 min blocks, one station per block. Work 3:30 at controlled effort, recover 1:30. Rotate through official station order. Quality over maximal pace"
+      ]
+    },
+    {
+      "id": "HYR-08",
+      "title": "Compromised 1K",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4",
+        "expanded block B02 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-09",
+      "title": "Sleds to Run",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 15,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-10",
+      "title": "Wall Ball Finish",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x3"
+      ],
+      "type": "hybrid",
+      "activityCount": 9,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-11",
+      "title": "Burpee Run Repeat",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-12",
+      "title": "Carry & Lunge Grinder",
+      "category": "HYROX",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 12,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-13",
+      "title": "Erg Sandwich",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 5,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-14",
+      "title": "Race Pace Builder",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x6"
+      ],
+      "type": "hybrid",
+      "activityCount": 12,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-15",
+      "title": "Front Half Density",
+      "category": "HYROX",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "HYR-16",
+      "title": "Back Half Density",
+      "category": "HYROX",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "HYR-17",
+      "title": "Transition Practice",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_2_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 2
+    },
+    {
+      "id": "HYR-18",
+      "title": "Broken Full",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "Complete official race order but rest 2 min after every second station. Use 85–90% race effort and aim for consistent splits"
+      ]
+    },
+    {
+      "id": "HYR-19",
+      "title": "Negative Split Simulation",
+      "category": "HYROX",
+      "format": "For Time",
+      "status": "unsupported",
+      "reasons": [
+        "incomplete_excel_steps_cannot_represent_prescription"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "6 x (1 km run + station). First 3 rounds at controlled pace, final 3 progressively faster. Use Ski, Push, Pull, Row, Lunges, Wall Balls.",
+        "6 x (1 km run",
+        "station). First 3 rounds at controlled pace, final 3 progressively faster. Use Ski, Push, Pull, Row, Lunges, Wall Balls"
+      ]
+    },
+    {
+      "id": "HYR-20",
+      "title": "No-Sled HYROX",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "missing_work_target:GOBLET_SQUAT"
+      ],
+      "warnings": [
+        "expanded block B01 x6",
+        "expanded block B02 x6",
+        "expanded block B03 x6",
+        "expanded block B04 x6",
+        "expanded block B05 x6",
+        "expanded block B06 x6"
+      ],
+      "preservedInstructions": []
+    },
+    {
+      "id": "HYR-21",
+      "title": "Minimal Equipment HYROX",
+      "category": "HYROX",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "HYR-22",
+      "title": "HYROX Doubles Builder",
+      "category": "HYROX",
+      "format": "Partner",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:Partner"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "HYR-23",
+      "title": "Station Benchmark",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "Complete each station as a standalone benchmark at race distance/reps with 4–6 min easy recovery between stations. Record split for each"
+      ]
+    },
+    {
+      "id": "HYR-24",
+      "title": "Sub-90 Builder",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": true,
+      "instructionCount": 0
+    },
+    {
+      "id": "HYR-25",
+      "title": "Race Week Primer",
+      "category": "HYROX",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x2",
+        "preserved_2_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": true,
+      "instructionCount": 2
+    },
+    {
+      "id": "TRK-01",
+      "title": "Threshold 1Ks",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-02",
+      "title": "Cruise 800s",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-03",
+      "title": "Speed 400s",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-04",
+      "title": "Race Pace 1Ks",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-05",
+      "title": "Tempo 20",
+      "category": "Track",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 min easy",
+        "20 min steady tempo at RPE 7/10",
+        "10 min easy"
+      ]
+    },
+    {
+      "id": "TRK-06",
+      "title": "Progression 6K",
+      "category": "Track",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "6 km continuous: km 1–2 easy, km 3–4 steady, km 5 at HYROX pace, km 6 faster but controlled"
+      ]
+    },
+    {
+      "id": "TRK-07",
+      "title": "Aerobic 8K",
+      "category": "Track",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-08",
+      "title": "Long Easy 10K",
+      "category": "Track",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 km easy, smooth breathing, no racing. Optional final 1 km steady"
+      ]
+    },
+    {
+      "id": "TRK-09",
+      "title": "Hill Strength",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-10",
+      "title": "200m Speed",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "TRK-11",
+      "title": "Broken 5K",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "2 km strong",
+        "3 min rest",
+        "1.5 km strong",
+        "2 min rest",
+        "1 km strong",
+        "90 sec rest",
+        "500 m fast"
+      ]
+    },
+    {
+      "id": "TRK-12",
+      "title": "Fartlek 30",
+      "category": "Track",
+      "format": "Fartlek",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 min easy, then 10 rounds of 1 min strong / 1 min easy, then 10 min easy"
+      ]
+    },
+    {
+      "id": "TRK-13",
+      "title": "Compromised 800s",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "run_interval_stored_as_instruction_player_would_omit_800m_runs"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "5 rounds: 20 kettlebell front-rack walking lunges + 800 m at HYROX pace. Rest 90 sec.",
+        "5 rounds: 20 kettlebell front-rack walking lunges",
+        "800 m at HYROX pace. Rest 90 sec"
+      ]
+    },
+    {
+      "id": "TRK-14",
+      "title": "Carry to 1K",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-15",
+      "title": "Lunge to 600",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-16",
+      "title": "Easy + Strides",
+      "category": "Track",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 2,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "TRK-17",
+      "title": "Race Week Track Primer",
+      "category": "Track",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_3_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 3
+    },
+    {
+      "id": "STR-01",
+      "title": "Sled Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-02",
+      "title": "Squat Foundation",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-03",
+      "title": "Front Rack Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-04",
+      "title": "Hinge & Carry",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-05",
+      "title": "Upper Pull",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-06",
+      "title": "Wall Ball Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-07",
+      "title": "Single-Leg Builder",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "STR-08",
+      "title": "Grip Builder",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "enriched_DEAD_HANG:sets_from_notes"
+      ],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-09",
+      "title": "Push Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-10",
+      "title": "Pull Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "enriched_PULL_UP:sets_from_notes"
+      ],
+      "type": "strength",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-11",
+      "title": "Posterior Chain",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "STR-12",
+      "title": "Lunge Load",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_distance_without_run_activity"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "3 x 20 m lighter lunge fast"
+      ]
+    },
+    {
+      "id": "STR-13",
+      "title": "Core Under Load",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-14",
+      "title": "Full Body 5x5",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "STR-15",
+      "title": "Heavy + Fast",
+      "category": "Strength",
+      "format": "Contrast Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4",
+        "expanded block B02 x4",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes"
+      ],
+      "type": "strength",
+      "activityCount": 16,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-16",
+      "title": "Wall Ball Base",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 3,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-17",
+      "title": "Race Load Strength",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "STR-18",
+      "title": "Strength Deload",
+      "category": "Strength",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 4,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "ERG-01",
+      "title": "Ski 5K Benchmark",
+      "category": "Ergs",
+      "format": "Time Trial",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "ERG-02",
+      "title": "Row 5K Benchmark",
+      "category": "Ergs",
+      "format": "Time Trial",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "ERG-03",
+      "title": "Ski 500s",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "8 x 500 m at strong repeatable pace, 90 sec easy recovery"
+      ]
+    },
+    {
+      "id": "ERG-04",
+      "title": "Row 500s",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "8 x 500 m at strong repeatable pace, 90 sec easy recovery"
+      ]
+    },
+    {
+      "id": "ERG-05",
+      "title": "Ski 1Ks",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "4 x 1,000 m at race-relevant pace, 2 min easy recovery. Aim for tight split consistency"
+      ]
+    },
+    {
+      "id": "ERG-06",
+      "title": "Row 1Ks",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "4 x 1,000 m at race-relevant pace, 2 min easy recovery"
+      ]
+    },
+    {
+      "id": "ERG-07",
+      "title": "Ski Threshold 20",
+      "category": "Ergs",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 min easy then 20 min continuous at RPE 7/10",
+        "keep 500 m split stable"
+      ]
+    },
+    {
+      "id": "ERG-08",
+      "title": "Row Threshold 20",
+      "category": "Ergs",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 min easy then 20 min continuous at RPE 7/10",
+        "keep 500 m split stable"
+      ]
+    },
+    {
+      "id": "ERG-09",
+      "title": "Erg Switch 10s",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x10",
+        "expanded block B02 x10",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 20,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "ERG-10",
+      "title": "Erg Sprint 250",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "2 sets of 6 x 250 m hard, 60 sec rest",
+        "4 min between sets"
+      ]
+    },
+    {
+      "id": "ERG-11",
+      "title": "Ski Descending",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "1,000 m",
+        "750 m",
+        "500 m",
+        "250 m. Rest 2 min between. Get progressively faster per 500 m"
+      ]
+    },
+    {
+      "id": "ERG-12",
+      "title": "Row Descending",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "1,000 m",
+        "750 m",
+        "500 m",
+        "250 m. Rest 2 min between. Get progressively faster per 500 m"
+      ]
+    },
+    {
+      "id": "ERG-13",
+      "title": "Erg + Burpee",
+      "category": "Ergs",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 16,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "ERG-14",
+      "title": "Erg + Run",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "ERG-15",
+      "title": "Aerobic Erg 45",
+      "category": "Ergs",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "45 min Zone 2",
+        "switch machine every 10–15 min if using both. Smooth stroke rate and nasal/conversational breathing"
+      ]
+    },
+    {
+      "id": "ERG-16",
+      "title": "Erg EMOM",
+      "category": "Ergs",
+      "format": "EMOM",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:EMOM"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "ERG-17",
+      "title": "Race Week Erg Primer",
+      "category": "Ergs",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 2,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-01",
+      "title": "Sled Acceleration",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-02",
+      "title": "Sled Pull Speed",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-03",
+      "title": "Jump + Push",
+      "category": "Power",
+      "format": "Contrast Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "expanded block B02 x5",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "PWR-04",
+      "title": "Med Ball Power",
+      "category": "Power",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_2_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 2,
+      "autoRoxzone": false,
+      "instructionCount": 2
+    },
+    {
+      "id": "PWR-05",
+      "title": "Kettlebell Swing Power",
+      "category": "Power",
+      "format": "EMOM",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:EMOM"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "PWR-06",
+      "title": "Hill Sprints",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_2_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 2
+    },
+    {
+      "id": "PWR-07",
+      "title": "200m Fast",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-08",
+      "title": "Deadlift + Broad Jump",
+      "category": "Power",
+      "format": "Contrast Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "expanded block B02 x5",
+        "enriched_DEADLIFT:reps_from_notes",
+        "enriched_DEADLIFT:reps_from_notes",
+        "enriched_DEADLIFT:reps_from_notes",
+        "enriched_DEADLIFT:reps_from_notes",
+        "enriched_DEADLIFT:reps_from_notes",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "PWR-09",
+      "title": "Front Squat + Jump",
+      "category": "Power",
+      "format": "Contrast Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "skipped_block_expand_B02_sets_define_volume_repeat_was_5",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes",
+        "enriched_FRONT_SQUAT:reps_from_notes"
+      ],
+      "type": "strength",
+      "activityCount": 11,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-10",
+      "title": "Burpee Speed",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "PWR-11",
+      "title": "Row Power 10",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 x 30 sec hard / 90 sec easy. High power, efficient stroke, no early fade"
+      ]
+    },
+    {
+      "id": "PWR-12",
+      "title": "Ski Power 10",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "10 x 30 sec hard / 90 sec easy. Strong hip hinge and finish"
+      ]
+    },
+    {
+      "id": "PWR-13",
+      "title": "Carry Speed",
+      "category": "Power",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-14",
+      "title": "Lunge Drive",
+      "category": "Power",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "strength",
+      "activityCount": 3,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-15",
+      "title": "Hybrid Power Circuit",
+      "category": "Power",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "enriched_KB_SWING:reps_from_notes",
+        "enriched_WALL_BALL:reps_from_notes",
+        "enriched_KB_SWING:reps_from_notes",
+        "enriched_WALL_BALL:reps_from_notes",
+        "enriched_KB_SWING:reps_from_notes",
+        "enriched_WALL_BALL:reps_from_notes",
+        "enriched_KB_SWING:reps_from_notes",
+        "enriched_WALL_BALL:reps_from_notes",
+        "enriched_KB_SWING:reps_from_notes",
+        "enriched_WALL_BALL:reps_from_notes"
+      ],
+      "type": "strength",
+      "activityCount": 20,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "PWR-16",
+      "title": "Power Primer",
+      "category": "Power",
+      "format": "Sets",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x3",
+        "enriched_MED_BALL_THROW:reps_from_notes",
+        "enriched_MED_BALL_THROW:reps_from_notes",
+        "enriched_MED_BALL_THROW:reps_from_notes",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "strength",
+      "activityCount": 9,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "AER-01",
+      "title": "Zone 2 Run 45",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "AER-02",
+      "title": "Zone 2 Run 60",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-03",
+      "title": "Long Aerobic 90",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 2,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-04",
+      "title": "Ski Zone 2",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-05",
+      "title": "Row Zone 2",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-06",
+      "title": "Mixed Erg 60",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 3,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-07",
+      "title": "Easy Run + Carry",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-08",
+      "title": "Aerobic Station Flow",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-09",
+      "title": "Run/Erg 10s",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 5,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-10",
+      "title": "Aerobic Fartlek",
+      "category": "Aerobic",
+      "format": "Fartlek",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "AER-11",
+      "title": "Recovery 30",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "30 min very easy cyclical work. Keep RPE 2–3/10"
+      ]
+    },
+    {
+      "id": "AER-12",
+      "title": "Aerobic 20",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-13",
+      "title": "Steady 5K",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "5 km steady, controlled breathing, finish with reserve"
+      ]
+    },
+    {
+      "id": "AER-14",
+      "title": "Steady 8K",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "8 km steady, slightly faster than easy pace but clearly below threshold"
+      ]
+    },
+    {
+      "id": "AER-15",
+      "title": "Aerobic Brick",
+      "category": "Aerobic",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 8,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "AER-16",
+      "title": "Pre-Race Easy",
+      "category": "Aerobic",
+      "format": "Continuous",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_2_instruction_steps"
+      ],
+      "type": "run",
+      "activityCount": 1,
+      "autoRoxzone": false,
+      "instructionCount": 2
+    },
+    {
+      "id": "CON-01",
+      "title": "HYROX EMOM 30",
+      "category": "Conditioning",
+      "format": "EMOM",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:EMOM"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-02",
+      "title": "Engine AMRAP 30",
+      "category": "Conditioning",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-03",
+      "title": "Sled Conditioning",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x6"
+      ],
+      "type": "hybrid",
+      "activityCount": 18,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-04",
+      "title": "Burpee Engine",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 15,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-05",
+      "title": "Wall Ball Density",
+      "category": "Conditioning",
+      "format": "Density",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x8"
+      ],
+      "type": "hybrid",
+      "activityCount": 16,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-06",
+      "title": "Carry Lunge Circuit",
+      "category": "Conditioning",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5"
+      ],
+      "type": "hybrid",
+      "activityCount": 20,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-07",
+      "title": "Erg Conditioning",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "CON-08",
+      "title": "Threshold Circuit",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x4"
+      ],
+      "type": "hybrid",
+      "activityCount": 12,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-09",
+      "title": "Race Floor 40",
+      "category": "Conditioning",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-10",
+      "title": "Compromise 5",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x5",
+        "expanded block B02 x5",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 10,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "CON-11",
+      "title": "No Equipment Hybrid",
+      "category": "Conditioning",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-12",
+      "title": "Dumbbell Hybrid",
+      "category": "Conditioning",
+      "format": "AMRAP",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:AMRAP"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-13",
+      "title": "Intervals 4x8",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 2,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "CON-14",
+      "title": "Station Chipper",
+      "category": "Conditioning",
+      "format": "For Time",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_distance_without_run_activity"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "50 m Lunges"
+      ]
+    },
+    {
+      "id": "CON-15",
+      "title": "Descending Hybrid",
+      "category": "Conditioning",
+      "format": "Rounds",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [],
+      "type": "hybrid",
+      "activityCount": 3,
+      "autoRoxzone": false,
+      "instructionCount": 0
+    },
+    {
+      "id": "CON-16",
+      "title": "30/30 Engine",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "unsupported",
+      "reasons": [
+        "instruction_only"
+      ],
+      "warnings": [],
+      "preservedInstructions": [
+        "3 sets of 8 x 30 sec hard / 30 sec easy",
+        "3 min easy between sets"
+      ]
+    },
+    {
+      "id": "CON-17",
+      "title": "Partner Conditioning",
+      "category": "Conditioning",
+      "format": "Partner",
+      "status": "unsupported",
+      "reasons": [
+        "unsupported_format:Partner"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "CON-18",
+      "title": "Race Week Conditioning Primer",
+      "category": "Conditioning",
+      "format": "Intervals",
+      "status": "imported",
+      "reasons": [],
+      "warnings": [
+        "expanded block B01 x3",
+        "expanded block B02 x3",
+        "preserved_1_instruction_steps"
+      ],
+      "type": "hybrid",
+      "activityCount": 9,
+      "autoRoxzone": false,
+      "instructionCount": 1
+    },
+    {
+      "id": "WU-01",
+      "title": "HYROX Full Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-02",
+      "title": "Run Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-03",
+      "title": "Sled Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-04",
+      "title": "SkiErg Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Progressive",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-05",
+      "title": "RowErg Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Progressive",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-06",
+      "title": "Strength Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-07",
+      "title": "Wall Ball Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-08",
+      "title": "Lunge Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-09",
+      "title": "Burpee Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-10",
+      "title": "Carry Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-11",
+      "title": "Power Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-12",
+      "title": "20-Min Race Warm-Up",
+      "category": "Warm-Ups",
+      "format": "Progressive",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-13",
+      "title": "Quick 8",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    },
+    {
+      "id": "WU-14",
+      "title": "Mobility Flow",
+      "category": "Warm-Ups",
+      "format": "Flow",
+      "status": "unsupported",
+      "reasons": [
+        "warm_ups_not_mapped"
+      ],
+      "warnings": []
+    }
+  ]
+}

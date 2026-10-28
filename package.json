@@ -6,6 +6,7 @@
     "start": "node server.js",
     "test": "node --test",
     "content:list-samples": "node scripts/list-sample-workouts.js",
+    "content:import-excel": "python scripts/import_excel_workouts.py",
     "migrate:daily-wellness": "node scripts/migrate-daily-wellness.js",
     "migrate:daily-wellness-index": "node scripts/migrate-daily-wellness-drop-duplicate-index.js",
     "seed:wellness": "node scripts/seed-wellness.js",

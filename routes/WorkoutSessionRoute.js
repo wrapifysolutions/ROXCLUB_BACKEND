@@ -7,6 +7,7 @@ const {
     CancelWorkoutSession,
     CompleteWorkoutSession,
     SubmitActivityDebrief,
+    ListActivityHistory,
 } = require('../controllers/Workouts/WorkoutSessionControllers');
 
 const WorkoutSessionRouter = express.Router();
@@ -16,6 +17,7 @@ WorkoutSessionRouter.get('/api/workout-sessions/active', authMiddleware, GetActi
 WorkoutSessionRouter.patch('/api/workout-sessions/:id/progress', authMiddleware, SaveWorkoutProgress);
 WorkoutSessionRouter.post('/api/workout-sessions/:id/cancel', authMiddleware, CancelWorkoutSession);
 WorkoutSessionRouter.post('/api/workout-sessions/:id/complete', authMiddleware, CompleteWorkoutSession);
+WorkoutSessionRouter.get('/api/activities', authMiddleware, ListActivityHistory);
 WorkoutSessionRouter.post('/api/activities/:id/debrief', authMiddleware, SubmitActivityDebrief);
 
 module.exports = WorkoutSessionRouter;
