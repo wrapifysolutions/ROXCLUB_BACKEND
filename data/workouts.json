@@ -10,6 +10,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Open the HYROX engine with the full station sequence at foundation loads.",
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 1,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -108,6 +115,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "1 km runs alternating with HYROX stations.",
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 2,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -164,6 +178,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "1 km runs alternating with HYROX stations.",
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 3,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -241,6 +262,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "1 km runs alternating with HYROX stations.",
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 4,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -338,6 +366,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "1 km runs alternating with HYROX stations.",
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 5,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -435,6 +470,13 @@
     "author": "ROX CLUB",
     "equipment": "Spikes or trainers",
     "purpose": "Track session with warm-up, work, and notes on pace.",
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 6,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -472,6 +514,13 @@
     "author": "ROX CLUB",
     "equipment": "Spikes or trainers",
     "purpose": "Track session with warm-up, work, and notes on pace.",
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 7,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -520,6 +569,13 @@
     "author": "ROX CLUB",
     "equipment": "Spikes or trainers",
     "purpose": "Track session with warm-up, work, and notes on pace.",
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 8,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -568,6 +624,13 @@
     "author": "ROX CLUB",
     "equipment": "Spikes or trainers",
     "purpose": "Track session with warm-up, work, and notes on pace.",
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 9,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -616,6 +679,13 @@
     "author": "ROX CLUB",
     "equipment": "Spikes or trainers",
     "purpose": "Track session with warm-up, work, and notes on pace.",
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 10,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -664,6 +734,13 @@
     "author": "ROX CLUB",
     "equipment": "Barbell and rack",
     "purpose": "Strength session with sets, reps, load, and rest.",
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 11,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -718,6 +795,13 @@
     "author": "ROX CLUB",
     "equipment": "Barbell and rack",
     "purpose": "Strength session with sets, reps, load, and rest.",
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 12,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -772,6 +856,13 @@
     "author": "ROX CLUB",
     "equipment": "Barbell and rack",
     "purpose": "Strength session with sets, reps, load, and rest.",
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 13,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -826,6 +917,13 @@
     "author": "ROX CLUB",
     "equipment": "Barbell and rack",
     "purpose": "Strength session with sets, reps, load, and rest.",
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 14,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -880,6 +978,13 @@
     "author": "ROX CLUB",
     "equipment": "Barbell and rack",
     "purpose": "Strength session with sets, reps, load, and rest.",
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 15,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -921,6 +1026,13 @@
     "author": "ROX CLUB",
     "equipment": "SkiErg and rower",
     "purpose": "SkiErg and Row intervals.",
+    "tags": [
+      "SkiErg",
+      "Row",
+      "Intervals"
+    ],
+    "sortOrder": 16,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -958,6 +1070,13 @@
     "author": "ROX CLUB",
     "equipment": "SkiErg and rower",
     "purpose": "SkiErg and Row intervals.",
+    "tags": [
+      "SkiErg",
+      "Row",
+      "Intervals"
+    ],
+    "sortOrder": 17,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1017,6 +1136,13 @@
     "author": "ROX CLUB",
     "equipment": "SkiErg and rower",
     "purpose": "SkiErg and Row intervals.",
+    "tags": [
+      "SkiErg",
+      "Row",
+      "Intervals"
+    ],
+    "sortOrder": 18,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1065,6 +1191,13 @@
     "author": "ROX CLUB",
     "equipment": "SkiErg and rower",
     "purpose": "SkiErg and Row intervals.",
+    "tags": [
+      "SkiErg",
+      "Row",
+      "Intervals"
+    ],
+    "sortOrder": 19,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1124,6 +1257,13 @@
     "author": "ROX CLUB",
     "equipment": "SkiErg and rower",
     "purpose": "SkiErg and Row intervals.",
+    "tags": [
+      "SkiErg",
+      "Row",
+      "Intervals"
+    ],
+    "sortOrder": 20,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1172,6 +1312,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "tags": [
+      "Explosive",
+      "Stations",
+      "Power"
+    ],
+    "sortOrder": 21,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1218,6 +1365,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "tags": [
+      "Explosive",
+      "Stations",
+      "Power"
+    ],
+    "sortOrder": 22,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1263,6 +1417,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "tags": [
+      "Explosive",
+      "Stations",
+      "Power"
+    ],
+    "sortOrder": 23,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1310,6 +1471,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "tags": [
+      "Explosive",
+      "Stations",
+      "Power"
+    ],
+    "sortOrder": 24,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1366,6 +1534,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Explosive stations: wall balls, broad jumps, and sled pushes.",
+    "tags": [
+      "Explosive",
+      "Stations",
+      "Power"
+    ],
+    "sortOrder": 25,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1402,6 +1577,13 @@
     "author": "ROX CLUB",
     "equipment": "Watch",
     "purpose": "Easy aerobic running to build the base under race pace.",
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 26,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1428,6 +1610,13 @@
     "author": "ROX CLUB",
     "equipment": "Watch",
     "purpose": "Zone 2 and long easy running.",
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 27,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1454,6 +1643,13 @@
     "author": "ROX CLUB",
     "equipment": "Watch",
     "purpose": "Zone 2 and long easy running.",
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 28,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1480,6 +1676,13 @@
     "author": "ROX CLUB",
     "equipment": "Watch",
     "purpose": "Zone 2 and long easy running.",
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 29,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1506,6 +1709,13 @@
     "author": "ROX CLUB",
     "equipment": "Watch",
     "purpose": "Zone 2 and long easy running.",
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 30,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1532,6 +1742,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Mixed circuits of short runs and stations.",
+    "tags": [
+      "Mixed",
+      "Circuits",
+      "Stations"
+    ],
+    "sortOrder": 31,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1612,6 +1829,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Mixed circuits of short runs and stations.",
+    "tags": [
+      "Mixed",
+      "Circuits",
+      "Stations"
+    ],
+    "sortOrder": 32,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1713,6 +1937,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Mixed circuits of short runs and stations.",
+    "tags": [
+      "Mixed",
+      "Circuits",
+      "Stations"
+    ],
+    "sortOrder": 33,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1814,6 +2045,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Mixed circuits of short runs and stations.",
+    "tags": [
+      "Mixed",
+      "Circuits",
+      "Stations"
+    ],
+    "sortOrder": 34,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -1936,6 +2174,13 @@
     "author": "ROX CLUB",
     "equipment": "Full kit",
     "purpose": "Mixed circuits of short runs and stations.",
+    "tags": [
+      "Mixed",
+      "Circuits",
+      "Stations"
+    ],
+    "sortOrder": 35,
+    "showInLibrary": true,
     "isSample": true,
     "activities": [
       {
@@ -2016,6 +2261,13 @@
     "author": "ROX CLUB",
     "equipment": "Mat",
     "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "tags": [
+      "Mobility",
+      "Easy",
+      "Recovery"
+    ],
+    "sortOrder": 36,
+    "showInLibrary": true,
     "isSample": true,
     "xp": 0,
     "activities": [
@@ -2052,6 +2304,13 @@
     "author": "ROX CLUB",
     "equipment": "Mat",
     "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "tags": [
+      "Mobility",
+      "Easy",
+      "Recovery"
+    ],
+    "sortOrder": 37,
+    "showInLibrary": true,
     "isSample": true,
     "xp": 0,
     "activities": [
@@ -2098,6 +2357,13 @@
     "author": "ROX CLUB",
     "equipment": "Mat",
     "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "tags": [
+      "Mobility",
+      "Easy",
+      "Recovery"
+    ],
+    "sortOrder": 38,
+    "showInLibrary": true,
     "isSample": true,
     "xp": 0,
     "activities": [
@@ -2134,6 +2400,13 @@
     "author": "ROX CLUB",
     "equipment": "Mat",
     "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "tags": [
+      "Mobility",
+      "Easy",
+      "Recovery"
+    ],
+    "sortOrder": 39,
+    "showInLibrary": true,
     "isSample": true,
     "xp": 0,
     "activities": [
@@ -2170,6 +2443,13 @@
     "author": "ROX CLUB",
     "equipment": "Mat",
     "purpose": "Easy recovery blocks. This session earns 0 XP.",
+    "tags": [
+      "Mobility",
+      "Easy",
+      "Recovery"
+    ],
+    "sortOrder": 40,
+    "showInLibrary": true,
     "isSample": true,
     "xp": 0,
     "activities": [
@@ -2202,207 +2482,6 @@
         "target": {
           "durationSec": 480
         }
-      }
-    ]
-  },
-  {
-    "id": "wk_foundation_b",
-    "categoryId": "cat_hybrid_race",
-    "type": "hybrid",
-    "title": "Foundation Protocol B",
-    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
-    "durationMin": 45,
-    "difficulty": "Intermediate",
-    "author": "ROX CLUB",
-    "equipment": "Full kit",
-    "purpose": "Second foundation session with a short run and station block.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Running",
-        "iconUrl": "icons/run.png",
-        "label": "1 km",
-        "target": { "distanceM": 1000, "durationSec": 360 }
-      },
-      {
-        "order": 2,
-        "kind": "station",
-        "name": "Wall Balls",
-        "iconUrl": "icons/wall-ball.png",
-        "label": "20 reps",
-        "target": { "reps": 20, "durationSec": 90 }
-      }
-    ]
-  },
-  {
-    "id": "wk_engine_intervals",
-    "categoryId": "cat_track",
-    "type": "run",
-    "title": "Engine Intervals",
-    "imageUrl": "/workouts/placeholder-track.jpg",
-    "durationMin": 35,
-    "difficulty": "Intermediate",
-    "author": "ROX CLUB",
-    "equipment": "Watch",
-    "purpose": "Threshold intervals that raise the engine.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Engine Intervals",
-        "iconUrl": "icons/run.png",
-        "label": "6 x 2 min threshold",
-        "target": { "distanceM": 3000, "durationSec": 1500 }
-      }
-    ]
-  },
-  {
-    "id": "wk_simulation",
-    "categoryId": "cat_hybrid_race",
-    "type": "hybrid",
-    "title": "Race Simulation",
-    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
-    "durationMin": 50,
-    "difficulty": "Advanced",
-    "author": "ROX CLUB",
-    "equipment": "Full kit",
-    "purpose": "A short race-pace run into one station.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Running",
-        "iconUrl": "icons/run.png",
-        "label": "1 km race pace",
-        "target": { "distanceM": 1000, "durationSec": 300 }
-      },
-      {
-        "order": 2,
-        "kind": "station",
-        "name": "Sled Push",
-        "iconUrl": "icons/sled.png",
-        "label": "50 m",
-        "target": { "distanceM": 50, "durationSec": 90 }
-      }
-    ]
-  },
-  {
-    "id": "wk_easy_cardio",
-    "categoryId": "cat_aerobic",
-    "type": "run",
-    "title": "Easy Cardio",
-    "imageUrl": "/workouts/placeholder-aerobic.jpg",
-    "durationMin": 30,
-    "difficulty": "Beginner",
-    "author": "ROX CLUB",
-    "equipment": "Watch",
-    "purpose": "Easy aerobic work to keep the week moving.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Easy Cardio",
-        "iconUrl": "icons/run.png",
-        "label": "30 min easy",
-        "target": { "distanceM": 4000, "durationSec": 1800 }
-      }
-    ]
-  },
-  {
-    "id": "wk_hybrid_base",
-    "categoryId": "cat_hybrid_race",
-    "type": "hybrid",
-    "title": "Hybrid Base",
-    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
-    "durationMin": 40,
-    "difficulty": "Beginner",
-    "author": "ROX CLUB",
-    "equipment": "Full kit",
-    "purpose": "Base hybrid session with a run and one station.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Running",
-        "iconUrl": "icons/run.png",
-        "label": "1 km easy",
-        "target": { "distanceM": 1000, "durationSec": 420 }
-      },
-      {
-        "order": 2,
-        "kind": "station",
-        "name": "Farmers Carry",
-        "iconUrl": "icons/carry.png",
-        "label": "100 m",
-        "target": { "distanceM": 100, "durationSec": 80 }
-      }
-    ]
-  },
-  {
-    "id": "wk_hybrid_engine",
-    "categoryId": "cat_hybrid_race",
-    "type": "hybrid",
-    "title": "Hybrid Engine",
-    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
-    "durationMin": 45,
-    "difficulty": "Intermediate",
-    "author": "ROX CLUB",
-    "equipment": "Full kit",
-    "purpose": "Engine hybrid session with a harder run and a station.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "run",
-        "name": "Running",
-        "iconUrl": "icons/run.png",
-        "label": "1 km steady",
-        "target": { "distanceM": 1000, "durationSec": 330 }
-      },
-      {
-        "order": 2,
-        "kind": "station",
-        "name": "SkiErg",
-        "iconUrl": "icons/skierg.png",
-        "label": "500 m",
-        "target": { "distanceM": 500, "durationSec": 150 }
-      }
-    ]
-  },
-  {
-    "id": "wk_general_a",
-    "categoryId": "cat_strength",
-    "type": "strength",
-    "title": "Full Body A",
-    "imageUrl": "/workouts/placeholder-strength.jpg",
-    "durationMin": 40,
-    "difficulty": "Beginner",
-    "author": "ROX CLUB",
-    "equipment": "Dumbbells",
-    "purpose": "Full-body strength for the first general-fitness week.",
-    "isSample": true,
-    "activities": [
-      {
-        "order": 1,
-        "kind": "strength_exercise",
-        "name": "Goblet Squat",
-        "iconUrl": "icons/strength.png",
-        "label": "3 x 10",
-        "target": { "sets": 3, "reps": 10, "loadKg": 16, "restSec": 60 }
-      },
-      {
-        "order": 2,
-        "kind": "strength_exercise",
-        "name": "Push-Up",
-        "iconUrl": "icons/strength.png",
-        "label": "3 x 8",
-        "target": { "sets": 3, "reps": 8, "restSec": 60 }
       }
     ]
   }

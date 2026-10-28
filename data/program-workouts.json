@@ -1,0 +1,284 @@
+[
+  {
+    "id": "wk_foundation_b",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Foundation Protocol B",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 45,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Second foundation session with a short run and station block.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 360
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Wall Balls",
+        "iconUrl": "icons/wall-ball.png",
+        "label": "20 reps",
+        "target": {
+          "reps": 20,
+          "durationSec": 90
+        }
+      }
+    ],
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 41,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_engine_intervals",
+    "categoryId": "cat_track",
+    "type": "run",
+    "title": "Engine Intervals",
+    "imageUrl": "/workouts/placeholder-track.jpg",
+    "durationMin": 35,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Threshold intervals that raise the engine.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Engine Intervals",
+        "iconUrl": "icons/run.png",
+        "label": "6 x 2 min threshold",
+        "target": {
+          "distanceM": 3000,
+          "durationSec": 1500
+        }
+      }
+    ],
+    "tags": [
+      "Road",
+      "Track",
+      "Intervals"
+    ],
+    "sortOrder": 42,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_simulation",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Race Simulation",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 50,
+    "difficulty": "Advanced",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "A short race-pace run into one station.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km race pace",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 300
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Sled Push",
+        "iconUrl": "icons/sled.png",
+        "label": "50 m",
+        "target": {
+          "distanceM": 50,
+          "durationSec": 90
+        }
+      }
+    ],
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 43,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_easy_cardio",
+    "categoryId": "cat_aerobic",
+    "type": "run",
+    "title": "Easy Cardio",
+    "imageUrl": "/workouts/placeholder-aerobic.jpg",
+    "durationMin": 30,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Watch",
+    "purpose": "Easy aerobic work to keep the week moving.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Easy Cardio",
+        "iconUrl": "icons/run.png",
+        "label": "30 min easy",
+        "target": {
+          "distanceM": 4000,
+          "durationSec": 1800
+        }
+      }
+    ],
+    "tags": [
+      "Road",
+      "Zone 2",
+      "Endurance"
+    ],
+    "sortOrder": 44,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_hybrid_base",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Hybrid Base",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Base hybrid session with a run and one station.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km easy",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 420
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "Farmers Carry",
+        "iconUrl": "icons/carry.png",
+        "label": "100 m",
+        "target": {
+          "distanceM": 100,
+          "durationSec": 80
+        }
+      }
+    ],
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 45,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_hybrid_engine",
+    "categoryId": "cat_hybrid_race",
+    "type": "hybrid",
+    "title": "Hybrid Engine",
+    "imageUrl": "/workouts/placeholder-hybrid-race.jpg",
+    "durationMin": 45,
+    "difficulty": "Intermediate",
+    "author": "ROX CLUB",
+    "equipment": "Full kit",
+    "purpose": "Engine hybrid session with a harder run and a station.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "run",
+        "name": "Running",
+        "iconUrl": "icons/run.png",
+        "label": "1 km steady",
+        "target": {
+          "distanceM": 1000,
+          "durationSec": 330
+        }
+      },
+      {
+        "order": 2,
+        "kind": "station",
+        "name": "SkiErg",
+        "iconUrl": "icons/skierg.png",
+        "label": "500 m",
+        "target": {
+          "distanceM": 500,
+          "durationSec": 150
+        }
+      }
+    ],
+    "tags": [
+      "HYROX",
+      "Run",
+      "Stations"
+    ],
+    "sortOrder": 46,
+    "showInLibrary": false
+  },
+  {
+    "id": "wk_general_a",
+    "categoryId": "cat_strength",
+    "type": "strength",
+    "title": "Full Body A",
+    "imageUrl": "/workouts/placeholder-strength.jpg",
+    "durationMin": 40,
+    "difficulty": "Beginner",
+    "author": "ROX CLUB",
+    "equipment": "Dumbbells",
+    "purpose": "Full-body strength for the first general-fitness week.",
+    "activities": [
+      {
+        "order": 1,
+        "kind": "strength_exercise",
+        "name": "Goblet Squat",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 10",
+        "target": {
+          "sets": 3,
+          "reps": 10,
+          "loadKg": 16,
+          "restSec": 60
+        }
+      },
+      {
+        "order": 2,
+        "kind": "strength_exercise",
+        "name": "Push-Up",
+        "iconUrl": "icons/strength.png",
+        "label": "3 x 8",
+        "target": {
+          "sets": 3,
+          "reps": 8,
+          "restSec": 60
+        }
+      }
+    ],
+    "tags": [
+      "Gym",
+      "Strength",
+      "Barbell"
+    ],
+    "sortOrder": 47,
+    "showInLibrary": false
+  }
+]

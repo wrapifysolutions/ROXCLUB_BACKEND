@@ -14,7 +14,22 @@ function act(order, kind, name, icon, label, target) {
     };
 }
 
+const CATEGORY_TAGS = {
+    cat_hybrid_race: ['HYROX', 'Run', 'Stations'],
+    cat_track: ['Road', 'Track', 'Intervals'],
+    cat_strength: ['Gym', 'Strength', 'Barbell'],
+    cat_ergs: ['SkiErg', 'Row', 'Intervals'],
+    cat_power: ['Explosive', 'Stations', 'Power'],
+    cat_aerobic: ['Road', 'Zone 2', 'Endurance'],
+    cat_conditioning: ['Mixed', 'Circuits', 'Stations'],
+    cat_recovery: ['Mobility', 'Easy', 'Recovery'],
+};
+
+let nextSortOrder = 1;
+
 function base(id, categoryId, slug, type, title, durationMin, difficulty, purpose, activities, extra = {}) {
+    const sortOrder = nextSortOrder;
+    nextSortOrder += 1;
     return {
         id,
         categoryId,
@@ -26,6 +41,9 @@ function base(id, categoryId, slug, type, title, durationMin, difficulty, purpos
         author: 'ROX CLUB',
         equipment: extra.equipment || 'Full kit',
         purpose,
+        tags: extra.tags || CATEGORY_TAGS[categoryId] || [],
+        sortOrder,
+        showInLibrary: extra.showInLibrary !== false,
         isSample: true,
         xp: extra.xp == null ? null : extra.xp,
         activities,
@@ -43,6 +61,9 @@ const foundation = {
     author: 'ROX CLUB',
     equipment: 'Full kit',
     purpose: 'Open the HYROX engine with the full station sequence at foundation loads.',
+    tags: CATEGORY_TAGS.cat_hybrid_race,
+    sortOrder: nextSortOrder++,
+    showInLibrary: true,
     isSample: true,
     activities: [
         act(1, 'run', 'Running', 'run', '1 km', { distanceM: 1000 }),
@@ -330,7 +351,7 @@ function recovery(index) {
     );
 }
 
-const workouts = [
+const samples = [
     foundation,
     ...[0, 1, 2, 3].map(hybridRace),
     ...[0, 1, 2, 3, 4].map(track),
@@ -342,10 +363,12 @@ const workouts = [
     ...[0, 1, 2, 3, 4].map(recovery),
 ];
 
+const workouts = samples;
+
 for (const workout of workouts) {
     if (workout.xp == null) delete workout.xp;
 }
 
 const target = path.join(__dirname, '..', 'data', 'workouts.json');
 fs.writeFileSync(target, `${JSON.stringify(workouts, null, 2)}\n`);
-console.log(`wrote ${workouts.length} workouts`);
+console.log(`wrote ${workouts.length} library workouts (program workouts stay in data/program-workouts.json)`);
