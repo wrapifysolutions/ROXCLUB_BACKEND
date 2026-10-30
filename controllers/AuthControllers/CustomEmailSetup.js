@@ -26,6 +26,15 @@ function setSignupSession(req, email) {
 const CustomEmailSetup = async (req, res) => {
     try {
         const { email, password } = req.body;
+        const requestedRole = String(req.body?.role || req.body?.accountType || req.body?.account_type || '')
+            .trim()
+            .toLowerCase();
+        if (requestedRole === 'admin') {
+            return res.status(403).json({
+                error: 'ROLE_NOT_ALLOWED',
+                message: 'Admin access cannot be requested',
+            });
+        }
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required' });

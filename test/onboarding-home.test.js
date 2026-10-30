@@ -3,19 +3,20 @@ const assert = require('node:assert/strict');
 const { runOnboardingComplete } = require('../lib/onboarding/completeFlow');
 const { buildHomeResponse } = require('../lib/home/homeState');
 
-function memoryClient() {
+function memoryClient(overrides = {}) {
     const db = {
         user: {
             id: 'user-1',
-            experience_level: 'intermediate',
-            training_experience: 'intermediate',
+            experience_level: 'beginner',
+            training_experience: 'beginner',
             training_goals: 'HYROX race',
             race_event: 'hyrox',
             race_date: '2027-03-15',
             onboarding_completed: false,
+            ...overrides.user,
         },
-        program: null,
-        sessions: [],
+        program: overrides.program || null,
+        sessions: overrides.sessions || [],
         dnaInserts: 0,
         dna: null,
     };
@@ -97,7 +98,7 @@ test('new user right after onboarding gets NEW_ATHLETE with today workout', asyn
     const home = homeFor(client, today);
 
     assert.equal(result.created, true);
-    assert.equal(result.programId, 'race_build_12w');
+    assert.equal(result.programId, 'hyrox_base_8w');
     assert.equal(client.db.user.onboarding_completed, true);
     assert.equal(client.db.dna.model_version, 'v0');
     assert.equal(client.db.dna.strength, null);
@@ -124,11 +125,47 @@ test('calling onboarding complete twice creates no duplicates', async () => {
 
     assert.equal(first.created, true);
     assert.equal(second.created, false);
-    assert.equal(second.programId, 'race_build_12w');
+    assert.equal(second.programId, 'hyrox_base_8w');
     assert.equal(second.sessionCount, sessionCount);
     assert.equal(client.db.sessions.length, sessionCount);
     assert.equal(client.db.dnaInserts, 1);
     assert.ok(sessionCount > 1);
+});
+
+test('onboarding blocks new Race Build assignment for hyrox Intermediate', async () => {
+    const client = memoryClient({
+        user: {
+            experience_level: 'intermediate',
+            training_experience: 'intermediate',
+        },
+    });
+    await assert.rejects(
+        () => runOnboardingComplete(client, 'user-1', { today: '2026-10-22' }),
+        (error) =>
+            error.code === 'PRODUCT_CONFIGURATION_BLOCKER' &&
+            error.enrollError === 'PROGRAM_NOT_ENROLLABLE' &&
+            client.db.program == null &&
+            client.db.sessions.length === 0
+    );
+});
+
+test('existing Race Build enrollment is preserved on onboarding complete', async () => {
+    const client = memoryClient({
+        user: {
+            experience_level: 'intermediate',
+            training_experience: 'intermediate',
+        },
+        program: { program_id: 'race_build_12w', start_date: '2026-09-01' },
+        sessions: Array.from({ length: 72 }, (_, index) => ({
+            scheduled_on: `2026-09-${String((index % 28) + 1).padStart(2, '0')}`,
+            workout_id: 'wk_foundation_a',
+        })),
+    });
+    const result = await runOnboardingComplete(client, 'user-1', { today: '2026-10-22' });
+    assert.equal(result.created, false);
+    assert.equal(result.programId, 'race_build_12w');
+    assert.equal(result.sessionCount, 72);
+    assert.equal(client.db.sessions.length, 72);
 });
 
 test('connected watch fills readiness and dna while workout and level stay ours', () => {

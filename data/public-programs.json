@@ -1,0 +1,73 @@
+{
+  "programs": [
+    {
+      "id": "race_build_12w",
+      "name": "Race Build — 12 Weeks",
+      "durationWeeks": 12,
+      "description": null,
+      "difficulty": null,
+      "goals": null,
+      "imageUrl": "/programs/race-build.jpg",
+      "tags": [],
+      "phases": [
+        { "name": "Base", "weeksFrom": 1, "weeksTo": 4 },
+        { "name": "Build", "weeksFrom": 5, "weeksTo": 9 },
+        { "name": "Peak", "weeksFrom": 10, "weeksTo": 11 },
+        { "name": "Taper", "weeksFrom": 12, "weeksTo": 12 }
+      ],
+      "intendedWorkoutsPerWeek": 3,
+      "intendedTrainingSessions": 36,
+      "scheduleProgramId": null,
+      "contentReadiness": "awaiting_coach_schedule",
+      "sortOrder": 1
+    },
+    {
+      "id": "rox_engine_8w",
+      "name": "ROX Engine — 8 Weeks",
+      "durationWeeks": 8,
+      "description": null,
+      "difficulty": null,
+      "goals": null,
+      "imageUrl": "/programs/rox-engine.jpg",
+      "tags": [],
+      "phases": null,
+      "intendedWorkoutsPerWeek": null,
+      "intendedTrainingSessions": null,
+      "scheduleProgramId": null,
+      "contentReadiness": "awaiting_coach_schedule",
+      "sortOrder": 2
+    },
+    {
+      "id": "strength_hybrid_6w",
+      "name": "Strength for Hybrid — 6 Weeks",
+      "durationWeeks": 6,
+      "description": null,
+      "difficulty": null,
+      "goals": null,
+      "imageUrl": "/programs/strength-for-hybrid.jpg",
+      "tags": ["HYROX"],
+      "phases": null,
+      "intendedWorkoutsPerWeek": null,
+      "intendedTrainingSessions": null,
+      "scheduleProgramId": null,
+      "contentReadiness": "awaiting_coach_schedule",
+      "sortOrder": 3
+    },
+    {
+      "id": "off_season_base_6w",
+      "name": "Off-Season Base — 6 Weeks",
+      "durationWeeks": 6,
+      "description": null,
+      "difficulty": null,
+      "goals": null,
+      "imageUrl": "/programs/off-season-base.jpg",
+      "tags": [],
+      "phases": null,
+      "intendedWorkoutsPerWeek": null,
+      "intendedTrainingSessions": null,
+      "scheduleProgramId": null,
+      "contentReadiness": "awaiting_coach_schedule",
+      "sortOrder": 4
+    }
+  ]
+}

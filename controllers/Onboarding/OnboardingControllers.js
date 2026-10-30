@@ -208,6 +208,17 @@ const UserOnboarding = async (req, res) => {
     }, 12000);
 
     try {
+        const requestedRole = String(req.body?.role || req.body?.accountType || req.body?.account_type || '')
+            .trim()
+            .toLowerCase();
+        if (requestedRole === 'admin') {
+            clearTimeout(watchdog);
+            return respond(403, {
+                error: 'ROLE_NOT_ALLOWED',
+                message: 'Admin access cannot be requested',
+            });
+        }
+
         const user = req.user || {};
         const userId = user.id;
         const email = String(user.email || '')

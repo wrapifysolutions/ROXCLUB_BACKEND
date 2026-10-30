@@ -28,6 +28,14 @@ const CompleteOnboarding = async (req, res) => {
         if (error.status === 400 || error.status === 404) {
             return res.status(error.status).json({ message: error.message });
         }
+        if (error.status === 409) {
+            return res.status(409).json({
+                error: error.code || 'CONFLICT',
+                enrollError: error.enrollError || null,
+                message: error.message,
+                details: error.details || null,
+            });
+        }
         console.error('CompleteOnboarding error', error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }

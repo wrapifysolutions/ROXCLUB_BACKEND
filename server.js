@@ -10,6 +10,9 @@ const WorkoutRouter = require('./routes/WorkoutRoute');
 const ReadinessRouter = require('./routes/ReadinessRoute');
 const WorkoutSessionRouter = require('./routes/WorkoutSessionRoute');
 const PlanRouter = require('./routes/PlanRoute');
+const ProgramsRouter = require('./routes/ProgramsRoute');
+const AccountRouter = require('./routes/AccountRoute');
+const ClubRouter = require('./routes/ClubRoute');
 const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
 
@@ -130,6 +133,9 @@ app.use('/', WorkoutRouter);
 app.use('/', ReadinessRouter);
 app.use('/', WorkoutSessionRouter);
 app.use('/', PlanRouter);
+app.use('/', ProgramsRouter);
+app.use('/', AccountRouter);
+app.use('/', ClubRouter);
 
 const port = Number(process.env.PORT) || 5000;
 
