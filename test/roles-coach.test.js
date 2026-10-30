@@ -350,18 +350,25 @@ test('bootstrap does not grant admin before email verification and never returns
     assert.equal(db.audits, 1);
 });
 
-test('certification upload stays disabled without Cloudinary configuration', () => {
+test('certification upload stays disabled without storage configuration', () => {
     const previous = {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET,
+        projectUrl: process.env.Project_Url,
+        supabaseUrl: process.env.SUPABASE_URL,
+        secretKey: process.env.SupaBase_Secret_Key,
+        serviceKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     };
     delete process.env.CLOUDINARY_CLOUD_NAME;
     delete process.env.CLOUDINARY_API_KEY;
     delete process.env.CLOUDINARY_API_SECRET;
+    delete process.env.Project_Url;
+    delete process.env.SUPABASE_URL;
+    delete process.env.SupaBase_Secret_Key;
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
     const status = storageStatus();
     assert.equal(status.enabled, false);
-    assert.equal(status.provider, 'cloudinary');
     assert.equal(status.code, 'STORAGE_NOT_CONFIGURED');
     assert.throws(() => createUploadSlot(), (error) => error.code === 'STORAGE_NOT_CONFIGURED');
     const file = validateCertificationFile({
@@ -370,9 +377,53 @@ test('certification upload stays disabled without Cloudinary configuration', () 
         filename: 'cert.pdf',
     });
     assert.equal(file.filename, 'cert.pdf');
+    const docx = validateCertificationFile({
+        size: 2048,
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        filename: 'cert.docx',
+    });
+    assert.equal(docx.filename, 'cert.docx');
+    assert.equal(docx.mimeType, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     process.env.CLOUDINARY_CLOUD_NAME = previous.cloudName;
     process.env.CLOUDINARY_API_KEY = previous.apiKey;
     process.env.CLOUDINARY_API_SECRET = previous.apiSecret;
+    process.env.Project_Url = previous.projectUrl;
+    process.env.SUPABASE_URL = previous.supabaseUrl;
+    process.env.SupaBase_Secret_Key = previous.secretKey;
+    process.env.SUPABASE_SERVICE_ROLE_KEY = previous.serviceKey;
+});
+
+test('a certification file is stored in private storage without a public URL', async () => {
+    let saved = null;
+    const uploaded = await uploadPrivateCertification(
+        {
+            buffer: Buffer.from('pdf-bytes'),
+            filename: 'cert.pdf',
+            mimeType: 'application/pdf',
+            size: 9,
+        },
+        {
+            userId: 'user-1',
+            storageClient: {
+                storage: {
+                    from() {
+                        return {
+                            async upload(path, buffer, opts) {
+                                saved = { path, bytes: buffer.length, contentType: opts.contentType };
+                                return { error: null };
+                            },
+                        };
+                    },
+                },
+            },
+        }
+    );
+    assert.equal(uploaded.provider, 'supabase');
+    assert.equal(uploaded.access, 'private');
+    assert.equal(uploaded.documentKey.includes('http'), false);
+    assert.equal(uploaded.documentKey.startsWith('supabase|private|coach-certifications|user-1/'), true);
+    assert.equal(saved.contentType, 'application/pdf');
+    assert.equal(saved.bytes, 9);
 });
 
 test('Cloudinary certification upload is private and does not return a public URL', async () => {

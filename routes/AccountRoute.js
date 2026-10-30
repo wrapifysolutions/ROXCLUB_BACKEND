@@ -25,7 +25,7 @@ function acceptCertification(req, res, next) {
         return res.status(400).json({
             error: 'FILE_INVALID',
             message: tooLarge
-                ? 'Certification file must be a PDF, JPEG, or PNG up to 8 MB'
+                ? 'Certification file must be a PDF, JPEG, PNG, or DOCX up to 8 MB'
                 : 'Certification file could not be read',
         });
     });
