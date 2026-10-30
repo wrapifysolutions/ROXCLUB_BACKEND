@@ -1,34 +1,31 @@
 const pool = require('../../lib/pool');
 const { ensureOnboardingProfileSchema } = require('../../lib/onboarding/schema');
 const { resolveNavigation } = require('../../lib/auth/accountRouting');
-const {
-    verifyAccessToken,
-    clearAuthCookie,
-    readTokenFromRequest,
-} = require('../../lib/token');
+const { clearAuthCookie } = require('../../lib/token');
+const { loadAuthenticatedUser } = require('../../middlewares/auth.middleware');
+
+function unauthenticated(res, message, clearCookie) {
+    if (clearCookie) clearAuthCookie(res);
+    return res.status(401).json({
+        authenticated: false,
+        redirect: '/login',
+        message,
+    });
+}
 
 const GetAuthSession = async (req, res) => {
     try {
-        const token = readTokenFromRequest(req);
-
-        if (!token) {
-            return res.status(401).json({
-                authenticated: false,
-                redirect: '/login',
-                message: 'Not authenticated',
-            });
-        }
-
-        let payload;
+        let sessionUser;
         try {
-            payload = verifyAccessToken(token);
-        } catch (_) {
-            clearAuthCookie(res);
-            return res.status(401).json({
-                authenticated: false,
-                redirect: '/login',
-                message: 'Session expired',
-            });
+            sessionUser = await loadAuthenticatedUser(req);
+        } catch (error) {
+            const message =
+                error.code === 'SESSION_EXPIRED'
+                    ? 'Session expired'
+                    : error.code === 'UNAUTHENTICATED'
+                      ? 'Not authenticated'
+                      : 'Unauthorized Access';
+            return unauthenticated(res, message, error.code === 'SESSION_EXPIRED');
         }
 
         await ensureOnboardingProfileSchema();
@@ -54,18 +51,34 @@ const GetAuthSession = async (req, res) => {
             ) coach ON TRUE
             WHERE u.id = $1
             `,
-            [payload.sub]
+            [sessionUser.id]
         );
 
         const user = rows[0];
 
-        if (!user || !user.is_email_verified) {
-            clearAuthCookie(res);
-            return res.status(401).json({
-                authenticated: false,
-                redirect: '/login',
-                message: 'Not authenticated',
+        if (!user) {
+            if (sessionUser.source !== 'supabase') {
+                return unauthenticated(res, 'Not authenticated', true);
+            }
+            const navigation = resolveNavigation({});
+            return res.status(200).json({
+                authenticated: true,
+                redirect: '/role-selection',
+                next: navigation.next,
+                navigation,
+                user: {
+                    id: sessionUser.id,
+                    email: sessionUser.email,
+                    auth_provider: sessionUser.auth_provider,
+                    onboarding_completed: false,
+                    account_type: null,
+                    permissions: navigation.permissions,
+                },
             });
+        }
+
+        if (!user.is_email_verified && user.auth_provider === 'email') {
+            return unauthenticated(res, 'Not authenticated', true);
         }
 
         const onboardingCompleted = Boolean(user.onboarding_is_completed);

@@ -71,6 +71,84 @@ async function findDbUser({ supabaseUserId, email }) {
     return rows[0] || null;
 }
 
+function providerFromSupabaseUser(sbUser) {
+    const provider = String(
+        sbUser?.app_metadata?.provider || sbUser?.identities?.[0]?.provider || ''
+    )
+        .trim()
+        .toLowerCase();
+    if (provider === 'google' || provider === 'apple' || provider === 'email') return provider;
+    return null;
+}
+
+async function loadAuthenticatedUser(req) {
+    const bearer = extractBearerToken(req);
+    const cookieToken = req.cookies?.[COOKIE_NAME];
+
+    if (bearer && isLikelySupabaseToken(bearer)) {
+        const { data, error } = await getSupabaseUser(bearer, 5000);
+        if (error || !data?.user?.id) {
+            const failure = new Error(error?.message || 'Unauthorized Access');
+            failure.status = 401;
+            failure.code = 'UNAUTHORIZED';
+            throw failure;
+        }
+        const sbUser = data.user;
+        const email = String(sbUser.email || '').trim().toLowerCase();
+        let dbUser = null;
+        try {
+            dbUser = await findDbUser({
+                supabaseUserId: sbUser.id,
+                email: email || null,
+            });
+        } catch (lookupError) {
+            console.warn('auth: db lookup skipped', lookupError.message);
+        }
+        return {
+            ...sbUser,
+            id: dbUser?.id || sbUser.id,
+            email: dbUser?.email || email || sbUser.email,
+            auth_provider: dbUser?.auth_provider || providerFromSupabaseUser(sbUser),
+            supabase_user_id: sbUser.id,
+            source: 'supabase',
+            linked: Boolean(dbUser),
+        };
+    }
+
+    let roxclubTokenRejected = false;
+    if (bearer) {
+        try {
+            const user = await authRoxClubJwt(bearer);
+            if (user) return user;
+        } catch (error) {
+            console.error('auth: bearer jwt failed', error.message);
+            roxclubTokenRejected = true;
+        }
+    }
+
+    if (cookieToken) {
+        try {
+            const user = await authRoxClubJwt(cookieToken);
+            if (user) return { ...user, source: 'cookie' };
+        } catch (error) {
+            console.error('auth: cookie failed', error.message);
+            roxclubTokenRejected = true;
+        }
+    }
+
+    if (roxclubTokenRejected) {
+        const failure = new Error('Session expired');
+        failure.status = 401;
+        failure.code = 'SESSION_EXPIRED';
+        throw failure;
+    }
+
+    const missing = new Error('Not authenticated');
+    missing.status = 401;
+    missing.code = 'UNAUTHENTICATED';
+    throw missing;
+}
+
 async function authRoxClubJwt(token) {
     const payload = verifyAccessToken(token);
     const { rows } = await queryWithHardTimeout(
@@ -128,89 +206,37 @@ const authMiddleware = async (req, res, next) => {
             });
         }
 
-        // Production mobile: Bearer wins over cookie (Flutter Dio + optional CookieJar).
         if (bearer && isLikelySupabaseToken(bearer)) {
             console.log('auth: supabase token detected', {
                 ms: Date.now() - startedAt,
                 tokenLen: bearer.length,
             });
-
-            const { data, error } = await getSupabaseUser(bearer, 5000);
-            if (error || !data?.user?.id) {
-                console.error('auth: supabase invalid', error?.message || error);
-                clearTimeout(watchdog);
-                return fail(401, {
-                    message: 'Unauthorized Access',
-                    detail: error?.message,
-                });
-            }
-
-            const sbUser = data.user;
-            const email = String(sbUser.email || '')
-                .trim()
-                .toLowerCase();
-
-            // Resolve canonical DB id so /onboarding-questions FK stays correct
-            // when Google links to an existing email account.
-            let dbUser = null;
-            try {
-                dbUser = await findDbUser({
-                    supabaseUserId: sbUser.id,
-                    email: email || null,
-                });
-            } catch (lookupError) {
-                console.warn('auth: db lookup skipped', lookupError.message);
-            }
-
-            req.user = {
-                ...sbUser,
-                id: dbUser?.id || sbUser.id,
-                email: dbUser?.email || email || sbUser.email,
-                supabase_user_id: sbUser.id,
-                source: 'supabase',
-            };
-
-            console.log('auth: supabase ok', req.user.id, req.user.email, {
-                ms: Date.now() - startedAt,
-                linked: Boolean(dbUser),
-            });
-            clearTimeout(watchdog);
-            return next();
         }
 
-        if (bearer) {
-            try {
-                const user = await authRoxClubJwt(bearer);
-                if (user) {
-                    req.user = user;
-                    clearTimeout(watchdog);
-                    return next();
-                }
-            } catch (error) {
-                console.error('auth: bearer jwt failed', error.message);
-            }
-        }
-
-        if (cookieToken) {
-            try {
-                const user = await authRoxClubJwt(cookieToken);
-                if (user) {
-                    req.user = { ...user, source: 'cookie' };
-                    clearTimeout(watchdog);
-                    return next();
-                }
-            } catch (error) {
-                console.error('auth: cookie failed', error.message);
-            }
-        }
-
+        const user = await loadAuthenticatedUser(req);
+        req.user = user;
+        console.log('auth: ok', req.user.id, req.user.email, {
+            ms: Date.now() - startedAt,
+            source: user.source || 'jwt',
+        });
         clearTimeout(watchdog);
-        return fail(401, { message: 'Unauthorized Access' });
+        return next();
     } catch (error) {
-        console.error('auth: fatal', error);
         clearTimeout(watchdog);
+        if (error.status === 401) {
+            if (error.code === 'SESSION_EXPIRED') {
+                return fail(401, { message: 'Session expired' });
+            }
+            if (error.code === 'UNAUTHORIZED' && error.message && error.message !== 'Unauthorized Access') {
+                return fail(401, { message: 'Unauthorized Access', detail: error.message });
+            }
+            return fail(401, { message: 'Unauthorized Access' });
+        }
+        console.error('auth: fatal', error);
         return fail(500, { message: 'Authentication Error', detail: error.message });
     }
 };
 
 module.exports = authMiddleware;
+module.exports.loadAuthenticatedUser = loadAuthenticatedUser;
+module.exports.isLikelySupabaseToken = isLikelySupabaseToken;
