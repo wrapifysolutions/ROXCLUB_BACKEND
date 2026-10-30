@@ -12,15 +12,16 @@ const {
 const { storageStatus } = require('../../lib/storage/privateObjectStorage');
 
 function sendError(res, error, label) {
-    if (error.status && error.status < 500) {
+    if (error.status && error.code && error.status < 600) {
+        if (error.status >= 500) console.error(label, error.message);
         return res.status(error.status).json({
-            error: error.code || 'REQUEST_FAILED',
+            error: error.code,
             message: error.message,
         });
     }
-    if (error.status === 503 && error.code) {
-        return res.status(503).json({
-            error: error.code,
+    if (error.status && error.status < 500) {
+        return res.status(error.status).json({
+            error: error.code || 'REQUEST_FAILED',
             message: error.message,
         });
     }
