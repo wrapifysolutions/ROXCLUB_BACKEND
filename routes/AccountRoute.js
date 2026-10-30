@@ -5,6 +5,7 @@ const { MAX_BYTES } = require('../lib/storage/privateObjectStorage');
 const {
     SelectAccountType,
     SubmitCoachApplication,
+    AttachCoachDocument,
     GetMyCoachApplications,
     CoachProtectedProbe,
     AdminListApplications,
@@ -33,6 +34,7 @@ function acceptCertification(req, res, next) {
 
 AccountRouter.post('/api/account/type', authMiddleware, SelectAccountType);
 AccountRouter.post('/api/coach/applications', authMiddleware, acceptCertification, SubmitCoachApplication);
+AccountRouter.post('/api/coach/applications/:id/document', authMiddleware, acceptCertification, AttachCoachDocument);
 AccountRouter.get('/api/coach/applications/me', authMiddleware, GetMyCoachApplications);
 AccountRouter.post('/api/coach/club', authMiddleware, CoachProtectedProbe);
 

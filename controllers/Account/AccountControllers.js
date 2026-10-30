@@ -1,6 +1,7 @@
 const {
     selectAccountType,
     submitCoachApplication,
+    attachApplicationDocument,
     listOwnApplications,
 } = require('../../lib/account/accountService');
 const { assertApprovedCoach } = require('../../lib/admin/coachReviewService');
@@ -63,13 +64,48 @@ const SubmitCoachApplication = async (req, res) => {
             application,
             documentUpload: {
                 enabled: storage.enabled,
+                stored: application.documentAvailable,
                 provider: storage.provider,
                 code: storage.code,
-                message: storage.message,
+                message: application.documentAvailable
+                    ? 'Certification file stored.'
+                    : 'Application saved. The certification file was not in this request.',
+                upload: application.documentAvailable
+                    ? null
+                    : `POST /api/coach/applications/${application.id}/document`,
             },
         });
     } catch (error) {
         return sendError(res, error, 'SubmitCoachApplication error');
+    }
+};
+
+const AttachCoachDocument = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        if (!req.file) {
+            return res.status(400).json({
+                error: 'FILE_REQUIRED',
+                message: 'Send the certification as multipart form-data in the file field',
+            });
+        }
+        const saved = await attachApplicationDocument(req.user.id, req.params.id, {
+            buffer: req.file.buffer,
+            filename: req.file.originalname,
+            mimeType: req.file.mimetype,
+            size: req.file.size,
+        });
+        return res.status(200).json({
+            application: saved.application,
+            documentUpload: {
+                enabled: true,
+                stored: true,
+                provider: saved.provider,
+                message: 'Certification file stored.',
+            },
+        });
+    } catch (error) {
+        return sendError(res, error, 'AttachCoachDocument error');
     }
 };
 
@@ -129,6 +165,7 @@ const AdminReview = (action) => async (req, res) => {
 module.exports = {
     SelectAccountType,
     SubmitCoachApplication,
+    AttachCoachDocument,
     GetMyCoachApplications,
     CoachProtectedProbe,
     AdminListApplications,

@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { resolveNavigation } = require('../lib/auth/accountRouting');
-const { selectAccountType, submitCoachApplication, listOwnApplications } = require('../lib/account/accountService');
+const { selectAccountType, submitCoachApplication, attachApplicationDocument, listOwnApplications } = require('../lib/account/accountService');
 const { reviewApplication, listApplications, assertApprovedCoach } = require('../lib/admin/coachReviewService');
 const { bootstrapAdmin } = require('../scripts/bootstrap-admin');
 const {
@@ -41,6 +41,17 @@ function memory() {
                     .filter((row) => row.user_id === params[0])
                     .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at))),
             };
+        }
+        if (sql.includes('coach:load_own_application')) {
+            return {
+                rows: db.applications.filter((row) => row.id === params[0] && row.user_id === params[1]),
+            };
+        }
+        if (sql.includes('coach:attach_document')) {
+            const row = db.applications.find((item) => item.id === params[0] && item.user_id === params[1] && item.status === 'pending');
+            if (!row) return { rows: [] };
+            row.document_key = params[2];
+            return { rows: [row] };
         }
         if (sql.includes('coach:insert_application')) {
             if (db.applications.some((row) => row.user_id === params[0] && row.status === 'pending')) {
@@ -253,6 +264,55 @@ test('rejection keeps history and allows a new application', async () => {
     assert.equal(second.id !== first.id, true);
 });
 
+test('a pending application stores the certification on the document route', async () => {
+    const { db, opts } = memory();
+    db.users.push({ id: 'c1', email: 'c@rox.test', account_type: 'coach', onboarding_completed: false });
+    const application = await submitCoachApplication('c1', 'c@rox.test', applicationBody, opts);
+    assert.equal(application.documentAvailable, false);
+    const saved = await attachApplicationDocument(
+        'c1',
+        application.id,
+        {
+            buffer: Buffer.from('docx'),
+            filename: 'cert.docx',
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            size: 4,
+        },
+        {
+            ...opts,
+            storageClient: {
+                storage: {
+                    from() {
+                        return {
+                            async upload() {
+                                return { error: null };
+                            },
+                        };
+                    },
+                },
+            },
+        }
+    );
+    assert.equal(saved.application.documentAvailable, true);
+    assert.equal(saved.provider, 'supabase');
+    assert.equal(String(saved.application.id), application.id);
+    await assert.rejects(
+        () =>
+            attachApplicationDocument(
+                'other',
+                application.id,
+                {
+                    buffer: Buffer.from('docx'),
+                    filename: 'cert.docx',
+                    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    size: 4,
+                },
+                opts
+            ),
+        (error) => error.code === 'APPLICATION_NOT_FOUND'
+    );
+});
+
 test('duplicate pending application is rejected', async () => {
     const { db, opts } = memory();
     db.users.push({ id: 'c1', email: 'c@rox.test', account_type: 'coach', onboarding_completed: false });
@@ -424,6 +484,42 @@ test('a certification file is stored in private storage without a public URL', a
     assert.equal(uploaded.documentKey.startsWith('supabase|private|coach-certifications|user-1/'), true);
     assert.equal(saved.contentType, 'application/pdf');
     assert.equal(saved.bytes, 9);
+});
+
+test('a Cloudinary refusal still stores the certification privately', async () => {
+    let saved = null;
+    const uploaded = await uploadPrivateCertification(
+        {
+            buffer: Buffer.from('pdf'),
+            filename: 'cert.pdf',
+            mimeType: 'application/pdf',
+            size: 3,
+        },
+        {
+            userId: 'user-1',
+            uploader: async () => {
+                const error = new Error('Server returned unexpected status code - 403');
+                error.http_code = 403;
+                throw error;
+            },
+            storageClient: {
+                storage: {
+                    from() {
+                        return {
+                            async upload(path, buffer) {
+                                saved = { path, bytes: buffer.length };
+                                return { error: null };
+                            },
+                        };
+                    },
+                },
+            },
+        }
+    );
+    assert.equal(uploaded.provider, 'supabase');
+    assert.equal(uploaded.access, 'private');
+    assert.equal(uploaded.documentKey.includes('http'), false);
+    assert.equal(saved.bytes, 3);
 });
 
 test('Cloudinary certification upload is private and does not return a public URL', async () => {
