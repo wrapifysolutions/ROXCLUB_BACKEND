@@ -192,6 +192,9 @@ function memoryWorkout() {
         if (sql.includes('strava') || sql.includes('zepp') || sql.includes('apple')) {
             return { rows: [] };
         }
+        if (sql.includes('engine:identity') || sql.includes('engine:cluster_xp')) {
+            return { rows: [] };
+        }
         throw new Error(`unexpected sql: ${sql.slice(0, 120)}`);
     };
     return db;

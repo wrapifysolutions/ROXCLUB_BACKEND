@@ -4,7 +4,10 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "node --test",
+    "test": "node --test ./test/*.test.js",
+    "test:staging": "node --test ./test/staging-athlete-flow.test.js",
+    "migrate": "node scripts/migrate.js",
+    "migrate:staging": "node scripts/migrate.js --staging",
     "content:list-samples": "node scripts/list-sample-workouts.js",
     "content:import-excel": "python scripts/import_excel_workouts.py",
     "migrate:daily-wellness": "node scripts/migrate-daily-wellness.js",

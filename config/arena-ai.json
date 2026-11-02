@@ -1,0 +1,17 @@
+{
+  "contexts": ["race_rules", "goal_and_pace", "strategy", "readiness", "race_summary"],
+  "timeoutMs": 8000,
+  "maxOutputTokens": 400,
+  "retries": 1,
+  "rateLimit": {
+    "windowMs": 60000,
+    "maxRequests": 10
+  },
+  "limitations": [
+    "AI does not change official race rules, finish times, evidence status, or rankings.",
+    "Goal time and run pace are stored separately. No approved formula reconciles them.",
+    "Virtual Race Engine equations are not approved, so no predicted finish is generated.",
+    "Readiness and Athlete DNA are explained only from server records, never from client-supplied scores.",
+    "Virtual race results do not create real-world athletic evidence."
+  ]
+}

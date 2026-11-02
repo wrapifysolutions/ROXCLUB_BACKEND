@@ -1,0 +1,15 @@
+{
+  "available": false,
+  "reason": "VIRTUAL_RACE_ENGINE_SPEC_NOT_APPROVED",
+  "message": "The Virtual Race Engine is not enabled. Athlete DNA, station proficiency, fatigue, and predicted finish times are not calculated.",
+  "inputs": {
+    "athleteDna": "snapshot_only",
+    "stationProficiency": "not_implemented",
+    "currentReadiness": "read_only_when_present",
+    "recentEvidenceConfidence": "not_mapped_to_arena",
+    "pacingStrategy": "stored_not_simulated",
+    "fatigueModel": "not_implemented"
+  },
+  "pacingOptions": ["conservative", "target", "aggressive"],
+  "checkpointDecisions": ["hold", "push", "back_off"]
+}

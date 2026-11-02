@@ -258,6 +258,35 @@ function memoryWorkout() {
             db.stations.push({ activity_id: params[0], activity_index: params[1], name: params[2] });
             return { rows: [] };
         }
+        if (sql.includes('engine:insert_proficiency_evidence')) {
+            db.proficiencyEvidence = db.proficiencyEvidence || [];
+            const key = `${params[0]}:${params[1]}:${params[2]}:${params[3]}`;
+            if (db.proficiencyEvidence.includes(key)) return { rows: [] };
+            db.proficiencyEvidence.push(key);
+            return { rows: [{ activity_id: params[2] }] };
+        }
+        if (sql.includes('engine:insert_proficiency_history')) {
+            return { rows: [] };
+        }
+        if (sql.includes('engine:upsert_proficiency')) {
+            db.proficiency = db.proficiency || [];
+            const existing = db.proficiency.find((row) => row.user_id === params[0] && row.station_key === params[1]);
+            if (existing) {
+                existing.evidence_count += 1;
+                existing.last_activity_id = params[2];
+            } else {
+                db.proficiency.push({
+                    user_id: params[0],
+                    station_key: params[1],
+                    evidence_count: 1,
+                    last_activity_id: params[2],
+                    status: 'CALIBRATING',
+                    score: null,
+                    score_status: 'PENDING_MODEL',
+                });
+            }
+            return { rows: [] };
+        }
         if (sql.includes('workout:load_activity_owner')) {
             const row = db.activities.find((activity) => activity.id === params[0]);
             return { rows: row ? [row] : [] };
@@ -275,6 +304,9 @@ function memoryWorkout() {
             if (index >= 0) db.debriefs[index] = row;
             else db.debriefs.push(row);
             return { rows: [row] };
+        }
+        if (sql.includes('engine:identity') || sql.includes('engine:cluster_xp')) {
+            return { rows: [] };
         }
         throw new Error(`unexpected sql: ${sql.trim().slice(0, 80)}`);
     };
@@ -378,6 +410,8 @@ test('hybrid full stores roxzone separately from the 8 activities', async () => 
     assert.equal(done.totalXp, xpConfig.sessionBaseXp + 8 * xpConfig.activityXp);
     assert.equal(db.stations.length, 7);
     assert.equal(db.evidence.length, 9);
+    assert.equal(db.proficiency.length, 7);
+    assert.ok(db.proficiency.every((row) => row.score === null && row.status === 'CALIBRATING'));
     assert.equal(db.scheduled[0].status, 'replaced');
 });
 

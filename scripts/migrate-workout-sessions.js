@@ -1,10 +1,13 @@
 require('dotenv').config();
 
-const { ensureOnboardingProfileSchema } = require('../lib/onboarding/schema');
+const { spawnSync } = require('node:child_process');
 
 async function main() {
-    await ensureOnboardingProfileSchema();
-    console.log('workout session tables are ready');
+    const result = spawnSync(process.execPath, [require.resolve('./migrate.js')], {
+        stdio: 'inherit',
+        env: process.env,
+    });
+    process.exit(result.status || 0);
 }
 
 main().catch((error) => {

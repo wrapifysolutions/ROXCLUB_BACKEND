@@ -59,8 +59,13 @@ function memoryClient(overrides = {}) {
                         endurance: null,
                         power: null,
                         mobility: null,
+                        speed: null,
                     };
                 }
+                return { rows: [] };
+            }
+            if (sql.includes('onboarding_complete:snapshot_dna')) {
+                db.dnaSnapshots = (db.dnaSnapshots || 0) + 1;
                 return { rows: [] };
             }
             if (sql.includes('onboarding_complete:mark_complete')) {
@@ -173,7 +178,7 @@ test('connected watch fills readiness and dna while workout and level stay ours'
         name: 'Alex',
         avatar: { smile: 'grin' },
         dnaStatus: 'CALIBRATING',
-        dna: { strength: null, engine: null, endurance: null, power: null, mobility: null },
+        dna: { strength: null, engine: null, endurance: null, power: null, mobility: null, speed: null },
         todaySession: {
             workout_id: 'wk_foundation_a',
             title: 'Foundation Protocol A',

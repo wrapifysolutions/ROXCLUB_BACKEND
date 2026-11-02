@@ -1,0 +1,13 @@
+-- Additive only. Do not run on production without explicit approval.
+-- Owned by lib/migrations/run.js (kind: xp_unique), not raw SQL apply.
+--
+-- This file documents the intended unique index. The runner:
+-- 1. Counts duplicate xp_ledger (activity_id, reason) groups.
+-- 2. Creates the index only when that count is zero.
+-- 3. Records 003 in schema_migrations only after pg_indexes shows the index.
+-- 4. Otherwise writes schema_migration_prerequisites status=unresolved.
+-- Historical XP rows are never deleted or rewritten.
+
+-- CREATE UNIQUE INDEX IF NOT EXISTS xp_ledger_activity_reason_uidx
+--     ON xp_ledger (activity_id, reason)
+--     WHERE activity_id IS NOT NULL;

@@ -14,6 +14,9 @@ function sendError(res, error, logLabel) {
     if (error.code === 'SESSION_IN_PROGRESS') {
         return res.status(409).json({ error: 'SESSION_IN_PROGRESS', sessionId: error.sessionId });
     }
+    if (error.code === 'DATABASE_NOT_READY') {
+        return res.status(503).json({ error: error.code, message: error.message });
+    }
     if (error.status && error.status < 500) {
         return res.status(error.status).json({ error: error.code, message: error.message });
     }
