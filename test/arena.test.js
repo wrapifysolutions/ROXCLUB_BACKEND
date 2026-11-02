@@ -464,6 +464,24 @@ test('Arena Home returns a valid empty catalog', async () => {
     assert.equal(home.simulationEngine.available, false);
 });
 
+test('missing arena tables return an empty home instead of a server error', async () => {
+    const query = async (sql) => {
+        if (sql.includes('arena:load_user')) {
+            return {
+                rows: [{ id: 'a1', display_name: 'A', gender: 'female', account_type: 'athlete', onboarding_completed: true }],
+            };
+        }
+        const error = new Error('relation "arena_events" does not exist');
+        error.code = '42P01';
+        throw error;
+    };
+    const home = await getArenaHome('a1', { query, now: new Date('2026-11-02T12:00:00Z') });
+    assert.deepEqual(home.featured, []);
+    assert.deepEqual(home.events, []);
+    assert.equal(home.eligibility.onboardingCompleted, true);
+    assert.equal(home.simulationEngine.available, false);
+});
+
 test('empty event catalog works', async () => {
     const { opts } = harness();
     const listed = await listEvents(opts);

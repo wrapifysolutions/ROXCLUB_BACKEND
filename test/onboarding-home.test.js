@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { runOnboardingComplete } = require('../lib/onboarding/completeFlow');
 const { buildHomeResponse } = require('../lib/home/homeState');
+const { loadHomeProfileRow } = require('../lib/home/homeScreen');
 
 function memoryClient(overrides = {}) {
     const db = {
@@ -241,4 +242,25 @@ test('three sessions makes home NORMAL with thisWeek', () => {
     assert.equal(home.recoveryNeeded, false);
     assert.equal(home.readiness.score, 78);
     assert.equal(home.thisWeek, thisWeek);
+});
+
+test('home profile retries without dna.speed when that column is missing', async () => {
+    const calls = [];
+    const query = async (sql) => {
+        calls.push(sql);
+        if (sql.includes('dna.speed')) {
+            const error = new Error('column dna.speed does not exist');
+            error.code = '42703';
+            throw error;
+        }
+        return { rows: [{ display_name: 'Alex', speed: null, dna_model_version: 'v0' }] };
+    };
+
+    const result = await loadHomeProfileRow('user-1', '2026-11-02', query);
+
+    assert.equal(calls.length, 2);
+    assert.equal(result.rows[0].display_name, 'Alex');
+    assert.equal(result.rows[0].speed, null);
+    assert.match(calls[1], /NULL::numeric AS speed/);
+    assert.doesNotMatch(calls[1], /dna\.speed/);
 });
