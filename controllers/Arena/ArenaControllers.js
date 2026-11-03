@@ -19,6 +19,13 @@ const {
 } = require('../../lib/arena/sessionService');
 const { explainArena } = require('../../lib/arena/arenaAiService');
 const { loadEngineInputs } = require('../../lib/athlete/engineInputs');
+const {
+    createCoachEvent,
+    listCoachEvents,
+    listAdminEvents,
+    reviewCoachEvent,
+    coachEventForm,
+} = require('../../lib/arena/eventPublishService');
 
 function sendError(res, error, label) {
     if (error.code === 'DATABASE_NOT_READY') {
@@ -31,6 +38,7 @@ function sendError(res, error, label) {
         return res.status(error.status).json({
             error: error.code || 'ARENA_ERROR',
             message: error.message,
+            ...(error.fields ? { fields: error.fields } : {}),
         });
     }
     console.error(label, error);
@@ -202,6 +210,65 @@ const ExplainArena = async (req, res) => {
     }
 };
 
+const GetCoachArenaEventForm = async (req, res) => {
+    try {
+        if (!requireUser(req, res)) return;
+        return res.status(200).json(coachEventForm());
+    } catch (error) {
+        return sendError(res, error, 'GetCoachArenaEventForm error');
+    }
+};
+
+const SubmitCoachArenaEvent = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(201).json(await createCoachEvent(userId, req.body || {}));
+    } catch (error) {
+        return sendError(res, error, 'SubmitCoachArenaEvent error');
+    }
+};
+
+const ListCoachArenaEvents = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await listCoachEvents(userId));
+    } catch (error) {
+        return sendError(res, error, 'ListCoachArenaEvents error');
+    }
+};
+
+const AdminListArenaEvents = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await listAdminEvents(userId, req.query?.status));
+    } catch (error) {
+        return sendError(res, error, 'AdminListArenaEvents error');
+    }
+};
+
+const AdminPublishArenaEvent = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await reviewCoachEvent(userId, req.params.id, 'publish', req.body || {}));
+    } catch (error) {
+        return sendError(res, error, 'AdminPublishArenaEvent error');
+    }
+};
+
+const AdminRejectArenaEvent = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await reviewCoachEvent(userId, req.params.id, 'reject', req.body || {}));
+    } catch (error) {
+        return sendError(res, error, 'AdminRejectArenaEvent error');
+    }
+};
+
 const AbandonArenaSession = async (req, res) => {
     try {
         const userId = requireUser(req, res);
@@ -230,4 +297,10 @@ module.exports = {
     FinishArenaSession,
     AbandonArenaSession,
     ExplainArena,
+    GetCoachArenaEventForm,
+    SubmitCoachArenaEvent,
+    ListCoachArenaEvents,
+    AdminListArenaEvents,
+    AdminPublishArenaEvent,
+    AdminRejectArenaEvent,
 };

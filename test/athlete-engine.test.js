@@ -166,3 +166,19 @@ test('shared engine inputs stay pending until approved models exist', async () =
     assert.equal(inputs.fatigueModel.available, false);
     assert.equal(inputs.athleteId, 'u1');
 });
+
+test('engine inputs stay readable when identity links are not migrated', async () => {
+    const { query } = memory();
+    const wrapped = async (sql, params) => {
+        if (sql.includes('engine:identity_links_for_user')) {
+            const error = new Error('relation "activity_identity_links" does not exist');
+            error.code = '42P01';
+            throw error;
+        }
+        return query(sql, params);
+    };
+    const inputs = await loadEngineInputs('u1', {}, { query: wrapped, now: new Date('2026-11-02T12:00:00Z') });
+    assert.equal(inputs.simulationEngine.available, false);
+    assert.equal(inputs.recentEvidenceConfidence, null);
+    assert.deepEqual(inputs.recentActivities, []);
+});

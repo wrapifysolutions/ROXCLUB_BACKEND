@@ -186,7 +186,9 @@ test('race rules explanation uses the published station order', async () => {
     const { opts, event } = harness();
     const explained = await explainArena('a1', { context: 'race_rules', eventId: event.id }, opts);
     assert.match(explained.explanation, /Ski Ergometer/);
-    assert.equal(explained.facts.orderFixed, true);
+    assert.equal(explained.facts.aboutRules, 'Hybrid simulation');
+    assert.equal(explained.facts.stations[0].title, 'Ski Ergometer');
+    assert.equal(explained.facts.stations[0].value, '1 km');
 });
 
 test('readiness explanation does not accept client-supplied scores', async () => {

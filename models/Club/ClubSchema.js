@@ -146,4 +146,4 @@ const clubStatements = [
     linkUserProgramCoachVersion,
 ];
 
-module.exports = { clubStatements };
+module.exports = { clubStatements, createClubsTable };

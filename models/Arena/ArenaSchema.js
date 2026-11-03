@@ -11,6 +11,11 @@ CREATE TABLE IF NOT EXISTS arena_events (
     category VARCHAR(40) NOT NULL DEFAULT 'hybrid',
     difficulty VARCHAR(40),
     club_id UUID REFERENCES clubs(id) ON DELETE SET NULL,
+    created_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    review_status VARCHAR(20) NOT NULL DEFAULT 'pending',
+    reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    reviewed_at TIMESTAMPTZ,
+    rejection_reason TEXT,
     status VARCHAR(20) NOT NULL DEFAULT 'draft',
     starts_at TIMESTAMPTZ,
     ends_at TIMESTAMPTZ,
@@ -22,8 +27,23 @@ CREATE TABLE IF NOT EXISTS arena_events (
     CONSTRAINT arena_events_status_check
         CHECK (status IN ('draft', 'upcoming', 'open', 'closed')),
     CONSTRAINT arena_events_division_check
-        CHECK (division IN ('open', 'men', 'women', 'mixed'))
+        CHECK (division IN ('open', 'men', 'women', 'mixed')),
+    CONSTRAINT arena_events_review_check
+        CHECK (review_status IN ('pending', 'approved', 'rejected'))
 );
+`;
+
+const alterArenaEventReviewColumns = `
+ALTER TABLE arena_events
+    ADD COLUMN IF NOT EXISTS created_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    ADD COLUMN IF NOT EXISTS review_status VARCHAR(20) DEFAULT 'pending',
+    ADD COLUMN IF NOT EXISTS reviewed_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    ADD COLUMN IF NOT EXISTS reviewed_at TIMESTAMPTZ,
+    ADD COLUMN IF NOT EXISTS rejection_reason TEXT,
+    ADD COLUMN IF NOT EXISTS sport_type VARCHAR(40),
+    ADD COLUMN IF NOT EXISTS visibility VARCHAR(20) DEFAULT 'public',
+    ADD COLUMN IF NOT EXISTS timezone VARCHAR(80) DEFAULT 'UTC',
+    ADD COLUMN IF NOT EXISTS max_participants INTEGER;
 `;
 
 const createArenaEventVersionsTable = `
@@ -187,6 +207,7 @@ CREATE INDEX IF NOT EXISTS arena_results_user_idx
 
 const arenaStatements = [
     createArenaEventsTable,
+    alterArenaEventReviewColumns,
     createArenaEventVersionsTable,
     createArenaEventStationsTable,
     createArenaParticipantsTable,

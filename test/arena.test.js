@@ -429,7 +429,12 @@ function harness() {
             estimated_duration_ms: 9736000,
             frozen_at: nowIso(),
             rules: {
+                aboutRules: 'Eight runs and eight stations in a fixed order.',
                 overview: 'Eight runs and eight stations in a fixed order.',
+                generalRules: [
+                    'Complete every published station before the cutoff.',
+                    'No skipping stations on this event.',
+                ],
                 formatSummary: 'Independent ROXCLUB hybrid simulation.',
                 orderFixed: true,
                 movementStandards: ['Complete stations in published order'],
@@ -482,6 +487,24 @@ test('missing arena tables return an empty home instead of a server error', asyn
     assert.equal(home.simulationEngine.available, false);
 });
 
+test('missing arena tables return empty history and not-found details', async () => {
+    const query = async () => {
+        const error = new Error('relation "arena_events" does not exist');
+        error.code = '42P01';
+        throw error;
+    };
+    const history = await getHistory('a1', { query });
+    assert.deepEqual(history.races, []);
+    await assert.rejects(
+        () => getEvent('missing', 'a1', { query }),
+        (error) => error.code === 'EVENT_NOT_FOUND' && error.status === 404
+    );
+    await assert.rejects(
+        () => getSession('a1', 'missing', { query }),
+        (error) => error.code === 'SESSION_NOT_FOUND' && error.status === 404
+    );
+});
+
 test('empty event catalog works', async () => {
     const { opts } = harness();
     const listed = await listEvents(opts);
@@ -501,12 +524,23 @@ test('full rules return ordered stations', async () => {
     const { opts, addEvent } = harness();
     const event = addEvent();
     const rules = await getEventRules(event.id, opts);
-    assert.equal(rules.stations.length, 16);
-    assert.equal(rules.stations[0].sequence, 1);
-    assert.equal(rules.stations[1].key, 'ski_erg');
-    assert.equal(rules.stations[15].key, 'wall_balls');
-    assert.equal(rules.orderFixed, true);
-    assert.equal(rules.terminology, 'roxclub');
+    assert.equal(rules.screenTitle, 'Full Race Rules');
+    assert.equal(rules.title, 'Coastal Hybrid Challenge');
+    assert.equal(rules.aboutRules, 'Eight runs and eight stations in a fixed order.');
+    assert.deepEqual(rules.generalRules, [
+        'Complete every published station before the cutoff.',
+        'No skipping stations on this event.',
+    ]);
+    assert.equal(rules.stations.length, 8);
+    assert.equal(rules.stations[0].title, 'Ski Ergometer');
+    assert.equal(rules.stations[0].value, '1 km');
+    assert.equal(rules.stations[7].title, 'Wall Balls');
+    assert.equal(rules.stations[7].value, '100 reps');
+    assert.deepEqual(
+        rules.categoryLoads.columns.map((column) => column.label),
+        ['Station', 'Open Men', 'Open Women', 'Doubles']
+    );
+    assert.equal(rules.categoryLoads.rows[0].station, 'Ski Ergometer');
 });
 
 test('unauthenticated strategy update is rejected', async () => {
