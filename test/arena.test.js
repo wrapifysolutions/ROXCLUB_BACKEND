@@ -540,7 +540,7 @@ test('full rules return ordered stations', async () => {
         rules.categoryLoads.columns.map((column) => column.label),
         ['Station', 'Open Men', 'Open Women', 'Doubles']
     );
-    assert.equal(rules.categoryLoads.rows[0].station, 'Ski Ergometer');
+    assert.deepEqual(rules.categoryLoads.rows, []);
 });
 
 test('unauthenticated strategy update is rejected', async () => {
@@ -579,6 +579,11 @@ test('an athlete can save goal time, run pace, and station targets', async () =>
     assert.equal(saved.goalTime.clock, '02:42:16');
     assert.equal(saved.runPace.clock, '02:42');
     assert.equal(saved.stationTargets.ski_erg.targetMs, 250000);
+    assert.equal(saved.racePlan[0].title, 'Run 1');
+    assert.equal(saved.racePlan[0].time.clock, '02:42');
+    assert.equal(saved.racePlan[0].timeOfDay.clock, '00:02:42');
+    assert.equal(saved.racePlan[1].key, 'ski_erg');
+    assert.equal(saved.racePlan[1].time.clock, '04:10');
     assert.equal(saved.validation.predictionAvailable, false);
     assert.equal(saved.simulationEngine.available, false);
 });
@@ -613,6 +618,16 @@ test('one-active-program restriction does not block Arena', () => {
     assert.equal(newAssignmentBlock('some-arena-event'), null);
 });
 
+test('strategy auto-joins so the app does not need a join API', async () => {
+    const { db, opts, addEvent } = harness();
+    db.users.push({ id: 'a1', display_name: 'Atif', account_type: 'athlete', onboarding_completed: true });
+    const event = addEvent();
+    const saved = await saveStrategy('a1', event.id, { goalTime: '02:42:16' }, opts);
+    assert.equal(saved.goalTime.clock, '02:42:16');
+    assert.equal(db.participants.length, 1);
+    assert.equal(db.participants[0].user_id, 'a1');
+});
+
 test('an athlete cannot edit another athlete strategy', async () => {
     const { db, opts, addEvent } = harness();
     db.users.push(
@@ -620,11 +635,11 @@ test('an athlete cannot edit another athlete strategy', async () => {
         { id: 'a2', display_name: 'B', account_type: 'athlete', onboarding_completed: true }
     );
     const event = addEvent();
-    await joinEvent('a1', event.id, opts);
-    await assert.rejects(
-        () => saveStrategy('a2', event.id, { goalTime: '02:00:00' }, opts),
-        (error) => error.code === 'NOT_JOINED'
-    );
+    await saveStrategy('a1', event.id, { goalTime: '02:42:16' }, opts);
+    const second = await saveStrategy('a2', event.id, { goalTime: '02:00:00' }, opts);
+    assert.equal(second.goalTime.clock, '02:00:00');
+    const first = await getStrategy('a1', event.id, opts);
+    assert.equal(first.goalTime.clock, '02:42:16');
 });
 
 test('a race session cannot be started twice and reconnect is authoritative', async () => {

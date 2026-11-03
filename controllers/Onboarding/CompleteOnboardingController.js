@@ -1,7 +1,12 @@
-const { withTransaction } = require('../../lib/dbQuery');
+const { withTransaction, runStatements } = require('../../lib/dbQuery');
 const { ensureOnboardingProfileSchema } = require('../../lib/onboarding/schema');
 const { isoDate } = require('../../lib/onboarding/schedule');
 const { runOnboardingComplete } = require('../../lib/onboarding/completeFlow');
+const {
+    alterAthleteDnaSpeedAndPeaks,
+    createAthleteDnaSnapshotsTable,
+    createAthleteDnaSnapshotsIndex,
+} = require('../../models/Athlete/AthleteEngineSchema');
 
 const CompleteOnboarding = async (req, res) => {
     try {
@@ -11,6 +16,15 @@ const CompleteOnboarding = async (req, res) => {
         }
 
         await ensureOnboardingProfileSchema();
+        try {
+            await runStatements([
+                alterAthleteDnaSpeedAndPeaks,
+                createAthleteDnaSnapshotsTable,
+                createAthleteDnaSnapshotsIndex,
+            ]);
+        } catch (_) {
+            // INSERT falls back if speed is still missing.
+        }
         const today = isoDate(req.body?.timezone);
         const result = await withTransaction((client) =>
             runOnboardingComplete(client, userId, { today })

@@ -226,6 +226,9 @@ const athleteEngineStatements = [
 
 module.exports = {
     athleteEngineStatements,
+    alterAthleteDnaSpeedAndPeaks,
+    createAthleteDnaSnapshotsTable,
+    createAthleteDnaSnapshotsIndex,
     createXpLedgerActivityReasonIndex,
     createSchemaMigrationsTable,
     createAthleteSignalEvidenceTable,

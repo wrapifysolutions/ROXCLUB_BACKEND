@@ -25,6 +25,13 @@ function memoryClient(overrides = {}) {
     return {
         db,
         async query(sql, params) {
+            if (
+                sql.includes('SAVEPOINT ') ||
+                sql.includes('RELEASE SAVEPOINT') ||
+                sql.includes('ROLLBACK TO SAVEPOINT')
+            ) {
+                return { rows: [] };
+            }
             if (sql.includes('onboarding_complete:lock')) {
                 return { rows: [db.user] };
             }
@@ -48,7 +55,29 @@ function memoryClient(overrides = {}) {
                 }
                 return { rowCount: sessions.length };
             }
+            if (sql.includes('onboarding_complete:insert_dna_legacy')) {
+                db.dnaInserts += 1;
+                db.dnaLegacy = true;
+                if (!db.dna) {
+                    db.dna = {
+                        status: 'CALIBRATING',
+                        model_version: 'v0',
+                        attributes: null,
+                        strength: null,
+                        engine: null,
+                        endurance: null,
+                        power: null,
+                        mobility: null,
+                    };
+                }
+                return { rows: [] };
+            }
             if (sql.includes('onboarding_complete:insert_dna')) {
+                if (db.failDnaSpeed) {
+                    const error = new Error('column "speed" does not exist');
+                    error.code = '42703';
+                    throw error;
+                }
                 db.dnaInserts += 1;
                 if (!db.dna) {
                     db.dna = {
@@ -122,6 +151,16 @@ test('new user right after onboarding gets NEW_ATHLETE with today workout', asyn
     assert.equal(home.thisWeek, undefined);
 });
 
+test('onboarding complete still works if athlete_dna.speed is missing', async () => {
+    const client = memoryClient();
+    client.db.failDnaSpeed = true;
+    const result = await runOnboardingComplete(client, 'user-1', { today: '2026-10-22' });
+    assert.equal(result.created, true);
+    assert.equal(client.db.dnaLegacy, true);
+    assert.equal(client.db.dnaInserts, 1);
+    assert.equal(client.db.user.onboarding_completed, true);
+});
+
 test('calling onboarding complete twice creates no duplicates', async () => {
     const client = memoryClient();
     const today = '2026-10-22';
@@ -177,6 +216,7 @@ test('existing Race Build enrollment is preserved on onboarding complete', async
 test('connected watch fills readiness and dna while workout and level stay ours', () => {
     const home = buildHomeResponse({
         name: 'Alex',
+        gender: 'male',
         avatar: { smile: 'grin' },
         dnaStatus: 'CALIBRATING',
         dna: { strength: null, engine: null, endurance: null, power: null, mobility: null, speed: null },
@@ -201,6 +241,7 @@ test('connected watch fills readiness and dna while workout and level stay ours'
     });
 
     assert.equal(home.state, 'NEW_ATHLETE');
+    assert.equal(home.user.gender, 'male');
     assert.equal(home.recoveryNeeded, false);
     assert.equal(home.thisWeek, undefined);
     assert.equal(home.readiness.score, 82);
