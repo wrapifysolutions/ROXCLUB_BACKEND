@@ -27,6 +27,12 @@ function sendError(res, error, logLabel) {
             message: 'Use the sessionId from POST /api/workout-sessions/start, or the workout id of the open session.',
         });
     }
+    if (error.code === '25P02') {
+        return res.status(503).json({
+            error: 'DATABASE_TX_ABORTED',
+            message: 'Complete hit an aborted database transaction. Retry once; if it persists, a ledger table is missing.',
+        });
+    }
     console.error(logLabel, error);
     return res.status(500).json({ message: 'Internal Server Error' });
 }

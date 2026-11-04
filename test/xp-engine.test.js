@@ -181,3 +181,43 @@ test('material duration edit recalculates XP', async () => {
     assert.equal(db.activities[0].duration_sec, 3600);
     assert.ok(db.xp.some((row) => String(row.reason).startsWith('rev:')));
 });
+
+test('missing seasonal table does not abort later xp rows in a transaction', async () => {
+    let aborted = false;
+    const written = [];
+    const query = async (sql, params = []) => {
+        const text = String(sql || '').trim();
+        if (/^(SAVEPOINT|RELEASE SAVEPOINT|ROLLBACK TO SAVEPOINT)\b/i.test(text)) {
+            aborted = false;
+            return { rows: [] };
+        }
+        if (aborted) {
+            const error = new Error('current transaction is aborted');
+            error.code = '25P02';
+            throw error;
+        }
+        if (text.includes('workout:insert_xp') || text.includes('engine:import_xp')) {
+            written.push(params[2]);
+            return { rows: [] };
+        }
+        if (text.includes('workout:insert_seasonal')) {
+            aborted = true;
+            const error = new Error('missing seasonal_points_ledger');
+            error.code = '42P01';
+            throw error;
+        }
+        throw new Error(`unhandled ${text}`);
+    };
+
+    const rows = await insertXpRows(
+        'u1',
+        'act-1',
+        [
+            { reason: 'session_base', xp: 50 },
+            { reason: 'duration', xp: 5 },
+        ],
+        query
+    );
+    assert.equal(rows.length, 2);
+    assert.deepEqual(written, ['session_base', 'duration']);
+});

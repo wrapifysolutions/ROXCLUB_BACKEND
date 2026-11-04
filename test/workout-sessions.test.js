@@ -1136,6 +1136,64 @@ test('every program week 1 day 1 can be started', async () => {
     }
 });
 
+test('complete accepts Flutter foundation payload with 0s taps and roxzone', async () => {
+    const db = memoryWorkout();
+    const enqueue = () => {};
+    const started = await start(db, 'wk_foundation_a', 'flutter-complete', enqueue);
+    const done = await completeSession(
+        'user-1',
+        started.sessionId,
+        {
+            totalDurationSec: 48,
+            pausedDurationSec: 0,
+            isPartial: false,
+            endedAt: '2026-11-04T11:08:19.097282Z',
+            completedActivities: [
+                { activityIndex: 0, kind: 'run', data: { durationSec: 1, distanceM: 1000, inputMethod: 'manual' } },
+                { activityIndex: 1, kind: 'roxzone', data: { durationSec: 1, targetSec: 30 } },
+                { activityIndex: 2, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', reps: 20 } },
+                { activityIndex: 3, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', distanceM: 30, loadKg: 20 } },
+                { activityIndex: 4, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', reps: 10 } },
+                { activityIndex: 5, kind: 'station', data: { durationSec: 42, inputMethod: 'tap', distanceM: 20, loadKg: 102 } },
+                { activityIndex: 6, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', distanceM: 500 } },
+                { activityIndex: 7, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', distanceM: 1000 } },
+                { activityIndex: 8, kind: 'station', data: { durationSec: 0, inputMethod: 'tap', distanceM: 20, loadKg: 32 } },
+            ],
+        },
+        opts(db, enqueue)
+    );
+
+    assert.equal(done.completedCount, 8);
+    assert.equal(done.totalCount, 8);
+    assert.equal(done.splits.length, 9);
+    assert.equal(db.sessions[0].status, 'completed');
+    assert.equal(done.roxzoneTotalSec, 1);
+});
+
+test('complete returns 400 when activityIndex is outside the player plan', async () => {
+    const db = memoryWorkout();
+    const started = await start(db, 'wk_foundation_a', 'bad-index', () => {});
+    await assert.rejects(
+        () =>
+            completeSession(
+                'user-1',
+                started.sessionId,
+                {
+                    totalDurationSec: 10,
+                    completedActivities: [
+                        {
+                            activityIndex: 99,
+                            kind: 'run',
+                            data: { durationSec: 1, distanceM: 1000, inputMethod: 'manual' },
+                        },
+                    ],
+                },
+                opts(db, () => {})
+            ),
+        (error) => error.code === 'INVALID_PROGRESS' && error.status === 400
+    );
+});
+
 test('startup fails when a program references an unknown workout', () => {
     assert.throws(
         () => assertProgramWorkouts(new Set(['wk_foundation_a']), programs),
