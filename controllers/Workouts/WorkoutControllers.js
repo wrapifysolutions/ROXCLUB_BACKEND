@@ -8,6 +8,7 @@ const {
 } = require('../../lib/workouts/workoutService');
 const { listCategories } = require('../../lib/workouts/workoutCatalog');
 const { getTrainOverview } = require('../../lib/workouts/trainOverview');
+const { getTrainAssist } = require('../../lib/workouts/trainAssist');
 
 function sendWorkoutError(res, error, logLabel) {
     if (error.code === 'WORKOUT_NOT_FOUND' || error.code === 'CATEGORY_NOT_FOUND') {
@@ -103,6 +104,76 @@ const ListCategoryWorkouts = async (req, res) => {
     }
 };
 
+const AssistTrain = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const body = req.body && typeof req.body === 'object' ? req.body : {};
+        const result = await getTrainAssist(req.user.id, {
+            ...body,
+            q: body.q ?? req.query?.q,
+            workoutId: body.workoutId ?? req.query?.workoutId,
+            intent: body.intent ?? req.query?.intent,
+            categoryId: body.categoryId ?? req.query?.categoryId,
+            type: body.type ?? req.query?.type,
+            difficulty: body.difficulty ?? req.query?.difficulty,
+            maxDuration: body.maxDuration ?? req.query?.maxDuration,
+            limit: body.limit ?? req.query?.limit,
+            timezone: body.timezone ?? req.query?.timezone,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'AssistTrain error');
+    }
+};
+
+const RecommendTrain = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await getTrainAssist(req.user.id, {
+            intent: 'recommend',
+            q: req.query?.q,
+            categoryId: req.query?.categoryId,
+            type: req.query?.type,
+            difficulty: req.query?.difficulty,
+            maxDuration: req.query?.maxDuration,
+            limit: req.query?.limit,
+            timezone: req.query?.timezone,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'RecommendTrain error');
+    }
+};
+
+const SwapTrain = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await getTrainAssist(req.user.id, {
+            intent: 'swap',
+            workoutId: req.query?.workoutId,
+            limit: req.query?.limit,
+            timezone: req.query?.timezone,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'SwapTrain error');
+    }
+};
+
+const ExplainTrain = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await getTrainAssist(req.user.id, {
+            intent: 'explain',
+            workoutId: req.query?.workoutId,
+            timezone: req.query?.timezone,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'ExplainTrain error');
+    }
+};
+
 const ListSavedWorkouts = async (req, res) => {
     try {
         const userId = req.user?.id;
@@ -121,6 +192,10 @@ module.exports = {
     ListSavedWorkouts,
     ListWorkouts,
     GetTrainOverview,
+    AssistTrain,
+    RecommendTrain,
+    SwapTrain,
+    ExplainTrain,
     ListCategories,
     ListCategoryWorkouts,
 };
