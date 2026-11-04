@@ -7,7 +7,16 @@ const {
     ensureAppleHealthTables,
     summarizeAppleHealth,
 } = require('../../lib/appleHealth/appleHealthStore');
+const {
+    ensureSamsungHealthTables,
+    summarizeSamsungHealth,
+} = require('../../lib/samsungHealth/samsungHealthStore');
 const { getZeppAvailability } = require('../../lib/zeppConfig/zeppConfig');
+const { getGarminAvailability } = require('../../lib/garmin/garminConfig');
+const {
+    ensureGarminDataTables,
+    countGarminSamples,
+} = require('../../lib/garmin/garminDataStore');
 const { ensureOnboardingProfileSchema } = require('../../lib/onboarding/schema');
 
 /**
@@ -25,23 +34,27 @@ const getAllIntegrationsStatus = async (req, res) => {
         await ensureZeppTables();
         await ensureZeppDataTables();
         await ensureAppleHealthTables();
+        await ensureSamsungHealthTables();
+        await ensureGarminDataTables().catch(() => {});
 
         const { rows } = await pool.query(
             `
             SELECT provider, status, provider_user_id, connected_at, last_synced_at, last_error
             FROM user_integrations
             WHERE user_id = $1
-              AND provider IN ('strava', 'zepp', 'apple_health')
+              AND provider IN ('strava', 'zepp', 'apple_health', 'samsung_health', 'garmin')
             `,
             [userId]
         );
 
         const byProvider = Object.fromEntries(rows.map((row) => [row.provider, row]));
 
-        const [stravaCount, zeppCounts, appleSummary] = await Promise.all([
+        const [stravaCount, zeppCounts, appleSummary, samsungSummary, garminCounts] = await Promise.all([
             countStoredActivities(userId).catch(() => 0),
             countZeppSamples(userId).catch(() => ({})),
             summarizeAppleHealth(userId).catch(() => ({})),
+            summarizeSamsungHealth(userId).catch(() => ({})),
+            countGarminSamples(userId).catch(() => ({})),
         ]);
 
         const counts = {
@@ -50,9 +63,14 @@ const getAllIntegrationsStatus = async (req, res) => {
             apple_health: Object.fromEntries(
                 Object.entries(appleSummary).map(([type, info]) => [type, info.count])
             ),
+            samsung_health: Object.fromEntries(
+                Object.entries(samsungSummary).map(([type, info]) => [type, info.count])
+            ),
+            garmin: garminCounts,
         };
 
         const zeppAvailability = getZeppAvailability();
+        const garminAvailability = getGarminAvailability();
 
         const build = (provider, label, description, extra = {}) => {
             const row = byProvider[provider];
@@ -69,7 +87,11 @@ const getAllIntegrationsStatus = async (req, res) => {
                     : available
                       ? row?.status || 'disconnected'
                       : 'unavailable',
-                button: connected ? 'Connected' : available ? 'Connect' : 'Use Strava',
+                button: connected
+                    ? 'Connected'
+                    : available
+                      ? 'Connect'
+                      : extra.unavailableButton || 'Unavailable',
                 connectedAt: row?.connected_at || null,
                 lastSyncedAt: row?.last_synced_at || null,
                 lastError: row?.last_error || extra.hint || null,
@@ -79,32 +101,61 @@ const getAllIntegrationsStatus = async (req, res) => {
             };
         };
 
+        const integrations = [
+            build(
+                'zepp',
+                'Amazfit/Zepp',
+                zeppAvailability.ready
+                    ? 'Syncs runs, workouts, HR, sleep and recovery data.'
+                    : 'Watch data via Zepp app. If Zepp already syncs to Strava, connect Strava.',
+                {
+                    available: zeppAvailability.ready,
+                    hint: zeppAvailability.hint,
+                    suggestProvider: zeppAvailability.ready ? null : 'strava',
+                    unavailableButton: 'Use Strava',
+                }
+            ),
+            build(
+                'strava',
+                'Strava',
+                'Sync workouts and get route & segment data.'
+            ),
+            build(
+                'apple_health',
+                'Apple Health',
+                'Core health data: HRV, sleep, resting HR and steps.'
+            ),
+            build(
+                'samsung_health',
+                'Samsung Health',
+                'Galaxy Watch data: HRV, sleep, resting HR, steps and workouts.'
+            ),
+            build(
+                'garmin',
+                'Garmin',
+                garminAvailability.ready
+                    ? 'Syncs workouts, sleep, HRV and daily stats from Garmin Connect.'
+                    : 'Needs approved Garmin Connect developer keys before athletes can connect.',
+                {
+                    available: garminAvailability.ready,
+                    hint: garminAvailability.hint,
+                    unavailableButton: 'Unavailable',
+                }
+            ),
+        ];
+        const connectedWatches = integrations
+            .filter((item) => item.connected)
+            .map((item) => ({
+                provider: item.provider,
+                label: item.label,
+                lastSyncedAt: item.lastSyncedAt,
+            }));
+
         return res.status(200).json({
             success: true,
-            integrations: [
-                build(
-                    'zepp',
-                    'Amazfit/Zepp',
-                    zeppAvailability.ready
-                        ? 'Syncs runs, workouts, HR, sleep and recovery data.'
-                        : 'Watch data via Zepp app. If Zepp already syncs to Strava, connect Strava.',
-                    {
-                        available: zeppAvailability.ready,
-                        hint: zeppAvailability.hint,
-                        suggestProvider: zeppAvailability.ready ? null : 'strava',
-                    }
-                ),
-                build(
-                    'strava',
-                    'Strava',
-                    'Sync workouts and get route & segment data.'
-                ),
-                build(
-                    'apple_health',
-                    'Apple Health',
-                    'Core health data: HRV, sleep, resting HR and steps.'
-                ),
-            ],
+            connectedWatches,
+            currentWatch: connectedWatches[0] || null,
+            integrations,
         });
     } catch (error) {
         console.error('Integrations status error:', error);
@@ -127,6 +178,8 @@ const getWorkoutsFeed = async (req, res) => {
         await ensureStravaDataTables();
         await ensureZeppDataTables();
         await ensureAppleHealthTables();
+        await ensureSamsungHealthTables();
+        await ensureGarminDataTables().catch(() => {});
         await ensureOnboardingProfileSchema();
 
         const { rows } = await pool.query(
@@ -202,6 +255,59 @@ const getWorkoutsFeed = async (req, res) => {
                     WHERE a.user_id = apple_health_samples.user_id
                       AND a.provenance @> jsonb_build_array(
                         jsonb_build_object('source', 'apple_health', 'externalId', apple_health_samples.external_id)
+                      )
+                  )
+            )
+            UNION ALL
+            (
+                SELECT
+                    'samsung_health'::text AS source,
+                    external_id,
+                    COALESCE(metadata->>'name', 'Workout') AS name,
+                    COALESCE(metadata->>'sport_type', 'workout') AS sport_type,
+                    start_at,
+                    NULLIF(value, 0) AS distance,
+                    CASE
+                        WHEN (metadata->>'duration_seconds') ~ '^[0-9]+$'
+                        THEN (metadata->>'duration_seconds')::int
+                    END AS duration_seconds,
+                    CASE
+                        WHEN (metadata->>'calories') ~ '^[0-9]+(\\.[0-9]+)?$'
+                        THEN (metadata->>'calories')::numeric
+                    END AS calories,
+                    CASE
+                        WHEN (metadata->>'average_heartrate') ~ '^[0-9]+(\\.[0-9]+)?$'
+                        THEN (metadata->>'average_heartrate')::numeric
+                    END AS average_heartrate
+                FROM samsung_health_samples
+                WHERE user_id = $1 AND sample_type = 'workout'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM activities a
+                    WHERE a.user_id = samsung_health_samples.user_id
+                      AND a.provenance @> jsonb_build_array(
+                        jsonb_build_object('source', 'samsung_health', 'externalId', samsung_health_samples.external_id)
+                      )
+                  )
+            )
+            UNION ALL
+            (
+                SELECT
+                    'garmin'::text AS source,
+                    external_id,
+                    COALESCE(name, sport_type, 'Workout') AS name,
+                    COALESCE(sport_type, sample_type, 'activity') AS sport_type,
+                    start_at,
+                    distance,
+                    duration_seconds,
+                    calories,
+                    average_heartrate
+                FROM garmin_health_samples
+                WHERE user_id = $1 AND sample_type = 'activity'
+                  AND NOT EXISTS (
+                    SELECT 1 FROM activities a
+                    WHERE a.user_id = garmin_health_samples.user_id
+                      AND a.provenance @> jsonb_build_array(
+                        jsonb_build_object('source', 'garmin', 'externalId', garmin_health_samples.external_id)
                       )
                   )
             )

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS user_integrations (
 
     provider VARCHAR(30) NOT NULL
         CHECK (
-            provider IN ('strava', 'zepp', 'apple_health')
+            provider IN ('strava', 'zepp', 'apple_health', 'samsung_health', 'garmin')
         ),
 
     provider_user_id VARCHAR(255),
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS oauth_states (
         REFERENCES users(id) ON DELETE CASCADE,
     provider VARCHAR(30) NOT NULL
         CHECK (
-            provider IN ('strava', 'zepp', 'apple_health')
+            provider IN ('strava', 'zepp', 'apple_health', 'samsung_health', 'garmin')
         ),
     expires_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

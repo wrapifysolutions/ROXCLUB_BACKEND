@@ -6,6 +6,8 @@ const Onboardingrouter = require('./routes/OnboardingRoute');
 const StravaRouter = require('./routes/StravaRoute');
 const ZeppRouter = require('./routes/ZeppRoute');
 const AppleHealthRouter = require('./routes/AppleHealthRoute');
+const SamsungHealthRouter = require('./routes/SamsungHealthRoute');
+const GarminRouter = require('./routes/GarminRoute');
 const WorkoutRouter = require('./routes/WorkoutRoute');
 const ReadinessRouter = require('./routes/ReadinessRoute');
 const WorkoutSessionRouter = require('./routes/WorkoutSessionRoute');
@@ -15,6 +17,7 @@ const AccountRouter = require('./routes/AccountRoute');
 const ClubRouter = require('./routes/ClubRoute');
 const ArenaRouter = require('./routes/ArenaRoute');
 const AthleteRouter = require('./routes/AthleteRoute');
+const ProfileRouter = require('./routes/ProfileRoute');
 const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
 
@@ -133,6 +136,8 @@ app.use('/', Onboardingrouter);
 app.use('/', StravaRouter);
 app.use('/', ZeppRouter);
 app.use('/', AppleHealthRouter);
+app.use('/', SamsungHealthRouter);
+app.use('/', GarminRouter);
 app.use('/', WorkoutRouter);
 app.use('/', ReadinessRouter);
 app.use('/', WorkoutSessionRouter);
@@ -142,6 +147,7 @@ app.use('/', AccountRouter);
 app.use('/', ClubRouter);
 app.use('/', ArenaRouter);
 app.use('/', AthleteRouter);
+app.use('/', ProfileRouter);
 
 const port = Number(process.env.PORT) || 5000;
 

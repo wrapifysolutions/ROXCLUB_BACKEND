@@ -9,7 +9,7 @@
     "checkin": 0.2,
     "lastRpe": 0.1
   },
-  "wellnessSourcePriority": ["zepp", "apple_health", "manual"],
+  "wellnessSourcePriority": ["zepp", "garmin", "samsung_health", "apple_health", "manual"],
   "baselineDays": 14,
   "minBaselineDays": 4,
   "loadLabels": [

@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS daily_wellness (
         REFERENCES users(id) ON DELETE CASCADE,
     local_date DATE NOT NULL,
     source VARCHAR(20) NOT NULL
-        CHECK (source IN ('zepp', 'apple_health', 'manual')),
+        CHECK (source IN ('zepp', 'apple_health', 'samsung_health', 'garmin', 'manual')),
     sleep_minutes INTEGER,
     sleep_score INTEGER,
     hrv_ms NUMERIC(8,2),
