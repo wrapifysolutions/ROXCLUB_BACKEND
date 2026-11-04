@@ -34,7 +34,10 @@ function sendError(res, error, logLabel) {
         });
     }
     console.error(logLabel, error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({
+        message: 'Internal Server Error',
+        error: error.code || 'INTERNAL_ERROR',
+    });
 }
 
 async function localDateFor(req) {
