@@ -180,7 +180,9 @@ test('home keeps the legacy dna field and exposes the shared pending DNA state',
         completedSessions: 0,
         todaySession: null,
     });
-    assert.equal(home.dna.attributes.hrv, 64);
+    assert.equal(home.watch.hrv, 64);
+    assert.equal(home.dna.status, 'CALIBRATING');
+    assert.equal(home.dna.attributes.mobility, 70);
     assert.equal(home.athleteDna.status, 'CALIBRATING');
     assert.equal(home.athleteDna.attributes.speed.current, null);
     assert.equal(home.athleteDna.attributes.speed.pending, true);

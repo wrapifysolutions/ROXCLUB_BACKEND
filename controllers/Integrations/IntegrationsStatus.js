@@ -332,10 +332,18 @@ const getWorkoutsFeed = async (req, res) => {
             [userId, limit]
         );
 
+        const { collapseImportedFeed } = require('../../lib/athlete/importedWorkout');
+        const workouts = await collapseImportedFeed(userId, rows, (sql, params) =>
+            pool.query(sql, params)
+        ).catch((error) => {
+            console.error('workout feed collapse failed', error.message);
+            return rows;
+        });
+
         return res.status(200).json({
             success: true,
-            count: rows.length,
-            workouts: rows,
+            count: workouts.length,
+            workouts,
         });
     } catch (error) {
         console.error('Workouts feed error:', error);

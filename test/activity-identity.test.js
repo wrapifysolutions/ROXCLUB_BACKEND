@@ -124,7 +124,7 @@ test('native and import become associated without merging provider rows', async 
     assert.equal(db.activities.some((row) => row.source === 'ROXCLUB_NATIVE'), true);
 });
 
-test('two provider copies stay unresolved and do not invent a merge', async () => {
+test('two provider copies stay as two rows and associate for XP/feed collapse', async () => {
     const { db, query } = memory();
     await upsertCanonicalImportedActivity(
         'u1',
@@ -136,8 +136,8 @@ test('two provider copies stay unresolved and do not invent a merge', async () =
         { source: 'ZEPP', externalId: 'z1', activityType: 'Run', startAt: '2026-11-02T08:01:00.000Z', durationSec: 1800 },
         query
     );
-    assert.equal(linkStatus('STRAVA', 'ZEPP'), 'unresolved');
-    assert.equal(db.links.every((row) => row.status === 'unresolved'), true);
+    assert.equal(linkStatus('STRAVA', 'ZEPP'), 'associated');
+    assert.equal(db.links.every((row) => row.status === 'associated'), true);
     assert.equal(db.activities.length, 2);
 });
 

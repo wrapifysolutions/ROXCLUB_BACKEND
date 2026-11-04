@@ -213,7 +213,7 @@ test('existing Race Build enrollment is preserved on onboarding complete', async
     assert.equal(client.db.sessions.length, 72);
 });
 
-test('connected watch fills readiness and dna while workout and level stay ours', () => {
+test('connected watch fills watch metrics while DNA and official readiness stay separate', () => {
     const home = buildHomeResponse({
         name: 'Alex',
         gender: 'male',
@@ -232,8 +232,8 @@ test('connected watch fills readiness and dna while workout and level stay ours'
         xpTotal: 0,
         completedSessions: 0,
         checkInScore: null,
+        dailyReadiness: { score: 82, status: 'READY', confidence: 'MODERATE' },
         watch: {
-            ready: { score: 82, status: 'peak', available: true },
             hrv: { value: 64, available: true, source: 'apple_health' },
             sleep: { value: 7.5, available: true, source: 'apple_health' },
             resting_hr: { value: 52, available: true, source: 'apple_health' },
@@ -245,10 +245,11 @@ test('connected watch fills readiness and dna while workout and level stay ours'
     assert.equal(home.recoveryNeeded, false);
     assert.equal(home.thisWeek, undefined);
     assert.equal(home.readiness.score, 82);
-    assert.equal(home.readiness.source, 'apple_health');
-    assert.equal(home.dna.status, 'READY');
-    assert.equal(home.dna.attributes.hrv, 64);
-    assert.equal(home.dna.attributes.sleep, 7.5);
+    assert.equal(home.readiness.source, 'daily_readiness');
+    assert.equal(home.dna.status, 'CALIBRATING');
+    assert.equal(home.dna.attributes, null);
+    assert.equal(home.watch.hrv, 64);
+    assert.equal(home.watch.sleep, 7.5);
     assert.equal(home.todayWorkout.id, 'wk_foundation_a');
     assert.deepEqual(home.level, { level: 1, xp: 0, nextLevelXp: 500 });
 });

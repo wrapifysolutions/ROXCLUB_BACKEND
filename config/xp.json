@@ -1,13 +1,34 @@
 {
   "todo": "formula TBD - sports science",
-  "calcVersion": "v0",
+  "calcVersion": "v1",
   "sessionBaseXp": 50,
   "activityXp": 10,
   "recoveryXp": 0,
   "coinsPerSession": 15,
   "recoveryCoins": 5,
-  "dailyMultipliers": [1, 0.5, 0.25],
-  "levelThresholds": [0, 500, 1200, 2000],
+  "duration": {
+    "minutesPerUnit": 10,
+    "xpPerUnit": 5,
+    "maxXp": 40
+  },
+  "intensity": {
+    "minFactor": 0.85,
+    "maxFactor": 1.15,
+    "neutralHr": 130,
+    "spanHr": 60,
+    "neutralRpe": 5
+  },
+  "dailyMultipliers": [1, 0.5, 0.25, 0.15, 0.1],
+  "anomaly": {
+    "dailyMultipliers": [1, 0.5, 0.25, 0.15, 0.1],
+    "tailMultiplier": 0.05,
+    "maxDurationMin": 180,
+    "softSessionCount": 4
+  },
+  "levelThresholds": [0, 500, 1200, 2000, 3000, 4500, 6500, 9000, 12000, 16000],
+  "season": {
+    "key": "calendar_month"
+  },
   "streak": {
     "recoveryKeepsStreak": true,
     "coins": 10

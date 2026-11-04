@@ -14,6 +14,11 @@ const {
 const { submitDebrief } = require('../lib/workout/debriefService');
 const { listActivityHistory } = require('../lib/workout/activityHistory');
 const { buildHomeResponse } = require('../lib/home/homeState');
+const { buildXp, totalXpOf } = require('../lib/workout/xpService');
+
+function xpFor(input) {
+    return totalXpOf(buildXp(input));
+}
 
 const DAY = '2026-10-26';
 const STARTED = '2026-10-26T08:00:00.000Z';
@@ -212,6 +217,17 @@ function memoryWorkout() {
             });
             return { rows: [] };
         }
+        if (sql.includes('workout:insert_seasonal') || sql.includes('workout:reverse_seasonal')) {
+            db.seasonal = db.seasonal || [];
+            db.seasonal.push({
+                user_id: params[0],
+                season_key: params[1],
+                points: params[2],
+                reason: params[3],
+                activity_id: params[4],
+            });
+            return { rows: [] };
+        }
         if (sql.includes('workout:insert_coins')) {
             db.coins.push({ user_id: params[0], coins: params[1], reason: params[2], activity_id: params[3] });
             return { rows: [] };
@@ -407,7 +423,16 @@ test('hybrid full stores roxzone separately from the 8 activities', async () => 
         .filter((split) => split.name !== 'Roxzone' && split.name !== 'Running')
         .reduce((sum, split) => sum + split.durationSec, 0);
     assert.equal(stationTime, 90 * 7);
-    assert.equal(done.totalXp, xpConfig.sessionBaseXp + 8 * xpConfig.activityXp);
+    assert.equal(
+        done.totalXp,
+        xpFor({
+            workoutType: getWorkout('wk_foundation_a').type,
+            partial: false,
+            finishedWork: workActivities(plan),
+            priorSessionsToday: 0,
+            durationSec: 2700,
+        })
+    );
     assert.equal(db.stations.length, 7);
     assert.equal(db.evidence.length, 9);
     assert.equal(db.proficiency.length, 7);
@@ -439,7 +464,16 @@ test('ending a hybrid early pays XP only for the finished activities', async () 
     assert.equal(done.completedCount, 3);
     assert.equal(done.totalCount, 8);
     assert.equal(done.subtitle, '3/8 completed');
-    assert.equal(done.totalXp, 3 * xpConfig.activityXp);
+    assert.equal(
+        done.totalXp,
+        xpFor({
+            workoutType: getWorkout('wk_foundation_a').type,
+            partial: true,
+            finishedWork: [{ name: 'a' }, { name: 'b' }, { name: 'c' }],
+            priorSessionsToday: 0,
+            durationSec: 600,
+        })
+    );
     assert.ok(done.xpBreakdown.every((row) => row.coins == null));
     assert.equal(done.xpBreakdown.some((row) => row.reason === 'session_base'), false);
     assert.equal(db.sessions[0].status, 'partial');
@@ -552,6 +586,7 @@ test('recovery earns 0 XP and coins, and keeps the streak alive', async () => {
         opts(db, enqueue, '2026-10-25')
     );
     assert.equal(db.streak.current_streak, 1);
+    const xpAfterRun = db.xp.length;
 
     const recoveryPlan = playerActivities(getWorkout('wk_recovery_01'));
     const second = await start(db, 'wk_recovery_01', 'day-2', enqueue, {
@@ -579,7 +614,7 @@ test('recovery earns 0 XP and coins, and keeps the streak alive', async () => {
     ]);
     assertCoinsMatchLedger(done, db);
     assert.equal(done.streak, 2);
-    assert.equal(db.xp.length, 2);
+    assert.equal(db.xp.length, xpAfterRun);
 });
 
 test('the second session on the same local day gets reduced XP', async () => {
@@ -602,11 +637,25 @@ test('the second session on the same local day gets reduced XP', async () => {
         opts(db, enqueue)
     );
 
-    assert.equal(first.totalXp, xpConfig.sessionBaseXp + xpConfig.activityXp);
+    assert.equal(
+        first.totalXp,
+        xpFor({
+            workoutType: getWorkout('wk_zone2_run').type,
+            partial: false,
+            finishedWork: [{ name: plan[0].name }],
+            priorSessionsToday: 0,
+            durationSec: 2400,
+        })
+    );
     assert.equal(
         second.totalXp,
-        Math.round(xpConfig.sessionBaseXp * xpConfig.dailyMultipliers[1]) +
-            Math.round(xpConfig.activityXp * xpConfig.dailyMultipliers[1])
+        xpFor({
+            workoutType: getWorkout('wk_zone2_run').type,
+            partial: false,
+            finishedWork: [{ name: plan[0].name }],
+            priorSessionsToday: 1,
+            durationSec: 2400,
+        })
     );
     assert.ok(second.totalXp < first.totalXp);
     assert.equal(second.rewards.some((reward) => reward.type === 'STREAK_COINS'), false);
@@ -718,7 +767,18 @@ test('crossing a level threshold returns a LEVEL_UP reward', async () => {
     );
     assert.equal(done.levelBefore, 1);
     assert.equal(done.levelAfter, 2);
-    assert.equal(done.xpIntoLevel, 10);
+    assert.equal(
+        done.xpIntoLevel,
+        450 +
+            xpFor({
+                workoutType: getWorkout('wk_zone2_run').type,
+                partial: false,
+                finishedWork: [{ name: plan[0].name }],
+                priorSessionsToday: 0,
+                durationSec: 2400,
+            }) -
+            500
+    );
     assert.ok(done.rewards.some((reward) => reward.type === 'LEVEL_UP' && reward.level === 2 && reward.title === 'Level 2' && reward.coins === 0));
     const firstBadge = badgeConfig.badges.find((badge) => badge.id === 'first_workout');
     assert.ok(done.rewards.some((reward) => reward.type === 'BADGE' && reward.id === 'first_workout' && reward.title === 'First Workout' && reward.coins === firstBadge.coins));
@@ -853,7 +913,16 @@ test('a different workout type than planned still earns normal XP and is not rep
         },
         opts(db, enqueue)
     );
-    assert.equal(done.totalXp, xpConfig.sessionBaseXp + plan.length * xpConfig.activityXp);
+    assert.equal(
+        done.totalXp,
+        xpFor({
+            workoutType: getWorkout('wk_strength_01').type,
+            partial: false,
+            finishedWork: plan,
+            priorSessionsToday: 0,
+            durationSec: 1800,
+        })
+    );
     assert.equal(db.scheduled[0].status, 'pending');
 });
 

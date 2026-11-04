@@ -59,7 +59,30 @@ const GetPerformanceReadiness = async (req, res) => {
         if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
         const today = await todayFor(req);
         const payload = await ensureTodayReadiness(req.user.id, today);
-        return res.status(200).json(payload);
+        const { suggestReducedLoad } = require('../../lib/plan/adaptationService');
+        const { queryWithHardTimeout } = require('../../lib/dbQuery');
+        let todaySession = null;
+        try {
+            const { rows } = await queryWithHardTimeout(
+                `
+                SELECT workout_id, title, duration_min
+                FROM scheduled_sessions
+                WHERE user_id = $1 AND scheduled_on = $2::date
+                `,
+                [req.user.id, today],
+                8000
+            );
+            todaySession = rows[0] || null;
+        } catch (_) {
+            todaySession = null;
+        }
+        return res.status(200).json({
+            ...payload,
+            adaptation: suggestReducedLoad({
+                status: payload.today?.status,
+                todaySession,
+            }),
+        });
     } catch (error) {
         return sendError(res, error, 'GetPerformanceReadiness error');
     }

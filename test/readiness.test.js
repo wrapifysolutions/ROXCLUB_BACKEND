@@ -680,6 +680,31 @@ test('three lifetime sessions unlock readiness when none are today', () => {
     assert.notEqual(result.status, 'CALIBRATING');
 });
 
+test('Samsung and Garmin sample workouts unlock readiness after dedupe', async () => {
+    const days = ['21', '22', '23'];
+    const samsung = days.map((day) => ({
+        start_at: `2026-10-${day}T07:00:00.000Z`,
+        end_at: `2026-10-${day}T07:30:00.000Z`,
+        metadata: { sport_type: 'Run' },
+    }));
+    const garmin = days.map((day) => ({
+        start_at: `2026-10-${day}T07:01:00.000Z`,
+        duration_seconds: 30 * 60,
+        activity_type: 'Run',
+    }));
+
+    const signals = await gatherSignals('user-new', TODAY, async (sql) => {
+        if (sql.includes('readiness:sessions_samsung')) return { rows: samsung };
+        if (sql.includes('readiness:sessions_garmin')) return { rows: garmin };
+        return emptySignals(sql);
+    });
+    const result = computeReadiness(signals);
+
+    assert.equal(signals.completedSessions, 3);
+    assert.equal(typeof result.score, 'number');
+    assert.notEqual(result.status, 'CALIBRATING');
+});
+
 test('three imported Strava runs unlock readiness after dedupe', async () => {
     const days = ['21', '22', '23'];
     const strava = days.map((day) => ({

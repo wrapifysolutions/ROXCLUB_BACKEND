@@ -9,6 +9,7 @@ const {
 } = require('../../lib/workout/sessionService');
 const { submitDebrief } = require('../../lib/workout/debriefService');
 const { listActivityHistory } = require('../../lib/workout/activityHistory');
+const { invalidateActivity, editActivity } = require('../../lib/workout/activityLifecycle');
 
 function sendError(res, error, logLabel) {
     if (error.code === 'SESSION_IN_PROGRESS') {
@@ -110,6 +111,26 @@ const ListActivityHistory = async (req, res) => {
     }
 };
 
+const DeleteActivity = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await invalidateActivity(req.user.id, req.params.id);
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendError(res, error, 'DeleteActivity error');
+    }
+};
+
+const PatchActivity = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await editActivity(req.user.id, req.params.id, req.body);
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendError(res, error, 'PatchActivity error');
+    }
+};
+
 module.exports = {
     StartWorkoutSession,
     GetActiveWorkoutSession,
@@ -118,4 +139,6 @@ module.exports = {
     CompleteWorkoutSession,
     SubmitActivityDebrief,
     ListActivityHistory,
+    DeleteActivity,
+    PatchActivity,
 };

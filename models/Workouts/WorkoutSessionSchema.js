@@ -181,6 +181,24 @@ ALTER TABLE xp_ledger
     ADD COLUMN IF NOT EXISTS calc_version VARCHAR(20);
 `;
 
+const createSeasonalPointsLedger = `
+CREATE TABLE IF NOT EXISTS seasonal_points_ledger (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    season_key VARCHAR(20) NOT NULL,
+    points INTEGER NOT NULL,
+    reason VARCHAR(80),
+    activity_id UUID,
+    calc_version VARCHAR(20),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+`;
+
+const createSeasonalPointsIndex = `
+CREATE INDEX IF NOT EXISTS seasonal_points_user_season_idx
+    ON seasonal_points_ledger (user_id, season_key);
+`;
+
 const alterScheduledSessionStatus = `
 ALTER TABLE scheduled_sessions
     ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'pending';
@@ -202,6 +220,8 @@ const workoutSessionStatements = [
     createActivityEvidenceTable,
     createStationEvidenceTable,
     alterXpLedgerColumns,
+    createSeasonalPointsLedger,
+    createSeasonalPointsIndex,
     alterScheduledSessionStatus,
 ];
 
