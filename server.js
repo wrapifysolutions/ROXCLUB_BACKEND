@@ -21,6 +21,11 @@ const ProfileRouter = require('./routes/ProfileRoute');
 const NotificationRouter = require('./routes/NotificationRoute');
 const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
+const cache = require('./lib/cache/redis');
+const { invalidateOnWrite } = require('./lib/cache/httpCache');
+const { globalRateLimit } = require('./lib/http/rateLimit');
+const { createSessionMiddleware } = require('./lib/http/session');
+const { isPrimaryWorker, workerId } = require('./lib/cluster');
 
 loadWorkoutCatalog();
 
@@ -33,6 +38,10 @@ const isProduction =
     process.env.ROXCLUB_ENV === 'production' ||
     isVercel ||
     isRailway;
+
+if (isRailway) {
+    app.set('trust proxy', 1);
+}
 
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
@@ -52,21 +61,7 @@ app.use((req, res, next) => {
 });
 
 if (!isVercel) {
-    const session = require('express-session');
-    app.use(
-        session({
-            name: 'roxclub.sid',
-            secret: process.env.SESSION_SECRET || 'dev-session-secret',
-            resave: false,
-            saveUninitialized: false,
-            cookie: {
-                maxAge: 5 * 60 * 1000,
-                httpOnly: true,
-                secure: isProduction,
-                sameSite: 'lax',
-            },
-        })
-    );
+    app.use(createSessionMiddleware({ isProduction }));
 }
 
 app.get('/', (req, res) => {
@@ -75,6 +70,8 @@ app.get('/', (req, res) => {
         service: 'roxclub-api',
         env: runtimeEnv,
         environment: process.env.ROXCLUB_ENV || 'unidentified',
+        worker: workerId(),
+        pid: process.pid,
     });
 });
 
@@ -85,6 +82,8 @@ app.get('/health', async (req, res) => {
         service: 'roxclub-api',
         env: runtimeEnv,
         environment: process.env.ROXCLUB_ENV || 'unidentified',
+        worker: workerId(),
+        pid: process.pid,
         db: null,
         supabase: null,
         ms: 0,
@@ -125,6 +124,7 @@ app.get('/health', async (req, res) => {
         result.supabase = { ok: false, error: error.message };
     }
 
+    result.cache = await cache.ping();
     result.ms = Date.now() - startedAt;
     return res.status(result.ok ? 200 : 503).json(result);
 });
@@ -138,6 +138,9 @@ app.use((req, res, next) => {
     });
     next();
 });
+
+app.use(globalRateLimit);
+app.use(invalidateOnWrite);
 
 app.use('/', Onboardingrouter);
 app.use('/', StravaRouter);
@@ -163,6 +166,8 @@ async function startServer() {
     try {
         await connectDB();
         console.log('Connected to the database');
+        await cache.connect();
+        console.log('Cache driver', cache.driver());
         const { schemaMutationsAllowed } = require('./lib/migrations/policy');
         await require('./lib/onboarding/schema').ensureOnboardingProfileSchema();
         if (schemaMutationsAllowed()) {
@@ -170,10 +175,12 @@ async function startServer() {
         } else {
             console.log('Schema mutations skipped on API startup; use scripts/migrate.js with explicit approval');
         }
-        require('./lib/plan/missedJob').scheduleMissedJob();
+        if (isPrimaryWorker()) {
+            require('./lib/plan/missedJob').scheduleMissedJob();
+        }
 
-        const server = app.listen(port, () => {
-            console.log(`Server is running on port ${port}`);
+        const server = app.listen(port, '0.0.0.0', () => {
+            console.log(`Server is running on port ${port} worker=${workerId()} pid=${process.pid}`);
         });
 
         server.on('error', (error) => {
@@ -186,7 +193,7 @@ async function startServer() {
             if (shuttingDown) return;
             shuttingDown = true;
             server.close(() => {
-                closeDB()
+                Promise.all([closeDB(), cache.quit()])
                     .catch(() => {})
                     .finally(() => process.exit(0));
             });

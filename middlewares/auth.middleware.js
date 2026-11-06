@@ -1,6 +1,13 @@
 const { getSupabaseUser } = require('../lib/SupabaseConfig');
 const { queryWithHardTimeout } = require('../lib/dbQuery');
 const { verifyAccessToken, COOKIE_NAME } = require('../lib/token');
+const {
+    AUTH_TTL_SEC,
+    authLookupKey,
+    authIdKey,
+    cachedLookup,
+    serveFromCacheOrNext,
+} = require('../lib/cache/httpCache');
 
 function peekJwtPayload(token) {
     try {
@@ -52,23 +59,25 @@ function extractBearerToken(req) {
 }
 
 async function findDbUser({ supabaseUserId, email }) {
-    const { rows } = await queryWithHardTimeout(
-        `
-        SELECT id, email, auth_provider, is_email_verified, supabase_user_id
-        FROM users
-        WHERE ($1::uuid IS NOT NULL AND (supabase_user_id = $1 OR id = $1))
-           OR ($2::text IS NOT NULL AND email = $2)
-        ORDER BY CASE
-            WHEN supabase_user_id = $1 THEN 0
-            WHEN id = $1 THEN 1
-            ELSE 2
-        END
-        LIMIT 1
-        `,
-        [supabaseUserId || null, email || null],
-        5000
-    );
-    return rows[0] || null;
+    return cachedLookup(authLookupKey({ supabaseUserId, email }), AUTH_TTL_SEC, async () => {
+        const { rows } = await queryWithHardTimeout(
+            `
+            SELECT id, email, auth_provider, is_email_verified, supabase_user_id
+            FROM users
+            WHERE ($1::uuid IS NOT NULL AND (supabase_user_id = $1 OR id = $1))
+               OR ($2::text IS NOT NULL AND email = $2)
+            ORDER BY CASE
+                WHEN supabase_user_id = $1 THEN 0
+                WHEN id = $1 THEN 1
+                ELSE 2
+            END
+            LIMIT 1
+            `,
+            [supabaseUserId || null, email || null],
+            5000
+        );
+        return rows[0] || null;
+    });
 }
 
 function providerFromSupabaseUser(sbUser) {
@@ -149,18 +158,33 @@ async function loadAuthenticatedUser(req) {
     throw missing;
 }
 
-async function authRoxClubJwt(token) {
-    const payload = verifyAccessToken(token);
+async function loadRoxClubUserById(userId) {
     const { rows } = await queryWithHardTimeout(
         `
         SELECT id, email, auth_provider, is_email_verified, supabase_user_id
         FROM users
         WHERE id = $1
         `,
-        [payload.sub],
+        [userId],
         5000
     );
-    const user = rows[0];
+    return rows[0] || null;
+}
+
+async function authRoxClubJwt(token) {
+    const payload = verifyAccessToken(token);
+    const cache = require('../lib/cache/redis');
+    const key = authIdKey(payload.sub);
+    let user;
+    if (cache.enabled()) {
+        const hit = await cache.getJson(key);
+        user = hit === undefined ? await loadRoxClubUserById(payload.sub) : hit;
+        if (hit === undefined && user?.is_email_verified) {
+            cache.setJson(key, user, AUTH_TTL_SEC).catch(() => {});
+        }
+    } else {
+        user = await loadRoxClubUserById(payload.sub);
+    }
     if (!user || !user.is_email_verified) {
         return null;
     }
@@ -220,7 +244,7 @@ const authMiddleware = async (req, res, next) => {
             source: user.source || 'jwt',
         });
         clearTimeout(watchdog);
-        return next();
+        return serveFromCacheOrNext(req, res, next);
     } catch (error) {
         clearTimeout(watchdog);
         if (error.status === 401) {
