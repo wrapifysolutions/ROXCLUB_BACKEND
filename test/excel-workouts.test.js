@@ -41,6 +41,11 @@ function memoryWorkout() {
         imports: [],
     };
     db.query = async (sql, params = []) => {
+        if (/CREATE TABLE|CREATE INDEX/i.test(sql)) return { rows: [] };
+        if (sql.includes('nova:')) return { rows: [] };
+        if (sql.includes('workout:insert_seasonal') || sql.includes('workout:reverse_seasonal')) {
+            return { rows: [] };
+        }
         if (sql.includes('workout:session_by_key')) {
             const row = db.sessions.find((s) => s.user_id === params[0] && s.idempotency_key === params[1]);
             return { rows: row ? [row] : [] };

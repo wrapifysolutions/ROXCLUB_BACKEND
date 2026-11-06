@@ -121,6 +121,26 @@ test('NOVA text parser maps known RoxClub moves and rejects invented ones', () =
     assert.throws(() => parseNovaText('invent a secret HYROX race formula'), (error) => error.code === 'NOVA_NO_EXERCISES');
 });
 
+test('NOVA create rejects invented activities and clamps duration', async () => {
+    const { query } = memoryNova();
+    await assert.rejects(
+        () =>
+            createUserWorkout(
+                'user-nova',
+                { activities: [{ kind: 'run', name: 'Secret invented HYROX move' }] },
+                query
+            ),
+        (error) => error.code === 'NOVA_NO_EXERCISES'
+    );
+    const created = await createUserWorkout(
+        'user-nova',
+        { q: '1km run', title: `${'x'.repeat(200)}`, durationMin: -5 },
+        query
+    );
+    assert.equal(created.title.length <= 160, true);
+    assert.equal(created.durationMin, 1);
+});
+
 test('user-authored NOVA workout can be created, edited, listed, and started', async () => {
     const { query } = memoryNova();
     const created = await createUserWorkout(

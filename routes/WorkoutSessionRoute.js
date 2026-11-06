@@ -19,7 +19,7 @@ const writeLimit = createRateLimit({ windowMs: 60000, max: 40, name: 'workout-wr
 
 WorkoutSessionRouter.post('/api/workout-sessions/start', authMiddleware, writeLimit, StartWorkoutSession);
 WorkoutSessionRouter.get('/api/workout-sessions/active', authMiddleware, GetActiveWorkoutSession);
-WorkoutSessionRouter.patch('/api/workout-sessions/:id/progress', authMiddleware, SaveWorkoutProgress);
+WorkoutSessionRouter.patch('/api/workout-sessions/:id/progress', authMiddleware, writeLimit, SaveWorkoutProgress);
 WorkoutSessionRouter.post('/api/workout-sessions/:id/cancel', authMiddleware, CancelWorkoutSession);
 WorkoutSessionRouter.post('/api/workout-sessions/:id/complete', authMiddleware, writeLimit, CompleteWorkoutSession);
 WorkoutSessionRouter.get('/api/activities', authMiddleware, ListActivityHistory);

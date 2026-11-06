@@ -5,6 +5,7 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "test": "node --test ./test/*.test.js",
+    "test:integration": "node --test ./test/integration/*.test.js",
     "test:staging": "node --test ./test/staging-athlete-flow.test.js",
     "migrate": "node scripts/migrate.js",
     "migrate:staging": "node scripts/migrate.js --staging",

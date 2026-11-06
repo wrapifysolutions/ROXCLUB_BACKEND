@@ -699,6 +699,27 @@ test('the third completed session grants the stub mission coins once', async () 
     assert.ok(fourth.xpBreakdown.every((row) => row.reason !== 'mission' && row.coins == null));
 });
 
+test('corrupt stored result does not crash or re-award complete', async () => {
+    const db = memoryWorkout();
+    const enqueue = () => {};
+    const started = await start(db, 'wk_zone2_run', 'corrupt-result', enqueue);
+    const session = db.sessions.find((row) => row.id === started.sessionId);
+    session.status = 'completed';
+    session.result = '{not-json';
+    await assert.rejects(
+        () =>
+            completeSession(
+                'user-1',
+                started.sessionId,
+                { endedAt: STARTED, totalDurationSec: 2400 },
+                opts(db, enqueue)
+            ),
+        (error) => error.code === 'SESSION_RESULT_UNREADABLE' && error.status === 409
+    );
+    assert.equal(db.xp.length, 0);
+    assert.equal(db.activities.length, 0);
+});
+
 test('a duplicate complete does not write XP twice', async () => {
     const db = memoryWorkout();
     const enqueue = () => {};

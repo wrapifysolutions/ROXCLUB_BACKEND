@@ -128,6 +128,18 @@ test('unknown workout id is not found', async () => {
     );
 });
 
+test('non-uuid workout id does not crash as a database 22P02', async () => {
+    const query = async () => {
+        const error = new Error('invalid input syntax for type uuid');
+        error.code = '22P02';
+        throw error;
+    };
+    await assert.rejects(
+        () => getWorkoutDetail('user-1', 'does-not-exist', query),
+        (error) => error.code === 'WORKOUT_NOT_FOUND' && error.status === 404
+    );
+});
+
 test('saving a workout twice keeps a single row and isSaved', async () => {
     const db = memoryQuery();
     const first = await saveWorkout('user-1', 'wk_foundation_a', db.query);

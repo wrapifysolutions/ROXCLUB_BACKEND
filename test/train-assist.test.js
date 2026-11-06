@@ -37,6 +37,16 @@ test('classify maps library language without inventing a workout', () => {
     assert.match(injury.medicalBoundary, /cannot diagnose/);
 });
 
+test('chat text with make/create words still recommends, it does not invent', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { q: 'make me 30 min hyrox' },
+        { daily: { status: 'READY', score: 80 } }
+    );
+    assert.equal(result.intent, 'recommend');
+    assertApprovedOnly(result.workouts);
+});
+
 test('recommend 30 min HYROX stays inside approved catalog', async () => {
     const result = await getTrainAssist(
         'user-1',
