@@ -179,6 +179,7 @@ test('authenticated read APIs do not crash', { timeout: TIMEOUT }, async (t) => 
         '/api/profile',
         '/api/profile/share',
         '/api/profile/export',
+        '/api/notifications',
         '/api/athlete/dna',
         '/api/athlete/station-proficiency',
         '/api/arena',
@@ -240,6 +241,7 @@ test('authenticated write APIs do not crash and stay reversible', { timeout: TIM
         return;
     }
 
+    const smokeToken = `smoke-fcm-${Date.now()}`;
     const writes = [
         await call('POST', '/api/train/assist', { intent: 'recommend', q: '30 min hyrox' }),
         await call('POST', '/api/train/assist', { intent: 'create', q: '' }),
@@ -258,6 +260,13 @@ test('authenticated write APIs do not crash and stay reversible', { timeout: TIM
         await call('PATCH', `/api/me/workouts/${ZERO}`, { title: 'nope' }),
         await call('POST', '/api/workouts/wk_foundation_a/save'),
         await call('DELETE', '/api/workouts/wk_foundation_a/save'),
+        await call('POST', '/api/notifications/device', {
+            token: smokeToken,
+            platform: 'android',
+        }),
+        await call('POST', '/api/notifications/read-all', {}),
+        await call('POST', `/api/notifications/${ZERO}/read`, {}),
+        await call('DELETE', '/api/notifications/device', { token: smokeToken }),
         await call('POST', '/auth/logout', {}),
     ];
     for (const result of writes) assertNoCrash(result);

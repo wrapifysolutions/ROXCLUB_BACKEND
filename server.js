@@ -18,6 +18,7 @@ const ClubRouter = require('./routes/ClubRoute');
 const ArenaRouter = require('./routes/ArenaRoute');
 const AthleteRouter = require('./routes/AthleteRoute');
 const ProfileRouter = require('./routes/ProfileRoute');
+const NotificationRouter = require('./routes/NotificationRoute');
 const { loadWorkoutCatalog } = require('./lib/workouts/workoutCatalog');
 const { connectDB, closeDB } = require('./lib/db');
 
@@ -148,6 +149,7 @@ app.use('/', ClubRouter);
 app.use('/', ArenaRouter);
 app.use('/', AthleteRouter);
 app.use('/', ProfileRouter);
+app.use('/', NotificationRouter);
 
 const port = Number(process.env.PORT) || 5000;
 
