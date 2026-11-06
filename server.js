@@ -26,7 +26,13 @@ loadWorkoutCatalog();
 
 const app = express();
 const isVercel = Boolean(process.env.VERCEL);
-const isProduction = process.env.NODE_ENV === 'production' || isVercel;
+const isRailway = Boolean(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PUBLIC_DOMAIN);
+const runtimeEnv = isVercel ? 'vercel' : isRailway ? 'railway' : 'local';
+const isProduction =
+    process.env.NODE_ENV === 'production' ||
+    process.env.ROXCLUB_ENV === 'production' ||
+    isVercel ||
+    isRailway;
 
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
@@ -67,7 +73,7 @@ app.get('/', (req, res) => {
     res.status(200).json({
         ok: true,
         service: 'roxclub-api',
-        env: isVercel ? 'vercel' : 'local',
+        env: runtimeEnv,
         environment: process.env.ROXCLUB_ENV || 'unidentified',
     });
 });
@@ -77,7 +83,7 @@ app.get('/health', async (req, res) => {
     const result = {
         ok: true,
         service: 'roxclub-api',
-        env: isVercel ? 'vercel' : 'local',
+        env: runtimeEnv,
         environment: process.env.ROXCLUB_ENV || 'unidentified',
         db: null,
         supabase: null,
