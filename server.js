@@ -182,6 +182,8 @@ async function startServer() {
         const server = app.listen(port, '0.0.0.0', () => {
             console.log(`Server is running on port ${port} worker=${workerId()} pid=${process.pid}`);
         });
+        server.keepAliveTimeout = 65000;
+        server.headersTimeout = 66000;
 
         server.on('error', (error) => {
             console.error('Server failed to start', error);

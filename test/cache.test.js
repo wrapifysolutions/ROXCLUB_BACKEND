@@ -46,6 +46,12 @@ test('hot GET paths are cached and live session paths are not', () => {
     assert.equal(cacheTtlForPath('/api/profile/export'), 0);
 });
 
+test('setNx only the first caller wins', async () => {
+    assert.equal(await cache.setNx('lock', 'a', 60), true);
+    assert.equal(await cache.setNx('lock', 'b', 60), false);
+    assert.equal(await cache.get('lock'), 'a');
+});
+
 test('memory cache round-trips JSON', async () => {
     assert.equal(cache.enabled(), true);
     await cache.setJson('k', { ok: true }, 60);
