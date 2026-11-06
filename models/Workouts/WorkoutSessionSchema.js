@@ -204,6 +204,28 @@ ALTER TABLE scheduled_sessions
     ADD COLUMN IF NOT EXISTS status VARCHAR(20) NOT NULL DEFAULT 'pending';
 `;
 
+const createUserWorkoutsTable = `
+CREATE TABLE IF NOT EXISTS user_workouts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(160) NOT NULL,
+    category_id VARCHAR(60),
+    type VARCHAR(40) NOT NULL,
+    duration_min INTEGER NOT NULL,
+    difficulty VARCHAR(40),
+    source VARCHAR(40) NOT NULL DEFAULT 'nova_text',
+    purpose TEXT,
+    activities JSONB NOT NULL DEFAULT '[]'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+`;
+
+const createUserWorkoutsIndex = `
+CREATE INDEX IF NOT EXISTS user_workouts_user_idx
+    ON user_workouts (user_id, updated_at DESC);
+`;
+
 const workoutSessionStatements = [
     createWorkoutSessionsTable,
     createWorkoutSessionIdempotencyIndex,
@@ -223,6 +245,8 @@ const workoutSessionStatements = [
     createSeasonalPointsLedger,
     createSeasonalPointsIndex,
     alterScheduledSessionStatus,
+    createUserWorkoutsTable,
+    createUserWorkoutsIndex,
 ];
 
 module.exports = {

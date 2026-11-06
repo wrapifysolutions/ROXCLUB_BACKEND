@@ -114,3 +114,46 @@ test('recommendFromLibrary never emits ids outside the catalog', () => {
     const picks = recommendFromLibrary({ q: 'legs at home', preferHome: true }, null, 5);
     assert.ok(picks.every((workout) => approvedIds.has(workout.id)));
 });
+
+test('create intent stores a user workout instead of inventing library content', async () => {
+    const stored = [];
+    const query = async (sql, params = []) => {
+        if (/CREATE TABLE|CREATE INDEX/i.test(sql)) return { rows: [] };
+        if (sql.includes('nova:insert_user_workout')) {
+            stored.push({ id: params[0], title: params[2], activities: JSON.parse(params[9]) });
+            return { rows: [] };
+        }
+        if (sql.includes('nova:load_user_workout')) {
+            const row = stored.find((item) => item.id === params[0]);
+            return {
+                rows: row
+                    ? [
+                          {
+                              id: row.id,
+                              user_id: params[1],
+                              title: row.title,
+                              category_id: 'cat_hybrid_race',
+                              type: 'hybrid',
+                              duration_min: 30,
+                              difficulty: 'Intermediate',
+                              source: 'nova_text',
+                              purpose: 'create 1km run wall balls',
+                              activities: row.activities,
+                          },
+                      ]
+                    : [],
+            };
+        }
+        return { rows: [] };
+    };
+
+    const result = await getTrainAssist(
+        'user-1',
+        { intent: 'create', q: 'create 1km run 20 wall balls' },
+        { daily: { status: 'READY', score: 80 }, query }
+    );
+    assert.equal(result.intent, 'create');
+    assert.equal(result.governance.aiMayInvent, false);
+    assert.ok(!approvedIds.has(result.workout.id));
+    assert.ok(result.workout.activities.some((item) => item.name === 'Wall Balls'));
+});

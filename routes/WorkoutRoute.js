@@ -14,6 +14,9 @@ const {
     ExplainTrain,
     ListCategories,
     ListCategoryWorkouts,
+    CreateUserWorkout,
+    ListUserWorkouts,
+    UpdateUserWorkout,
 } = require('../controllers/Workouts/WorkoutControllers');
 
 const WorkoutRouter = express.Router();
@@ -22,6 +25,9 @@ const assistLimit = createRateLimit({ windowMs: 60000, max: 40, name: 'train-ass
 WorkoutRouter.get('/api/categories', authMiddleware, ListCategories);
 WorkoutRouter.get('/api/categories/:categoryId/workouts', authMiddleware, ListCategoryWorkouts);
 WorkoutRouter.get('/api/me/saved-workouts', authMiddleware, ListSavedWorkouts);
+WorkoutRouter.get('/api/me/workouts', authMiddleware, ListUserWorkouts);
+WorkoutRouter.post('/api/me/workouts', authMiddleware, assistLimit, CreateUserWorkout);
+WorkoutRouter.patch('/api/me/workouts/:id', authMiddleware, assistLimit, UpdateUserWorkout);
 WorkoutRouter.get('/api/train/overview', authMiddleware, GetTrainOverview);
 WorkoutRouter.post('/api/train/assist', authMiddleware, assistLimit, AssistTrain);
 WorkoutRouter.get('/api/train/recommend', authMiddleware, RecommendTrain);

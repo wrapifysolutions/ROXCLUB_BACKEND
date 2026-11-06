@@ -9,6 +9,7 @@ const {
     CompleteWorkoutSession,
     SubmitActivityDebrief,
     ListActivityHistory,
+    GetActivity,
     DeleteActivity,
     PatchActivity,
 } = require('../controllers/Workouts/WorkoutSessionControllers');
@@ -22,6 +23,7 @@ WorkoutSessionRouter.patch('/api/workout-sessions/:id/progress', authMiddleware,
 WorkoutSessionRouter.post('/api/workout-sessions/:id/cancel', authMiddleware, CancelWorkoutSession);
 WorkoutSessionRouter.post('/api/workout-sessions/:id/complete', authMiddleware, writeLimit, CompleteWorkoutSession);
 WorkoutSessionRouter.get('/api/activities', authMiddleware, ListActivityHistory);
+WorkoutSessionRouter.get('/api/activities/:id', authMiddleware, GetActivity);
 WorkoutSessionRouter.post('/api/activities/:id/debrief', authMiddleware, SubmitActivityDebrief);
 WorkoutSessionRouter.patch('/api/activities/:id', authMiddleware, writeLimit, PatchActivity);
 WorkoutSessionRouter.delete('/api/activities/:id', authMiddleware, writeLimit, DeleteActivity);

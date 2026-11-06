@@ -8,7 +8,7 @@ const {
     completeSession,
 } = require('../../lib/workout/sessionService');
 const { submitDebrief } = require('../../lib/workout/debriefService');
-const { listActivityHistory } = require('../../lib/workout/activityHistory');
+const { listActivityHistory, getActivityDetail } = require('../../lib/workout/activityHistory');
 const { invalidateActivity, editActivity } = require('../../lib/workout/activityLifecycle');
 
 function sendError(res, error, logLabel) {
@@ -107,6 +107,16 @@ const SubmitActivityDebrief = async (req, res) => {
     }
 };
 
+const GetActivity = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const result = await getActivityDetail(req.user.id, req.params.id);
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendError(res, error, 'GetActivity error');
+    }
+};
+
 const ListActivityHistory = async (req, res) => {
     try {
         if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
@@ -148,6 +158,7 @@ module.exports = {
     CompleteWorkoutSession,
     SubmitActivityDebrief,
     ListActivityHistory,
+    GetActivity,
     DeleteActivity,
     PatchActivity,
 };

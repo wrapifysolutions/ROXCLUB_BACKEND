@@ -9,6 +9,13 @@ const {
 const { listCategories } = require('../../lib/workouts/workoutCatalog');
 const { getTrainOverview } = require('../../lib/workouts/trainOverview');
 const { getTrainAssist } = require('../../lib/workouts/trainAssist');
+const {
+    createUserWorkout,
+    updateUserWorkout,
+    listUserWorkouts,
+    toDetail,
+    toListItem,
+} = require('../../lib/workouts/userWorkoutService');
 
 function sendWorkoutError(res, error, logLabel) {
     if (error.code === 'WORKOUT_NOT_FOUND' || error.code === 'CATEGORY_NOT_FOUND') {
@@ -174,6 +181,39 @@ const ExplainTrain = async (req, res) => {
     }
 };
 
+const CreateUserWorkout = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized Access' });
+        const workout = await createUserWorkout(userId, req.body || {});
+        return res.status(201).json(toDetail(workout, false));
+    } catch (error) {
+        return sendWorkoutError(res, error, 'CreateUserWorkout error');
+    }
+};
+
+const ListUserWorkouts = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized Access' });
+        const workouts = await listUserWorkouts(userId);
+        return res.status(200).json({ workouts: workouts.map((workout) => toListItem(workout)) });
+    } catch (error) {
+        return sendWorkoutError(res, error, 'ListUserWorkouts error');
+    }
+};
+
+const UpdateUserWorkout = async (req, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ message: 'Unauthorized Access' });
+        const workout = await updateUserWorkout(userId, req.params.id, req.body || {});
+        return res.status(200).json(toDetail(workout, false));
+    } catch (error) {
+        return sendWorkoutError(res, error, 'UpdateUserWorkout error');
+    }
+};
+
 const ListSavedWorkouts = async (req, res) => {
     try {
         const userId = req.user?.id;
@@ -198,4 +238,7 @@ module.exports = {
     ExplainTrain,
     ListCategories,
     ListCategoryWorkouts,
+    CreateUserWorkout,
+    ListUserWorkouts,
+    UpdateUserWorkout,
 };
