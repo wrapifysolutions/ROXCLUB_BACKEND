@@ -30,7 +30,11 @@ function memoryPlan() {
                             !session.completed_at &&
                             (!session.status || session.status === 'pending')
                     )
-                    .map((session) => ({ id: session.id, scheduled_on: session.scheduled_on })),
+                    .map((session) => ({
+                        id: session.id,
+                        scheduled_on: session.scheduled_on,
+                        title: session.title,
+                    })),
             };
         }
         if (sql.includes('plan:insert_missed')) {
@@ -45,6 +49,7 @@ function memoryPlan() {
                     suggestion: null,
                     created_at: new Date().toISOString(),
                 });
+                return { rows: [{ scheduled_session_id: params[2] }] };
             }
             return { rows: [] };
         }

@@ -2,13 +2,21 @@ const { clearAuthCookie } = require('../../lib/token');
 const {
     getProfile,
     updateProfile,
+    uploadProfilePhoto,
+    removeProfilePhoto,
     getShareCard,
     exportProfile,
     deleteAccount,
 } = require('../../lib/profile/profileService');
 
 function sendError(res, error, label) {
-    if (error.status === 400 || error.status === 404 || error.status === 409) {
+    if (error.status && error.status < 500) {
+        return res.status(error.status).json({
+            error: error.code || 'PROFILE_ERROR',
+            message: error.message,
+        });
+    }
+    if (error.status === 502 || error.status === 503) {
         return res.status(error.status).json({
             error: error.code || 'PROFILE_ERROR',
             message: error.message,
@@ -43,6 +51,37 @@ const PatchProfile = async (req, res) => {
         return res.status(200).json(await updateProfile(userId, req.body || {}));
     } catch (error) {
         return sendError(res, error, 'PatchProfile error');
+    }
+};
+
+function profilePhotoFile(req) {
+    return req.file
+        ? {
+              buffer: req.file.buffer,
+              filename: req.file.originalname,
+              mimeType: req.file.mimetype,
+              size: req.file.size,
+          }
+        : null;
+}
+
+const UploadProfilePhoto = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await uploadProfilePhoto(userId, profilePhotoFile(req)));
+    } catch (error) {
+        return sendError(res, error, 'UploadProfilePhoto error');
+    }
+};
+
+const DeleteProfilePhoto = async (req, res) => {
+    try {
+        const userId = requireUser(req, res);
+        if (!userId) return;
+        return res.status(200).json(await removeProfilePhoto(userId));
+    } catch (error) {
+        return sendError(res, error, 'DeleteProfilePhoto error');
     }
 };
 
@@ -81,6 +120,8 @@ const DeleteProfile = async (req, res) => {
 module.exports = {
     GetProfile,
     PatchProfile,
+    UploadProfilePhoto,
+    DeleteProfilePhoto,
     GetProfileShare,
     GetProfileExport,
     DeleteProfile,

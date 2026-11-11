@@ -3,11 +3,14 @@ const assert = require('node:assert/strict');
 const {
     getProfile,
     updateProfile,
+    uploadProfilePhoto,
+    removeProfilePhoto,
     getShareCard,
     exportProfile,
     deleteAccount,
     LAUNCH_SECTIONS,
 } = require('../lib/profile/profileService');
+const { validateProfilePhotoFile } = require('../lib/storage/profilePhoto');
 const { GetProfile, PatchProfile, DeleteProfile } = require('../controllers/Profile/ProfileControllers');
 
 function memoryQuery(db) {
@@ -82,6 +85,11 @@ function memoryQuery(db) {
             user.height_cm = params[2];
             return { rows: [user] };
         }
+        if (sql.includes('profile:save_photo')) {
+            const user = db.users[params[0]];
+            user.avatar = params[1] ? JSON.parse(params[1]) : {};
+            return { rows: [user] };
+        }
         throw new Error(sql);
     };
 }
@@ -152,6 +160,7 @@ test('GET profile returns athlete identity, DNA, activity, and launch section fl
     assert.equal(profile.user.timezone, 'Asia/Karachi');
     assert.equal(profile.user.heightCm, 178);
     assert.deepEqual(profile.user.avatar, { smile: 'grin', hair: 'short', kit: 'black' });
+    assert.equal(profile.user.photoUrl, null);
     assert.equal(profile.level.level, 1);
     assert.equal(profile.athleteDna.status, 'CALIBRATING');
     assert.equal(profile.recentActivities[0].activityId, 'act-1');
@@ -198,6 +207,58 @@ test('PATCH profile updates name, avatar, and body metrics on existing tables', 
     assert.equal(profile.user.heightCm, 180);
     assert.equal(profile.user.weightKg, 80);
     assert.equal(db.users['user-1'].display_name, 'Alex Khan');
+});
+
+test('profile photo upload stores a public URL without replacing the digital avatar', async () => {
+    const db = athleteDb();
+    const jpeg = Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
+    validateProfilePhotoFile({
+        buffer: jpeg,
+        filename: 'me.jpg',
+        mimeType: 'image/jpeg',
+        size: jpeg.length,
+    });
+    assert.throws(
+        () => validateProfilePhotoFile({ filename: 'cert.pdf', mimeType: 'application/pdf', size: 12 }),
+        (error) => error.status === 400 && error.code === 'FILE_TYPE_NOT_ALLOWED'
+    );
+
+    const profile = await uploadProfilePhoto(
+        'user-1',
+        { buffer: jpeg, filename: 'me.jpg', mimeType: 'image/jpeg', size: jpeg.length },
+        {
+            query: memoryQuery(db),
+            uploader: async () => ({
+                secure_url: 'https://res.cloudinary.com/demo/image/upload/roxclub/profile-photos/user-1.jpg',
+                public_id: 'roxclub/profile-photos/user-1',
+            }),
+        }
+    );
+    assert.equal(
+        profile.user.photoUrl,
+        'https://res.cloudinary.com/demo/image/upload/roxclub/profile-photos/user-1.jpg'
+    );
+    assert.equal(profile.user.avatar.kit, 'black');
+    assert.equal(profile.user.avatar.photoUrl, undefined);
+
+    const patched = await updateProfile(
+        'user-1',
+        { avatar: { smile: 'calm', hair: 'short', kit: 'white' } },
+        { query: memoryQuery(db) }
+    );
+    assert.equal(patched.user.avatar.kit, 'white');
+    assert.equal(patched.user.photoUrl, profile.user.photoUrl);
+
+    let destroyed = null;
+    const cleared = await removeProfilePhoto('user-1', {
+        query: memoryQuery(db),
+        destroyer: async (id) => {
+            destroyed = id;
+        },
+    });
+    assert.equal(cleared.user.photoUrl, null);
+    assert.equal(cleared.user.avatar.kit, 'white');
+    assert.equal(destroyed, 'roxclub/profile-photos/user-1');
 });
 
 test('PATCH profile rejects empty name and unknown gender', async () => {

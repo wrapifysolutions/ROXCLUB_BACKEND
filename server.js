@@ -177,6 +177,7 @@ async function startServer() {
         }
         if (isPrimaryWorker()) {
             require('./lib/plan/missedJob').scheduleMissedJob();
+            require('./lib/notifications/reminderJob').scheduleReminderJob();
         }
 
         const server = app.listen(port, '0.0.0.0', () => {

@@ -51,9 +51,26 @@ function harness({ enabled = true } = {}) {
                     .map((row) => ({ token: row.token })),
             };
         }
+        if (sql.includes('notify:once_key')) {
+            const rows = db.inbox.filter((row) => {
+                const data = typeof row.data === 'string' ? JSON.parse(row.data) : row.data || {};
+                return row.user_id === params[0] && row.type === params[1] && data.onceKey === params[2];
+            });
+            return { rows: rows[0] ? [{ id: rows[0].id }] : [] };
+        }
         if (sql.includes('notify:once')) {
             const rows = db.inbox.filter((row) => row.user_id === params[0] && row.type === params[1]);
             return { rows: rows[0] ? [{ id: rows[0].id }] : [] };
+        }
+        if (sql.includes('notify:unread_count')) {
+            return {
+                rows: [
+                    {
+                        count: db.inbox.filter((row) => row.user_id === params[0] && !row.read_at)
+                            .length,
+                    },
+                ],
+            };
         }
         if (sql.includes('notify:insert')) {
             db.inbox.push({
@@ -129,12 +146,14 @@ test('device register, inbox list, and mark read stay scoped to the user', async
     await notifyUser('user-2', { type: 'program_assigned' }, { query });
     const listed = await listNotifications('user-1', { query, limit: 10 });
     assert.equal(listed.notifications.length, 1);
+    assert.equal(listed.unreadCount, 1);
     assert.equal(listed.notifications[0].read, false);
     const read = await markRead('user-1', listed.notifications[0].id, query);
     assert.equal(read.read, true);
     await markAllRead('user-1', query);
     const after = await listNotifications('user-1', { query });
     assert.equal(after.notifications[0].read, true);
+    assert.equal(after.unreadCount, 0);
     await removeDeviceToken('user-1', { token: 'aaa' }, query);
     await assert.rejects(() => registerDeviceToken('user-1', {}, query), (error) => error.status === 400);
 });
@@ -142,4 +161,34 @@ test('device register, inbox list, and mark read stay scoped to the user', async
 test('club and session tests keep their injected query out of live FCM', () => {
     assert.equal(shouldFanout({ query: async () => ({ rows: [] }) }), false);
     assert.equal(shouldFanout({}), true);
+});
+
+test('workout and missed events write inbox once per key', async () => {
+    const { query, db } = harness();
+    const first = await notifyUser(
+        'user-1',
+        { type: 'workout_completed', onceKey: 'workout:s1', body: 'Run · +40 XP.' },
+        { query }
+    );
+    const again = await notifyUser(
+        'user-1',
+        { type: 'workout_completed', onceKey: 'workout:s1' },
+        { query }
+    );
+    const nextSession = await notifyUser(
+        'user-1',
+        { type: 'workout_completed', onceKey: 'workout:s2' },
+        { query }
+    );
+    const missed = await notifyUser(
+        'user-1',
+        { type: 'session_missed', onceKey: 'missed:plan-1', body: 'Foundation was missed. Open Train to catch up.' },
+        { query }
+    );
+    assert.equal(first.reason, 'NO_PUSH_TOKEN');
+    assert.equal(again.reason, 'ALREADY_NOTIFIED');
+    assert.equal(nextSession.reason, 'NO_PUSH_TOKEN');
+    assert.equal(missed.reason, 'NO_PUSH_TOKEN');
+    assert.equal(db.inbox.length, 3);
+    assert.match(db.inbox[0].body, /40 XP/);
 });

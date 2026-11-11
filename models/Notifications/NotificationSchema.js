@@ -17,6 +17,12 @@ CREATE INDEX IF NOT EXISTS notifications_user_unread_idx
     WHERE read_at IS NULL;
 `;
 
+const createNotificationsOnceKeyIndex = `
+CREATE INDEX IF NOT EXISTS notifications_once_key_idx
+    ON notifications (user_id, type, ((data->>'onceKey')))
+    WHERE data ? 'onceKey';
+`;
+
 const createDevicePushTokensTable = `
 CREATE TABLE IF NOT EXISTS device_push_tokens (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -37,6 +43,7 @@ CREATE INDEX IF NOT EXISTS device_push_tokens_user_idx
 const notificationStatements = [
     createNotificationsTable,
     createNotificationsUserIndex,
+    createNotificationsOnceKeyIndex,
     createDevicePushTokensTable,
     createDevicePushTokensUserIndex,
 ];
