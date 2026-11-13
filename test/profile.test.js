@@ -11,7 +11,13 @@ const {
     LAUNCH_SECTIONS,
 } = require('../lib/profile/profileService');
 const { validateProfilePhotoFile } = require('../lib/storage/profilePhoto');
-const { GetProfile, PatchProfile, DeleteProfile } = require('../controllers/Profile/ProfileControllers');
+const {
+    GetProfile,
+    PatchProfile,
+    UploadProfilePhoto,
+    DeleteProfilePhoto,
+    DeleteProfile,
+} = require('../controllers/Profile/ProfileControllers');
 
 function memoryQuery(db) {
     return async (sql, params = []) => {
@@ -289,6 +295,10 @@ test('profile HTTP handlers require auth', async () => {
     await GetProfile({ user: null }, res);
     assert.equal(res.statusCode, 401);
     await PatchProfile({ user: null, body: {} }, res);
+    assert.equal(res.statusCode, 401);
+    await UploadProfilePhoto({ user: null }, res);
+    assert.equal(res.statusCode, 401);
+    await DeleteProfilePhoto({ user: null }, res);
     assert.equal(res.statusCode, 401);
     await DeleteProfile({ user: null, body: {} }, res);
     assert.equal(res.statusCode, 401);

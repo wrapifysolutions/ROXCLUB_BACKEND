@@ -125,6 +125,32 @@ test('recommendFromLibrary never emits ids outside the catalog', () => {
     assert.ok(picks.every((workout) => approvedIds.has(workout.id)));
 });
 
+test('general questions still recommend approved library workouts and add a positive reply', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { q: 'what should I train today?' },
+        {
+            daily: { status: 'READY', score: 80 },
+            completeChat: async ({ user }) => {
+                assert.match(user, /what should I train today/i);
+                assert.match(user, /"aiMayInvent":false/);
+                return {
+                    text: 'You are in a great place. Start the approved session from your library when you are ready.',
+                    provider: 'groq',
+                    model: 'test-model',
+                };
+            },
+        }
+    );
+    assert.equal(result.intent, 'recommend');
+    assert.equal(result.asked, 'question');
+    assert.equal(result.governance.aiMayInvent, false);
+    assertApprovedOnly(result.workouts);
+    assert.equal(result.voice.provider, 'groq');
+    assert.match(result.reply, /great place/i);
+    assert.doesNotMatch(result.reply, /\bcan't\b|\bfailed\b/i);
+});
+
 test('create intent stores a user workout instead of inventing library content', async () => {
     const stored = [];
     const query = async (sql, params = []) => {
@@ -166,4 +192,6 @@ test('create intent stores a user workout instead of inventing library content',
     assert.equal(result.governance.aiMayInvent, false);
     assert.ok(!approvedIds.has(result.workout.id));
     assert.ok(result.workout.activities.some((item) => item.name === 'Wall Balls'));
+    assert.ok(result.reply);
+    assert.equal(result.voice.tone, 'positive');
 });

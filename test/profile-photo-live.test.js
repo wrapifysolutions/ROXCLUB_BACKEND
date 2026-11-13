@@ -1,6 +1,5 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const express = require('express');
 const {
     uploadPublicProfilePhoto,
     destroyProfilePhoto,
@@ -63,22 +62,18 @@ function memoryPhotoQuery(db) {
     };
 }
 
-test('POST and DELETE /api/profile/photo require auth', async () => {
-    const ProfileRouter = require('../routes/ProfileRoute');
-    const app = express();
-    app.use('/', ProfileRouter);
-    const server = await new Promise((resolve) => {
-        const listener = app.listen(0, '127.0.0.1', () => resolve(listener));
-    });
-    const { port } = server.address();
+test.after(async () => {
+    const { closeDB } = require('../lib/db');
+    const cache = require('../lib/cache/redis');
+    await Promise.race([closeDB().catch(() => {}), new Promise((resolve) => setTimeout(resolve, 1500))]);
+    await cache.quit().catch(() => {});
     try {
-        const post = await fetch(`http://127.0.0.1:${port}/api/profile/photo`, { method: 'POST' });
-        const del = await fetch(`http://127.0.0.1:${port}/api/profile/photo`, { method: 'DELETE' });
-        assert.equal(post.status, 401);
-        assert.equal(del.status, 401);
-    } finally {
-        await new Promise((resolve) => server.close(resolve));
-    }
+        require('http').globalAgent.destroy();
+        require('https').globalAgent.destroy();
+    } catch (_) {}
+    try {
+        require('undici').getGlobalDispatcher().destroy();
+    } catch (_) {}
 });
 
 test('profile photo upload then delete works against live storage', { skip: !hasStorage(), timeout: 60000 }, async () => {
@@ -107,11 +102,4 @@ test('profile photo upload then delete works against live storage', { skip: !has
     assert.equal(afterDelete.user.avatar.kit, 'black');
 
     await destroyProfilePhoto(uploaded.photoPublicId);
-});
-
-test.after(async () => {
-    const { closeDB } = require('../lib/db');
-    const cache = require('../lib/cache/redis');
-    await closeDB().catch(() => {});
-    await cache.quit().catch(() => {});
 });
