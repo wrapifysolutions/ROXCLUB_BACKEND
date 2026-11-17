@@ -45,6 +45,19 @@ test('negative or invented Groq copy is dropped', () => {
     );
 });
 
+test('general coaching copy is kept even when it is not a catalog title', () => {
+    const result = {
+        workouts: [{ id: 'wk_hybrid_01', title: 'Race Intro' }],
+    };
+    assert.match(
+        sanitizeReply(
+            'Show up three days this week, keep a calm warm-up, and finish feeling strong. Race Intro is a kind first session when you are ready.',
+            result
+        ),
+        /Show up three days/
+    );
+});
+
 test('Groq reply is used when grounded and ignored when the provider fails', async () => {
     const base = {
         intent: 'recommend',

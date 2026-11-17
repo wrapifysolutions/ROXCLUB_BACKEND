@@ -134,8 +134,9 @@ test('general questions still recommend approved library workouts and add a posi
             completeChat: async ({ user }) => {
                 assert.match(user, /what should I train today/i);
                 assert.match(user, /"aiMayInvent":false/);
+                assert.match(user, /"generalCoachingAllowed":true/);
                 return {
-                    text: 'You are in a great place. Start the approved session from your library when you are ready.',
+                    text: 'Start simple: show up, warm up, and keep the session honest. You are in a great place. Start the approved session from your library when you are ready.',
                     provider: 'groq',
                     model: 'test-model',
                 };
