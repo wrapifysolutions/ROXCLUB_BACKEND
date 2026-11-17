@@ -222,8 +222,10 @@ test('NOVA star create, edit, favorite, and start map to player APIs', { timeout
         { intent: 'create', q: 'invent a secret race formula' },
         token
     );
-    assert.equal(unknown.status, 400);
-    assert.equal(unknown.json.error, 'NOVA_NO_EXERCISES');
+    assert.equal(unknown.status, 200);
+    assert.equal(unknown.json.intent, 'recommend');
+    assert.equal(unknown.json.governance.aiMayInvent, false);
+    assert.ok(unknown.json.reply);
 
     const created = await jsonRequest(
         'POST',

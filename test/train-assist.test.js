@@ -151,6 +151,58 @@ test('general questions still recommend approved library workouts and add a posi
     assert.doesNotMatch(result.reply, /\bcan't\b|\bfailed\b/i);
 });
 
+test('a 1 week training plan request uses library days and does not invent', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { q: 'create a 1 week training plan' },
+        { daily: { status: 'READY', score: 82 } }
+    );
+    assert.equal(result.intent, 'plan');
+    assert.equal(result.governance.aiMayInvent, false);
+    assert.equal(result.plan.length, 7);
+    assert.ok(result.plan.every((day) => !day.workout || approvedIds.has(day.workout.id)));
+    assertApprovedOnly(result.workouts);
+    assert.match(result.reply, /library|week|Monday/i);
+});
+
+test('intent create with no known moves still answers instead of failing', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { intent: 'create', q: 'invent a secret race formula' },
+        { daily: { status: 'READY', score: 80 } }
+    );
+    assert.equal(result.intent, 'recommend');
+    assert.equal(result.governance.aiMayInvent, false);
+    assertApprovedOnly(result.workouts);
+    assert.ok(result.reply);
+});
+
+test('questions include saved app session facts for Groq', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { q: 'what is on my plan today?' },
+        {
+            daily: { status: 'READY', score: 80 },
+            athleteContext: {
+                todaySession: { title: 'Foundation Protocol A', durationMin: 45, status: 'pending' },
+                programName: 'Race Build',
+            },
+            completeChat: async ({ user }) => {
+                assert.match(user, /Foundation Protocol A/);
+                assert.match(user, /Race Build/);
+                return {
+                    text: 'Your plan already has Foundation Protocol A today. You are in a great place to start.',
+                    provider: 'groq',
+                    model: 'test-model',
+                };
+            },
+        }
+    );
+    assert.equal(result.asked, 'question');
+    assert.equal(result.app.todaySession.title, 'Foundation Protocol A');
+    assert.match(result.reply, /Foundation Protocol A/);
+});
+
 test('create intent stores a user workout instead of inventing library content', async () => {
     const stored = [];
     const query = async (sql, params = []) => {
