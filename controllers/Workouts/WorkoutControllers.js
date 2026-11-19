@@ -9,6 +9,8 @@ const {
 const { listCategories } = require('../../lib/workouts/workoutCatalog');
 const { getTrainOverview } = require('../../lib/workouts/trainOverview');
 const { getTrainAssist } = require('../../lib/workouts/trainAssist');
+const { importWorkoutFromPhoto } = require('../../lib/workouts/novaPhoto');
+const { paceHybridRace } = require('../../lib/workouts/novaPace');
 const {
     createUserWorkout,
     updateUserWorkout,
@@ -214,6 +216,34 @@ const UpdateUserWorkout = async (req, res) => {
     }
 };
 
+const ImportWorkoutPhoto = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const body = req.body && typeof req.body === 'object' ? req.body : {};
+        const result = await importWorkoutFromPhoto(req.user.id, req.file, {
+            ocrText: body.ocrText || body.text,
+            title: body.title,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'ImportWorkoutPhoto error');
+    }
+};
+
+const PaceRace = async (req, res) => {
+    try {
+        if (!req.user?.id) return res.status(401).json({ message: 'Unauthorized Access' });
+        const body = req.body && typeof req.body === 'object' ? req.body : {};
+        const result = paceHybridRace({
+            division: body.division ?? req.query?.division,
+            goalTime: body.goalTime ?? req.query?.goalTime,
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        return sendWorkoutError(res, error, 'PaceRace error');
+    }
+};
+
 const ListSavedWorkouts = async (req, res) => {
     try {
         const userId = req.user?.id;
@@ -241,4 +271,6 @@ module.exports = {
     CreateUserWorkout,
     ListUserWorkouts,
     UpdateUserWorkout,
+    ImportWorkoutPhoto,
+    PaceRace,
 };

@@ -167,10 +167,14 @@ test('a 1 week training plan request uses library days and does not invent', asy
 });
 
 test('intent create with no known moves still answers instead of failing', async () => {
+    const query = async (sql) => {
+        if (/CREATE TABLE|CREATE INDEX/i.test(sql)) return { rows: [] };
+        return { rows: [] };
+    };
     const result = await getTrainAssist(
         'user-1',
         { intent: 'create', q: 'invent a secret race formula' },
-        { daily: { status: 'READY', score: 80 } }
+        { daily: { status: 'READY', score: 80 }, query }
     );
     assert.equal(result.intent, 'recommend');
     assert.equal(result.governance.aiMayInvent, false);
@@ -247,4 +251,64 @@ test('create intent stores a user workout instead of inventing library content',
     assert.ok(result.workout.activities.some((item) => item.name === 'Wall Balls'));
     assert.ok(result.reply);
     assert.equal(result.voice.tone, 'positive');
+});
+
+test('preference text searches the library first and does not auto-create', async () => {
+    const result = await getTrainAssist(
+        'user-1',
+        { q: 'I want a 45-minute HYROX focusing on sled push, running' },
+        { daily: { status: 'READY', score: 80 } }
+    );
+    assert.equal(result.intent, 'recommend');
+    assert.equal(result.governance.aiMayInvent, false);
+    assertApprovedOnly(result.workouts);
+    assert.equal(result.offerCreate, false);
+});
+
+test('structured create clones an approved library session', async () => {
+    const stored = [];
+    const query = async (sql, params = []) => {
+        if (/CREATE TABLE|CREATE INDEX/i.test(sql)) return { rows: [] };
+        if (sql.includes('nova:insert_user_workout')) {
+            stored.push({
+                id: params[0],
+                title: params[2],
+                source: params[7],
+                activities: JSON.parse(params[9]),
+            });
+            return { rows: [] };
+        }
+        if (sql.includes('nova:load_user_workout')) {
+            const row = stored.find((item) => item.id === params[0]);
+            return {
+                rows: row
+                    ? [
+                          {
+                              id: row.id,
+                              user_id: params[1],
+                              title: row.title,
+                              category_id: 'cat_hybrid_race',
+                              type: 'hybrid',
+                              duration_min: 45,
+                              difficulty: 'Intermediate',
+                              source: row.source,
+                              purpose: null,
+                              activities: row.activities,
+                          },
+                      ]
+                    : [],
+            };
+        }
+        return { rows: [] };
+    };
+
+    const result = await getTrainAssist(
+        'user-1',
+        { intent: 'create', durationMin: 45, difficulty: 'Intermediate', type: 'hybrid' },
+        { daily: { status: 'READY', score: 80 }, query }
+    );
+    assert.equal(result.intent, 'create');
+    assert.equal(result.workout.source, 'nova_library_customise');
+    assert.equal(result.governance.aiMayInvent, false);
+    assert.ok(result.workout.activities.length > 0);
 });
